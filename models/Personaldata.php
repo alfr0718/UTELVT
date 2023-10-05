@@ -51,14 +51,14 @@ class Personaldata extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Ci' => 'Ci',
+            'Ci' => 'Cédula',
             'Apellidos' => 'Apellidos',
             'Nombres' => 'Nombres',
-            'FechaNacimiento' => 'Fecha Nacimiento',
+            'FechaNacimiento' => 'Fecha de Nacimiento',
             'Email' => 'Email',
-            'Genero' => 'Genero',
-            'Institucion' => 'Institucion',
-            'Nivel' => 'Nivel',
+            'Genero' => 'Género',
+            'Institucion' => 'Institución',
+            'Nivel' => 'Nivel Educativo',
         ];
     }
 

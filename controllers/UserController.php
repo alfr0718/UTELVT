@@ -75,10 +75,9 @@ class UserController extends Controller
         $model->Auth_key = \Yii::$app->security->generateRandomString(); //GENERACION DE AUTOKEY. MICAEL
         $model->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
         
-    
         if ($this->request->isPost) {
-            //$model->password = MD5($model->password);
-            $model->password = \Yii::$app->security->generatePasswordHash($model->password);            
+            $model->password = MD5($model->password);
+            //$model->password = \Yii::$app->security->generatePasswordHash($model->password);            
 
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -101,8 +100,11 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $now = \Yii::$app->formatter;
+        
         $model = $this->findModel($id);
+
+
+        $now = \Yii::$app->formatter;
         $model->Updated_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
         
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {

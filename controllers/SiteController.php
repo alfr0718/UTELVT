@@ -9,8 +9,9 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\SignupForm;
 use app\models\Personaldata as PersonalD;
-use app\models\Usuario as Usuario;
+use app\models\User as User;
 use app\models\Libro as Libro;
 use app\models\Prestamo as Prestamo;
 
@@ -131,16 +132,19 @@ class SiteController extends Controller
     }
 
 
-    public function actionSignUp()
+    public function actionRegistro()
     {
-        $PersonalD = new Personaldata(); // Ajusta el modelo de Datos Personales según tu aplicación.
+        $PersonalD = new PersonalD(); // Ajusta el modelo de Datos Personales según tu aplicación.
         $User = new User(); // Ajusta el modelo de Usuario según tu aplicación.
 
         if ($PersonalD->load(Yii::$app->request->post()) && $PersonalD->save()) {
             // Los datos personales se guardaron con éxito, ahora puedes crear un usuario.
             // Puedes utilizar los datos personales para llenar el modelo de Usuario si es necesario.
-            $User->username = $PersonalD->Ci;
-            $User->password = $PersonalD->Ci;
+           $now = \Yii::$app->formatter;
+           $User->username = $PersonalD->Ci;
+           $User->password = $PersonalD->Ci;
+           $User->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
+           $User->Auth_key = \Yii::$app->security->generateRandomString();
 
             // Aquí puedes configurar otros campos del modelo Usuario según tus necesidades.
 
@@ -150,12 +154,12 @@ class SiteController extends Controller
             } else {
                 \Yii::$app->session->setFlash('error', 'Error al crear el usuario.');
             }
-        } else {
+        } elseif (Yii::$app->request->isPost) {
+            // Si se envió el formulario pero no se cargaron ni guardaron datos, muestra un mensaje de error.
             \Yii::$app->session->setFlash('error', 'Error al guardar los datos personales.');
         }
-
         // Redirige a donde sea necesario después de completar las acciones.
-        return $this->render('view-generated-data', [
+        return $this->render('registro', [
             'PersonalD' => $PersonalD,  // Pasa el modelo de datos personales si deseas mostrarlo en la vista.
             'User' => $User,    // Pasa el modelo de usuario si deseas mostrarlo en la vista.
         ]);

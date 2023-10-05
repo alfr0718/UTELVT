@@ -53,15 +53,15 @@ $config = [
             'timeZone' => 'America/Guayaquil', // Zona horaria de Ecuador
         ],
         'db' => $db,
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'personaldata/create' =>'usuario/create' ,
+                'registro' => 'site/registro',
             ],
         ],
-        */
+        
     ],
     'params' => $params,
 ];
