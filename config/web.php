@@ -54,13 +54,13 @@ $config = [
         ],
         'db' => $db,
         
-        'urlManager' => [
+        /*'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
                 'registro' => 'site/registro',
             ],
-        ],
+        ],*/
 
        // 'authManager' => [
         //    'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager'

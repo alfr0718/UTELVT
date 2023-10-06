@@ -46,10 +46,6 @@ class Prestamo extends \yii\db\ActiveRecord
             [['tipoprestamo_id'], 'string', 'max' => 5],
             [['pc_idpc', 'personaldata_Ci'], 'string', 'max' => 15],
             [['libro_codigo_barras'], 'string', 'max' => 100],
-            [['libro_biblioteca_idbiblioteca'], 'unique'],
-            [['libro_codigo_barras'], 'unique'],
-            [['pc_biblioteca_idbiblioteca'], 'unique'],
-            [['pc_idpc'], 'unique'],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
             [['libro_codigo_barras', 'libro_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_codigo_barras' => 'codigo_barras', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
             [['pc_idpc', 'pc_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Pc::class, 'targetAttribute' => ['pc_idpc' => 'idpc', 'pc_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
@@ -65,15 +61,15 @@ class Prestamo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fecha_solicitud' => 'Fecha de Solicitud',
-            'intervalo_solicitado' => 'Intervalo',
-            'tipoprestamo_id' => 'Tipo de Solicitud',
-            'biblioteca_idbiblioteca' => 'Campus',
-            'pc_idpc' => 'PC Solicitada',
+            'fecha_solicitud' => 'Fecha Solicitud',
+            'intervalo_solicitado' => 'Intervalo Solicitado',
+            'tipoprestamo_id' => 'Tipoprestamo ID',
+            'biblioteca_idbiblioteca' => 'Biblioteca Idbiblioteca',
+            'pc_idpc' => 'Pc Idpc',
             'pc_biblioteca_idbiblioteca' => 'Pc Biblioteca Idbiblioteca',
-            'libro_codigo_barras' => 'Libro Solicitado',
+            'libro_codigo_barras' => 'Libro Codigo Barras',
             'libro_biblioteca_idbiblioteca' => 'Libro Biblioteca Idbiblioteca',
-            'personaldata_Ci' => 'Solicitante',
+            'personaldata_Ci' => 'Personaldata Ci',
         ];
     }
 

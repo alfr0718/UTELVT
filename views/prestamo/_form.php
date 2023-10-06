@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'fecha_solicitud')->textInput() ?>
+    <?php // $form->field($model, 'fecha_solicitud')->textInput() ?>
 
     <?= $form->field($model, 'intervalo_solicitado')->textInput() ?>
 
