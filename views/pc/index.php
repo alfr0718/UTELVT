@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\PcSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Pcs';
+$this->title = 'Computadores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="pc-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Pc', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Agregar PC', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

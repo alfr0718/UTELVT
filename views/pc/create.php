@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Pc $model */
 
-$this->title = 'Create Pc';
+$this->title = 'Agregar Computador';
 $this->params['breadcrumbs'][] = ['label' => 'Pcs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

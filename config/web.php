@@ -37,7 +37,7 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error', 'warning', 'info'], //agrege info
                 ],
             ],
         ],
@@ -61,6 +61,10 @@ $config = [
                 'registro' => 'site/registro',
             ],
         ],
+
+       // 'authManager' => [
+        //    'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager'
+       // ],
         
     ],
     'params' => $params,

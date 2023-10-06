@@ -42,7 +42,7 @@ class Tipoprestamo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nombre_tipo' => 'Nombre Tipo',
+            'nombre_tipo' => 'Tipo de Solicitud',
         ];
     }
 

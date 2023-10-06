@@ -58,7 +58,7 @@ class Personaldata extends \yii\db\ActiveRecord
             'Email' => 'Email',
             'Genero' => 'Género',
             'Institucion' => 'Institución',
-            'Nivel' => 'Nivel Educativo',
+            'Nivel' => 'Nivel Académico',
         ];
     }
 

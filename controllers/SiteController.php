@@ -32,7 +32,11 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    
                 ],
+
+            
+
             ],
             'verbs' => [
                 'class' => VerbFilter::class,
@@ -142,7 +146,7 @@ class SiteController extends Controller
             // Puedes utilizar los datos personales para llenar el modelo de Usuario si es necesario.
            $now = \Yii::$app->formatter;
            $User->username = $PersonalD->Ci;
-           $User->password = $PersonalD->Ci;
+           $User->setPassword($PersonalD->Ci);
            $User->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
            $User->Auth_key = \Yii::$app->security->generateRandomString();
 

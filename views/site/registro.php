@@ -30,7 +30,7 @@ $this->title = 'Registro';
     <?= $form->field($PersonalD, 'Nivel')->dropDownList([ 'Bachiller','Universidad', 'Posgrado' ], ['prompt' => 'Seleccione su nivel de educación']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Registrar', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Iniciar Registro', ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

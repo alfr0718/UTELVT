@@ -45,9 +45,9 @@ class Pc extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idpc' => 'Idpc',
+            'idpc' => 'Código de PC',
             'estado' => 'Estado',
-            'biblioteca_idbiblioteca' => 'Biblioteca Idbiblioteca',
+            'biblioteca_idbiblioteca' => 'Campus',
         ];
     }
 

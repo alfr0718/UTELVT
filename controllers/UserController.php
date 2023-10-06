@@ -68,27 +68,27 @@ class UserController extends Controller
     public function actionCreate()
     {
         $now = \Yii::$app->formatter;
-        
         $model = new User();
-
-
         $model->Auth_key = \Yii::$app->security->generateRandomString(); //GENERACION DE AUTOKEY. MICAEL
         $model->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
-        
+
         if ($this->request->isPost) {
-            $model->password = MD5($model->password);
-            //$model->password = \Yii::$app->security->generatePasswordHash($model->password);            
-
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                // Configura la contraseña del usuario después de cargar los datos del formulario
+                $model->setPassword($model->password);
+            
+            // Guarda el modelo si pasa las validaciones
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
-        } else {
-            $model->loadDefaultValues();
-        }
+         } else {
+             $model->loadDefaultValues();
+         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+    return $this->render('create', [
+        'model' => $model,
+    ]);
     }
 
     /**
@@ -104,16 +104,23 @@ class UserController extends Controller
         $model = $this->findModel($id);
 
 
-        $now = \Yii::$app->formatter;
-        $model->Updated_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
-        
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post())) {
+                // Configura la contraseña del usuario después de cargar los datos del formulario
+                $model->setPassword($model->password);
+            
+            // Guarda el modelo si pasa las validaciones
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
+         } else {
+             $model->loadDefaultValues();
+         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+    return $this->render('update', [
+        'model' => $model,
+    ]);
     }
 
     /**

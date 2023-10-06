@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\PersonaldataSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Personaldatas';
+$this->title = 'Datos Personales';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="personaldata-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Personaldata', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Agregar Persona Natural', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

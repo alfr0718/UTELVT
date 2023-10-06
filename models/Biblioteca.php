@@ -51,7 +51,7 @@ class Biblioteca extends \yii\db\ActiveRecord
             'Apertura' => 'Apertura',
             'Cierre' => 'Cierre',
             'Email' => 'Email',
-            'Telefono' => 'Telefono',
+            'Telefono' => 'Teléfono',
         ];
     }
 

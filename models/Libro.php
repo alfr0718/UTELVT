@@ -71,11 +71,11 @@ class Libro extends \yii\db\ActiveRecord
             'isbn' => 'ISBN',
             'cute' => 'CUTE',
             'editorial' => 'Editorial',
-            'anio_publicacion' => 'Año de Publicacion',
+            'anio_publicacion' => 'Año de Publicación',
             'estado' => 'Estado',
-            'categoria_id' => 'Categoria',
+            'categoria_id' => 'Categoría',
             'asignatura_id' => 'Asignatura',
-            'pais_codigopais' => 'Pais',
+            'pais_codigopais' => 'País',
             'biblioteca_idbiblioteca' => 'Biblioteca',
         ];
     }

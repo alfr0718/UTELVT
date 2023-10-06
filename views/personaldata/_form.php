@@ -22,14 +22,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'Email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Genero')->dropDownList([ 'M' => 'Male', 'F' => 'Female', ], ['prompt' => 'Seleccine su género']) ?>
+    <?= $form->field($model, 'Genero')->dropDownList([ 'M' => 'Male', 'F' => 'Female', ], ['prompt' => 'Seleccione su Género']) ?>
 
     <?= $form->field($model, 'Institucion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Nivel')->dropDownList([ 'Bachiller','Universidad', 'Posgrado' ], ['prompt' => 'Seleccione su Nivel Educativo']) ?>
+    <?= $form->field($model, 'Nivel')->dropDownList([ 'Bachiller','Universidad', 'Posgrado' ], ['prompt' => 'Seleccione su Nivel Académico']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

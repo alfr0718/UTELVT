@@ -30,12 +30,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 0;
     private $_user = false;
 
-    //public $currentPassword;
-    //public $newPassword;
-    //public $confirmPassword;
+    public $currentPassword;
+    public $newPassword;
+    public $confirmPassword;
     //public $temporalpassword;
     //public $tempralpasswordtime;
-    //public $_roleNames = [];
+    
     /**
      * {@inheritdoc}
      */
@@ -139,9 +139,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->Auth_key;
     }
 
+    public function setPassword($password)
+    {
+        $this->password = Yii::$app->security->generatePasswordHash($password);
+    }
+
     public function validatePassword($password)
     {
-        return $this->password;
+        return Yii::$app->security->validatePassword($password, $this->password);
     }
 
     /**
@@ -172,6 +177,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return false;
     }
 
+    public function changePassword()
+    {
+        if ($this->validate()) {
+            $user = self::findIdentity($this->id);
+            $user->setPassword($this->newPassword);
+            return $user->save(false);
+        }
+        return false;
+    }
 
 }
 
