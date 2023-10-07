@@ -12,6 +12,10 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+      //  'authManager' => [
+        //    'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager
+        //    'defaultRoles' => ['guest', 'user'],
+        // ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'c_72IRt49CqoKS2nvjxAnUzSAs5fQvgj',
@@ -71,20 +75,22 @@ $config = [
                 'registro' => 'site/registro',
             ],
         ],*/
-
-       // 'authManager' => [
-        //    'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager'
-       // ],
+        
+        
         
     ],
+
+    
     'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
+
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
+        
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
@@ -95,6 +101,12 @@ if (YII_ENV_DEV) {
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
+
+   // $config['modules']['rbac'] = [
+
+     //   'class' => 'yii2mod\rbac\Module',
+
+   // ];
 }
 
 return $config;

@@ -44,12 +44,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Datos Personales', 'url' => ['/personaldata/index']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
-                : [
-                    'label' => 'Logout (' . Yii::$app->user->identity->personaldata->Nombres . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['class' => 'nav-link btn btn-link logout'],
-                    'options' => ['class' => 'nav-item']
-                ]
+                : '<li class="nav-item">'
+                    . Html::beginForm(['/site/logout'])
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->personaldata->Nombres . ')',
+                        ['class' => 'nav-link btn btn-link logout']
+                    )
+                    . Html::endForm()
         ]
     ]);
     NavBar::end();
