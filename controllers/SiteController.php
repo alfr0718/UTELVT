@@ -14,6 +14,7 @@ use app\models\Personaldata as PersonalD;
 use app\models\User as User;
 use app\models\Libro as Libro;
 use app\models\Prestamo as Prestamo;
+use app\models\Bilioteca as Biblioteca;
 
 class SiteController extends Controller
 {
@@ -136,6 +137,18 @@ class SiteController extends Controller
     }
 
 
+    public function actionCatalogo()
+    {
+        return $this->render('@app/views/libro/index');
+    }
+
+    public function actionSolicitud()
+    {
+        return $this->render('@app/views/prestamo/create');
+
+    }
+
+
     public function actionRegistro()
     {
         $PersonalD = new PersonalD(); // Ajusta el modelo de Datos Personales según tu aplicación.
@@ -169,5 +182,6 @@ class SiteController extends Controller
         ]);
     // Ajusta la redirección según tus necesidades.
     }
+
 
 }

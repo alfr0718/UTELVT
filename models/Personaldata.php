@@ -21,6 +21,10 @@ use Yii;
  */
 class Personaldata extends \yii\db\ActiveRecord
 {
+    const NIVEL_BACHILLER = '1';
+    const NIVEL_UNIVERSIDAD = '2';
+    const NIVEL_POSGRADO = '3';
+
     /**
      * {@inheritdoc}
      */

@@ -1,8 +1,4 @@
 <?php
-
-/** @var yii\web\View $this */
-/** @var string $content */
-
 use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\bootstrap5\Breadcrumbs;
@@ -40,23 +36,20 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Inicio', 'url' => ['/site/index']],
-           ['label' => 'Acerca de', 'url' => ['/site/about']],
-           ['label' => 'Libros', 'url' => ['/libro/index']],
+            ['label' => 'Acerca de', 'url' => ['/site/about']],
+            ['label' => 'Libros', 'url' => ['/libro/index']],
             ['label' => 'Computadores', 'url' => ['/pc/index']],
             ['label' => 'Préstamos', 'url' => ['/prestamo/index']],
             ['label' => 'Usuarios', 'url' => ['/user/index']],
-            //['label' => 'Datos Personales', 'url' => ['/personaldata/index']],
-            ['label' => 'Registrarse', 'url' => ['/site/registro']],
+            ['label' => 'Datos Personales', 'url' => ['/personaldata/index']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
+                : [
+                    'label' => 'Logout (' . Yii::$app->user->identity->personaldata->Nombres . ')',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['class' => 'nav-link btn btn-link logout'],
+                    'options' => ['class' => 'nav-item']
+                ]
         ]
     ]);
     NavBar::end();

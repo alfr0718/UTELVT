@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\PrestamoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Prestamos';
+$this->title = 'Préstamos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="prestamo-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Prestamo', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Ingresar Préstamo', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -33,13 +33,46 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'fecha_solicitud',
             'intervalo_solicitado',
-            'tipoprestamo_id',
-            'biblioteca_idbiblioteca',
-            //'pc_idpc',
+           //'tipoprestamo_id',
+           [
+            'attribute' => 'tipoprestamo_id', // Esto muestra el código del país
+            'value' => function ($model) {
+                return $model->tipoprestamo->nombre_tipo; // Accede al nombre del país relacionado
+            },
+        ],
+            'pc_idpc',
             //'pc_biblioteca_idbiblioteca',
-            //'libro_codigo_barras',
+            'libro_codigo_barras',
+           // 'biblioteca_idbiblioteca',
+            [
+                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                },
+            ],
             //'libro_biblioteca_idbiblioteca',
-            //'personaldata_Ci',
+            'personaldata_Ci',
+            [
+                'attribute' => 'personaldata_Ci', // Esto muestra el código
+                'label' => 'Nombres',
+                'value' => function ($model) {
+                    return $model->personaldataCi->Nombres; // Accede al dato relacionado
+                },
+            ],
+            [
+                'attribute' => 'personaldata_Ci', // Esto muestra el código
+                'label' => 'Apellidos',
+                'value' => function ($model) {
+                    return $model->personaldataCi->Apellidos; // Accede al dato relacionado
+                },
+            ],
+            [
+                'attribute' => 'personaldata_Ci', // Esto muestra el código 
+                'label' => 'Institución',
+                'value' => function ($model) {
+                    return $model->personaldataCi->Institucion; // Accede al nombre relacionado
+                },
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Prestamo $model, $key, $index, $column) {

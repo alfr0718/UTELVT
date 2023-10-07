@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <p> 
-        <?= Html::a('Agregar Libro', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Ingresar Libro', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -38,10 +38,34 @@ $this->params['breadcrumbs'][] = $this->title;
             //'editorial',
             'anio_publicacion',
             //'estado',
-            'categoria_id',
-            'asignatura_id',
-            'pais_codigopais',
-            //'biblioteca_idbiblioteca',
+            //'categoria_id',
+            [
+                'attribute' => 'categoria_id',
+                'value' => function ($model) {
+                    return $model->categoria->Categoría;
+                },
+            ],
+           // 'asignatura_id',
+            [
+                'attribute' => 'asignatura_id',
+                'value' => function ($model) {
+                    return $model->asignatura->Nombre;
+                },
+            ],
+           // 'pais_codigopais',
+            [
+                'attribute' => 'pais_codigopais', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->paisCodigopais->Nombrepais; // Accede al nombre del país relacionado
+                },
+            ],
+           // 'biblioteca_idbiblioteca',
+            [
+                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                },
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Libro $model, $key, $index, $column) {

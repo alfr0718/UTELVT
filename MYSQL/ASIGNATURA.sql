@@ -8,4 +8,16 @@ INSERT INTO asignatura(nombre, id) VALUES
 ('Matemáticas', 'MAT'),
 ('Mecánica', 'MEC'),
 ('Medio Ambiente', 'MA'),
-('Química', 'QUI');
+('Química', 'QUI'),
+('Ciencias Politicas', 'CP'),
+('Contabilidad', 'CON'),
+('Informatica', 'INF'),
+('Ingles', 'ING'),
+('Sociologia', 'SOC'),
+('Trabajo Social', 'TS'),
+('Turismo', 'TUR');
+INSERT INTO categoria (id, Categoría) VALUES
+('L', 'Libro'),
+('D', 'Diccionario'),
+('R', 'Revista'),
+('E', 'Enciclopedia');

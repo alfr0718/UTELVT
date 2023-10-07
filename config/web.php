@@ -52,6 +52,16 @@ $config = [
             'datetimeFormat' => 'php:d/m/Y H:i:s', // Formato de fecha y hora
             'timeZone' => 'America/Guayaquil', // Zona horaria de Ecuador
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\jui\DatePickerAsset' => [
+                    'sourcePath' => null,
+                    'basePath' => '@webroot/assets',
+                    'baseUrl' => '@web/assets',
+                    'js' => ['jquery-ui.min.js'], // Verifica si este archivo existe
+                ],
+            ],
+        ],
         'db' => $db,
         
         /*'urlManager' => [

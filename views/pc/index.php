@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Agregar PC', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Ingresar PC', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -32,7 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'idpc',
             'estado',
-            'biblioteca_idbiblioteca',
+          //  'biblioteca_idbiblioteca',
+            [
+                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                },
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Pc $model, $key, $index, $column) {

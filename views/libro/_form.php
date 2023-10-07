@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'codigo_barras')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'n_ejemplares')->textInput() ?>
+    <?= $form->field($model, 'n_ejemplares')->input('number', ['max' => 100, 'step' => 1, 'placeholder' => 'Ingrese la cantidad de ejemplares', 'min' => 0])?>
 
     <?= $form->field($model, 'titulo')->textInput(['maxlength' => true]) ?>
 
@@ -26,20 +26,24 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'editorial')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'anio_publicacion')->textInput() ?>
+    <?= $form->field($model, 'anio_publicacion')->input('number', ['max' => date('Y'), 'step' => 1, 'placeholder' => 'Ingrese el año'])?>
 
     <?= $form->field($model, 'estado')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'categoria_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'categoria_id')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Categoria::find()->all(), 'id', 'Categoría'),
+    ['prompt' => 'Ingrese la categoría']) ?>
 
-    <?= $form->field($model, 'asignatura_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'asignatura_id')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Asignatura::find()->all(), 'id', 'Nombre'),
+    ['prompt' => 'Ingrese la asignatura']) ?>
 
-    <?= $form->field($model, 'pais_codigopais')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'pais_codigopais')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Pais::find()->all(), 'codigopais', 'Nombrepais'),
+    ['prompt' => 'Ingrese el país']) ?>
 
-    <?= $form->field($model, 'biblioteca_idbiblioteca')->textInput() ?>
+    <?= $form->field($model, 'biblioteca_idbiblioteca')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
+    ['prompt' => 'Ingrese el campus']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Ingresar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

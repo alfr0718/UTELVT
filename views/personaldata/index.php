@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Agregar Persona Natural', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Ingresar Persona Natural', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -35,9 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'Nombres',
             'FechaNacimiento',
             'Email:email',
-            //'Genero',
-            //'Institucion',
-            //'Nivel',
+            'Genero',
+            'Institucion',
+            'Nivel',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Personaldata $model, $key, $index, $column) {

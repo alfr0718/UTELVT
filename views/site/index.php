@@ -1,53 +1,50 @@
 <?php
 
 /** @var yii\web\View $this */
+use app\models\PersonalData;
+use app\models\User;
 
-$this->title = 'My Yii Application';
+
+$this->title = 'Biblioteca General - UTELVT';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron text-center bg-transparent mt-5 mb-5">
-        <h1 class="display-4">Congratulations!</h1>
+<?php if (Yii::$app->user->isGuest): ?>
+    <h1 class="display-4">¡Bienvenido!</h1>
+<?php else: ?>
+    <?php $userData = Yii::$app->user->identity->personaldata; ?>
+    <h1 class="display-4">¡Bienvenido, <?= $userData->Nombres ?>!</h1>
+<?php endif; ?>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <p class="lead">"Te deseamos una experiencia enriquecedora y llena de inspiración."</p>
 
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
+        <p><a class="btn btn-lg btn-success" href="<?= Yii::$app->urlManager->createUrl(['/prestamo/registro']) ?>">Registra tu visita</a></p>
     </div>
 
     <div class="body-content">
+    <div class="row">
+        <div class="col-lg-4">
+            <h2>¡Bienvenido a Nuestra Biblioteca Digital!</h2>
 
-        <div class="row">
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
+            <p>En nuestro espacio, fomentamos el aprendizaje y la exploración. Estamos aquí para ayudarte a obtener el conocimiento y las herramientas que necesitas para tener éxito en tus proyectos y objetivos. ¡Siéntete libre de explorar y aprender!</p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+            <p><a class="btn btn-outline-secondary" href="">Registra tu visita &raquo;</a></p>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <h2>Catálogo de Libros</h2>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
+            <p>Explora nuestra amplia colección de libros. Sumérgete en el mundo de la literatura y descubre nuevas historias y conocimientos.</p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+           <p><a class="btn btn-outline-secondary" href="<?= Yii::$app->urlManager->createUrl(['/libro/index']) ?>">Ver libros disponibles &raquo;</a></p>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <h2>Solicitud de Préstamo</h2>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+          <p>¿Necesitas una computadora para tus tareas o proyectos? También ofrecemos la posibilidad de solicitar préstamo de libros junto con las computadoras.</p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
+        <p><a class="btn btn-outline-secondary" href="<?= Yii::$app->urlManager->createUrl(['/prestamo/create']) ?>">Solicitar préstamo de PC &raquo;</a></p>
         </div>
 
     </div>
 </div>
+

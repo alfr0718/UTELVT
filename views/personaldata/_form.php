@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'Institucion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Nivel')->dropDownList([ 'Bachiller','Universidad', 'Posgrado' ], ['prompt' => 'Seleccione su Nivel Académico']) ?>
+    <?= $form->field($model, 'Nivel')->dropDownList([ 'Bachiller' => 'Bachiller', 'Universidad' => 'Universidad', 'Posgrado'=> 'Posgrado', ], ['prompt' => 'Seleccione su Nivel Académico']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

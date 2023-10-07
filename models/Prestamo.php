@@ -61,15 +61,15 @@ class Prestamo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fecha_solicitud' => 'Fecha Solicitud',
+            'fecha_solicitud' => 'Fecha de Solicitud',
             'intervalo_solicitado' => 'Intervalo Solicitado',
-            'tipoprestamo_id' => 'Tipoprestamo ID',
-            'biblioteca_idbiblioteca' => 'Biblioteca Idbiblioteca',
-            'pc_idpc' => 'Pc Idpc',
-            'pc_biblioteca_idbiblioteca' => 'Pc Biblioteca Idbiblioteca',
-            'libro_codigo_barras' => 'Libro Codigo Barras',
-            'libro_biblioteca_idbiblioteca' => 'Libro Biblioteca Idbiblioteca',
-            'personaldata_Ci' => 'Personaldata Ci',
+            'tipoprestamo_id' => 'Tipo de Préstamo',
+            'biblioteca_idbiblioteca' => 'Campus',
+            'pc_idpc' => 'Computador Solicitado',
+            'pc_biblioteca_idbiblioteca' => 'Ubicación Computador',
+            'libro_codigo_barras' => 'Libro Solicitado',
+            'libro_biblioteca_idbiblioteca' => 'Ubicación Libro',
+            'personaldata_Ci' => 'Solicitante',
         ];
     }
 
