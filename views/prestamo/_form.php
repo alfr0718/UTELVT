@@ -14,7 +14,11 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'fecha_solicitud')->textInput() ?>
 
-    <?php // $form->field($model, 'intervalo_solicitado')->textInput() ?>
+    <?php $username = Yii::$app->user->isGuest ? '' : Yii::$app->user->identity->username; ?>
+
+    <?= $form->field($model, 'personaldata_Ci')->textInput(['maxlength' => true, 'value' => $username, 'readonly' => true]) ?>
+
+    <?= $form->field($model, 'intervalo_solicitado')->textInput(['type' => 'time']) ?>
 
     <?= $form->field($model, 'tipoprestamo_id')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Tipoprestamo::find()->all(), 'id', 'nombre_tipo'),
     ['prompt' => 'Seleccione su tipo de préstamo']) ?>
@@ -36,7 +40,6 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'libro_biblioteca_idbiblioteca')->textInput() ?>
 
-    <?= $form->field($model, 'personaldata_Ci')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

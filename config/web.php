@@ -7,15 +7,21 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'es',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'modules' => [
+        'rbac' => [
+            'class' => 'yii2mod\rbac\Module',
+        ],
+    ],
     'components' => [
-      //  'authManager' => [
-        //    'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager
-        //    'defaultRoles' => ['guest', 'user'],
-        // ],
+       'authManager' => [
+            'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager
+            'defaultRoles' => ['guest', 'user'],
+         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'c_72IRt49CqoKS2nvjxAnUzSAs5fQvgj',
@@ -67,7 +73,6 @@ $config = [
             ],
         ],
         'db' => $db,
-        
         /*'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -75,12 +80,15 @@ $config = [
                 'registro' => 'site/registro',
             ],
         ],*/
-        
-        
-        
+        'i18n' => [
+            'translations' => [
+                'yii2mod.rbac' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages/',
+                ],
+            ],
+        ],
     ],
-
-    
     'params' => $params,
 ];
 
@@ -101,12 +109,6 @@ if (YII_ENV_DEV) {
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
-
-   // $config['modules']['rbac'] = [
-
-     //   'class' => 'yii2mod\rbac\Module',
-
-   // ];
 }
 
 return $config;

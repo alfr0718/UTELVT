@@ -149,7 +149,7 @@ class SiteController extends Controller
     }
 
 
-    public function actionRegistro()
+    public function actionSignup()
     {
         $PersonalD = new PersonalD(); // Ajusta el modelo de Datos Personales según tu aplicación.
         $User = new User(); // Ajusta el modelo de Usuario según tu aplicación.
@@ -176,7 +176,7 @@ class SiteController extends Controller
             \Yii::$app->session->setFlash('error', 'Error al guardar los datos personales.');
         }
         // Redirige a donde sea necesario después de completar las acciones.
-        return $this->render('registro', [
+        return $this->render('signup', [
             'PersonalD' => $PersonalD,  // Pasa el modelo de datos personales si deseas mostrarlo en la vista.
             'User' => $User,    // Pasa el modelo de usuario si deseas mostrarlo en la vista.
         ]);

@@ -70,8 +70,11 @@ class PrestamoController extends Controller
     public function actionCreate()
     {
         $model = new Prestamo();
-        $user = \Yii::$app->user->identity->personaldata;
-        $model->personaldata_Ci = $user;
+
+
+        //$Cedula = \Yii::$app->user->identity->personaldata;
+        //$model->personaldata_Ci = $Cedula;
+
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {

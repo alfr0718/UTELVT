@@ -35,13 +35,26 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
+            //TODOS
             ['label' => 'Inicio', 'url' => ['/site/index']],
-            ['label' => 'Acerca de', 'url' => ['/site/about']],
+            
+            //BIBLIOTECA
             ['label' => 'Libros', 'url' => ['/libro/index']],
             ['label' => 'Computadores', 'url' => ['/pc/index']],
             ['label' => 'Préstamos', 'url' => ['/prestamo/index']],
+            //ADMIN
             ['label' => 'Usuarios', 'url' => ['/user/index']],
             ['label' => 'Datos Personales', 'url' => ['/personaldata/index']],
+            //USUARIOS
+
+            //PERFIL
+            // ['label' => 'Perfil', 'url' => ['/personaldata/view', 'Ci' => Yii::$app->user->identity->personaldata->Ci]],
+            [
+                'label' => 'Perfil',
+                'url' => ['/personaldata/view', 'Ci' => Yii::$app->user->isGuest ? null : Yii::$app->user->identity->personaldata->Ci],
+                'visible' => !Yii::$app->user->isGuest,
+            ],
+    
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
@@ -50,7 +63,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         'Logout (' . Yii::$app->user->identity->personaldata->Nombres . ')',
                         ['class' => 'nav-link btn btn-link logout']
                     )
-                    . Html::endForm()
+                    . Html::endForm(),
+            ['label' => 'Acerca de', 'url' => ['/site/about']],
         ]
     ]);
     NavBar::end();

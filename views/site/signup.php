@@ -1,8 +1,6 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\jui\DatePicker;
-
 
 $this->title = 'SignUp';
 ?>
@@ -19,17 +17,7 @@ $this->title = 'SignUp';
 
     <?= $form->field($PersonalD, 'Nombres')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($PersonalD, 'FechaNacimiento')->widget(DatePicker::classname(), [
-    'language' => 'es',
-    'dateFormat' => 'yyyy-MM-dd',
-    'clientOptions' => [
-        'changeYear' => true,
-        'changeMonth' => true,
-    ],
-    'options' => [
-        'class' => 'form-control',
-        'value' => '2000-01-01', // Aquí inicializamos la fecha en el año 2000
-    ],]) ?>
+    <?= $form->field($PersonalD, 'FechaNacimiento')->input('date') ?>
 
     <?= $form->field($PersonalD, 'Email')->textInput(['maxlength' => true]) ?>
 

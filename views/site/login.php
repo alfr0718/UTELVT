@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="form-group text-center">
     <div class="col-lg-12">
-            <?= Html::a('Registrarse', ['site/registro'], ['class' => 'btn btn-success btn-block btn-lg w-100']) ?>
+            <?= Html::a('Registrarse', ['site/signup'], ['class' => 'btn btn-success btn-block btn-lg w-100']) ?>
     </div>
 </div>
                 <?php ActiveForm::end(); ?>

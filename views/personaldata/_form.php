@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'Nombres')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'FechaNacimiento')->textInput() ?>
+    <?= $form->field($model, 'FechaNacimiento')->input('date') ?>
 
     <?= $form->field($model, 'Email')->textInput(['maxlength' => true]) ?>
 

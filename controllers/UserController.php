@@ -102,7 +102,8 @@ class UserController extends Controller
     {
         
         $model = $this->findModel($id);
-
+        $now = \Yii::$app->formatter;
+        $model->Updated_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {

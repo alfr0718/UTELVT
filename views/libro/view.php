@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'codigo_barras',
-            'n_ejemplares',
+          //'n_ejemplares',
             'titulo',
             'autor',
             'isbn',
@@ -38,10 +38,34 @@ $this->params['breadcrumbs'][] = $this->title;
             'editorial',
             'anio_publicacion',
             'estado',
-            'categoria_id',
-            'asignatura_id',
-            'pais_codigopais',
-            'biblioteca_idbiblioteca',
+            //'categoria_id',
+            [
+                'attribute' => 'categoria_id',
+                'value' => function ($model) {
+                    return $model->categoria->Categoría;
+                },
+            ],
+           // 'asignatura_id',
+            [
+                'attribute' => 'asignatura_id',
+                'value' => function ($model) {
+                    return $model->asignatura->Nombre;
+                },
+            ],
+           // 'pais_codigopais',
+            [
+                'attribute' => 'pais_codigopais', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->paisCodigopais->Nombrepais; // Accede al nombre del país relacionado
+                },
+            ],
+           // 'biblioteca_idbiblioteca',
+            [
+                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                },
+            ],
         ],
     ]) ?>
 

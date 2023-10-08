@@ -39,6 +39,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'libro_codigo_barras',
             'libro_biblioteca_idbiblioteca',
             'personaldata_Ci',
+            ///MAS DATOS PERSONALES
+            [
+                'attribute' => 'personaldata_Ci', // Esto muestra el código
+                'label' => 'Nombres',
+                'value' => function ($model) {
+                    return $model->personaldataCi->Nombres; // Accede al dato relacionado
+                },
+            ],
+            [
+                'attribute' => 'personaldata_Ci', // Esto muestra el código
+                'label' => 'Apellidos',
+                'value' => function ($model) {
+                    return $model->personaldataCi->Apellidos; // Accede al dato relacionado
+                },
+            ],
+            [
+                'attribute' => 'personaldata_Ci', // Esto muestra el código 
+                'label' => 'Institución',
+                'value' => function ($model) {
+                    return $model->personaldataCi->Institucion; // Accede al nombre relacionado
+                },
+            ],
         ],
     ]) ?>
 
