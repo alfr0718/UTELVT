@@ -39,6 +39,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
                 },
             ],
+            //boton de Prestar
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Acciones',
+                'template' => '{customButton}', // Agrega el botón personalizado
+                'buttons' => [
+                    'customButton' => function ($url, $model, $key) {
+                        return Html::a('Prestar', ['prestamo/prestarpc', 'id' => $model->idpc], [
+                            'class' => 'btn btn-primary',
+                            'data' => [
+                                'confirm' => '¿Estás seguro de que deseas prestar este computador?',
+                                'method' => 'post',
+                            ],
+                        ]);
+                    },
+                ],
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Pc $model, $key, $index, $column) {

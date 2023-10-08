@@ -67,6 +67,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Acciones',
+                'template' => '{customButton}', // Agrega el botón personalizado
+                'buttons' => [
+                    'customButton' => function ($url, $model, $key) {
+                        return Html::a('Prestar', ['prestamo/prestarlibro', 'id' => $model->codigo_barras], [
+                            'class' => 'btn btn-primary',
+                            'data' => [
+                                'confirm' => '¿Estás seguro de que deseas prestar este libro?',
+                                'method' => 'post',
+                            ],
+                        ]);
+                    },
+                ],
+            ],
+            
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'codigo_barras' => $model->codigo_barras, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);

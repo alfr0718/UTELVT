@@ -26,17 +26,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'biblioteca_idbiblioteca')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
     ['prompt' => 'Seleccione el campus']) ?>
 
-    <?= $form->field($model, 'pc_idpc')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Pc::find()->all(), 'idpc', 'idpc'),
-    ['prompt' => 'Seleccione su computador']) ?>
+    <?= $form->field($model, 'pc_idpc')->textInput() ?>
 
     <?php // $form->field($model, 'pc_biblioteca_idbiblioteca')->textInput() ?>
 
-    <?= $form->field($model, 'libro_codigo_barras')->dropDownList(
-    \yii\helpers\ArrayHelper::map(\app\models\Libro::find()->all(), 'codigo_barras', function ($model) {
-        return $model->codigo_barras . ' - ' . $model->titulo;
-    }),
-    ['prompt' => 'Seleccione su libro']
-) ?>
+    <?= $form->field($model, 'libro_codigo_barras')->textInput() ?>
 
     <?php // $form->field($model, 'libro_biblioteca_idbiblioteca')->textInput() ?>
 

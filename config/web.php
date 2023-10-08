@@ -73,13 +73,15 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*'urlManager' => [
+        'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'registro' => 'site/registro',
+                //'registro' => 'site/registro',
+                'prestamo/prestarlibro/<id:\d+>' => 'prestamo/prestarlibro',
+                'prestamo/prestarpc/<id:\d+>' => 'prestamo/pretarpc',
             ],
-        ],*/
+        ],
         'i18n' => [
             'translations' => [
                 'yii2mod.rbac' => [
