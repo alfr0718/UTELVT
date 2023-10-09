@@ -15,9 +15,9 @@ $this->title = 'Biblioteca General - UTELVT';
     
         <?php else: ?>
         
-        <?php $userData = Yii::$app->user->identity->personaldata->Nombres; ?>
+        <?php $userData = Yii::$app->user->identity->personaldata; ?>
         
-            <h1 class="display-4">¡Bienvenido, <?= $userData ?>!</h1>
+            <h1 class="display-4">¡Bienvenido, <?= $userData->Nombres ?>!</h1>
     
         <?php endif; ?>
 
@@ -35,11 +35,11 @@ $this->title = 'Biblioteca General - UTELVT';
             <h2>¡Bienvenido a Nuestra Biblioteca Digital!</h2>
                 <?php if (!Yii::$app->user->isGuest): ?>
                     <?php
-                    $ciParam = Yii::$app->user->isGuest ? null : Yii::$app->user->identity->personaldata->Ci;
-                    $url = ['/personaldata/update', 'Ci' => $ciParam];
+                    //$ciParam = Yii::$app->user->isGuest ? null : Yii::$app->user->identity->personaldata->Ci;
+                    $url = ['/personaldata/update', 'Ci' => $userData->Ci];
                     ?>
                     <p>¡Gracias por ser parte de nuestra comunidad! Actualiza tus datos ahora para brindarte una experiencia aún mejor. </p>
-                    <p><a class="btn btn-outline-secondary" href="<?= Yii::$app->urlManager->createUrl(['/personaldata/update']) ?>">Actualizar datos  &raquo;</a></p>
+                    <p><a class="btn btn-outline-secondary" href="<?= Yii::$app->urlManager->createUrl($url) ?>">Actualizar datos  &raquo;</a></p>
                 <?php else: ?>
                     <p>¡Gracias por visitarnos! Para disfrutar de una experiencia aún mejor, te animamos a iniciar sesión.</p>
                     <p><a class="btn btn-outline-secondary" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión  &raquo;</a></p>

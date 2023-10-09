@@ -161,8 +161,7 @@ class PrestamoController extends Controller
         if (!$libro) {
             throw new NotFoundHttpException('El libro no se encontró.');
         }
-
-        Yii::$app->session->set('prestarlib', true);
+        
         $model = new Prestamo();
 
         // Obtener el usuario actual
@@ -171,6 +170,7 @@ class PrestamoController extends Controller
         // Asignar valores al modelo de Prestamo
         $model->personaldata_Ci = $usuario->personaldata;
         $model->tipoprestamo_id = 'LIB';
+        
         $model->biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; // Campus donde se encuentra el usuario... mejorar (Y)
         $model->libro_codigo_barras = $id;
         $model->libro_biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; //Campus donde se encuentra el libro
@@ -201,8 +201,6 @@ class PrestamoController extends Controller
             throw new NotFoundHttpException('El computador no se encontró.');
         }
 
-        Yii::$app->session->set('prestarcomp', true);
-
         $model = new Prestamo();
 
     // Obtener el usuario actual
@@ -210,6 +208,7 @@ class PrestamoController extends Controller
 
     // Asignar valores al modelo de Prestamo
         $model->personaldata_Ci = $usuario->personaldata;
+        $model->intervalo_solicitado = '01:00:00';
         $model->tipoprestamo_id = 'COMP';
         $model->biblioteca_idbiblioteca = $pc->biblioteca_idbiblioteca; // Campus donde se encuentra el usuario... mejorar (Y)
         $model->pc_idpc = $id;
@@ -234,7 +233,6 @@ class PrestamoController extends Controller
     }
 
         $model = new Prestamo();
-        Yii::$app->session->set('prestaresp', true);
 
         // Obtener el usuario actual
         $usuario = \Yii::$app->user->identity;

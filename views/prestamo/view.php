@@ -32,12 +32,41 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'fecha_solicitud',
             'intervalo_solicitado',
-            'tipoprestamo_id',
-            'biblioteca_idbiblioteca',
+            //'tipoprestamo_id',
+            [
+                'attribute' => 'tipoprestamo_id', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->tipoprestamo->nombre_tipo; // Accede al nombre del país relacionado
+                },
+            ],
+            //'biblioteca_idbiblioteca',
+            [
+                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                },
+            ],
             'pc_idpc',
-            'pc_biblioteca_idbiblioteca',
+            //'pc_biblioteca_idbiblioteca',
             'libro_codigo_barras',
-            'libro_biblioteca_idbiblioteca',
+            //'libro_biblioteca_idbiblioteca',
+            //MAS DATOS DEL LIBRO
+            
+            [
+                'attribute' => 'libro_codigo_barras', // Esto muestra el código
+                'label' => 'Titulo solicitado',
+                'value' => function ($model) {
+                    return $model->libroCodigoBarras ? $model->libroCodigoBarras->titulo : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
+                },
+            ],
+            [
+                'attribute' => 'libro_codigo_barras', // Esto muestra el código
+                'label' => 'Asignatura',
+                'value' => function ($model) {
+                    return $model->libroCodigoBarras ? $model->libroCodigoBarras->asignatura->Nombre : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
+                },
+            ],
+
             'personaldata_Ci',
             ///MAS DATOS PERSONALES
             [

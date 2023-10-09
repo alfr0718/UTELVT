@@ -137,7 +137,7 @@ class SiteController extends Controller
     }
 
 
-    public function actionCatalogo()
+    /*public function actionCatalogo()
     {
         return $this->render('@app/views/libro/index');
     }
@@ -146,7 +146,7 @@ class SiteController extends Controller
     {
         return $this->render('@app/views/prestamo/create');
 
-    }
+    }*/
 
 
     public function actionSignup()
@@ -182,6 +182,5 @@ class SiteController extends Controller
         ]);
     // Ajusta la redirección según tus necesidades.
     }
-
 
 }

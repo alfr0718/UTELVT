@@ -34,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'estado',
           //  'biblioteca_idbiblioteca',
             [
-                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código de la biblioteca
                 'value' => function ($model) {
-                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre de la biblioteca
                 },
             ],
             //boton de Prestar
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('Prestar', ['prestamo/prestarpc', 'id' => $model->idpc], [
                             'class' => 'btn btn-primary',
                             'data' => [
-                                'confirm' => '¿Estás seguro de que deseas prestar este computador?',
+                                //'confirm' => '¿Estás seguro de que deseas prestar este computador?',
                                 'method' => 'post',
                             ],
                         ]);

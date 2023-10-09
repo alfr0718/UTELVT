@@ -34,12 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'fecha_solicitud',
             'intervalo_solicitado',
            //'tipoprestamo_id',
-           [
-            'attribute' => 'tipoprestamo_id', // Esto muestra el código del país
-            'value' => function ($model) {
-                return $model->tipoprestamo->nombre_tipo; // Accede al nombre del país relacionado
-            },
-        ],
+            [
+                'attribute' => 'tipoprestamo_id', // Esto muestra el código del país
+                'value' => function ($model) {
+                    return $model->tipoprestamo->nombre_tipo; // Accede al nombre del país relacionado
+                },
+            ],
             'pc_idpc',
             //'pc_biblioteca_idbiblioteca',
             'libro_codigo_barras',

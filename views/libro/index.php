@@ -21,11 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -47,9 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
            // 'asignatura_id',
             [
-                'attribute' => 'asignatura_id',
+                'attribute' => 'asignatura_id', // Esto muestra el código de la asignatura
                 'value' => function ($model) {
-                    return $model->asignatura->Nombre;
+                    return $model->asignatura->Nombre; // Accede al nombre de la asignatura relacionada
                 },
             ],
            // 'pais_codigopais',
@@ -61,9 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
            // 'biblioteca_idbiblioteca',
             [
-                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código de la biblioteca
                 'value' => function ($model) {
-                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre de la biblioteca
                 },
             ],
             [
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('Prestar', ['prestamo/prestarlibro', 'id' => $model->codigo_barras], [
                             'class' => 'btn btn-primary',
                             'data' => [
-                                'confirm' => '¿Estás seguro de que deseas prestar este libro?',
+                                //'confirm' => '¿Estás seguro de que deseas prestar este libro?',
                                 'method' => 'post',
                             ],
                         ]);
