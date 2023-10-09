@@ -15,9 +15,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'idpc')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'estado')->dropDownList([
-    'Reparación' => 'Reparación',
-    'Activa' => 'Activa',
-    'Apagada' => 'Apagada',], ['prompt' => 'Seleccione el estado']) ?>
+    'D' => 'Disponible',
+    'ND' => 'No Disponible',
+    'F' => 'Fuera de servicio',
+    'EM' => 'En Mantenimiento',
+    'R' => 'Retirada',], ['prompt' => 'Seleccione el estado']) ?>
 
     <?= $form->field($model, 'biblioteca_idbiblioteca')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
     ['prompt' => 'Seleccione el campus']) ?>

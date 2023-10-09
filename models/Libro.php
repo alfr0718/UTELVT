@@ -7,14 +7,14 @@ use Yii;
 /**
  * This is the model class for table "libro".
  *
- * @property string $codigo_barras
- * @property int|null $n_ejemplares
+ * @property int $codigo_barras
+ * @property string|null $n_ejemplares
  * @property string $titulo
  * @property string $autor
  * @property string|null $isbn
  * @property string|null $cute
  * @property string $editorial
- * @property string $anio_publicacion
+ * @property string|null $anio_publicacion
  * @property string|null $estado
  * @property string $categoria_id
  * @property string $asignatura_id
@@ -43,14 +43,13 @@ class Libro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['codigo_barras', 'titulo', 'autor', 'editorial', 'anio_publicacion', 'categoria_id', 'asignatura_id', 'pais_codigopais', 'biblioteca_idbiblioteca'], 'required'],
-            [['n_ejemplares', 'biblioteca_idbiblioteca'], 'integer'],
+            [['titulo', 'autor', 'editorial', 'categoria_id', 'asignatura_id', 'pais_codigopais', 'biblioteca_idbiblioteca'], 'required'],
             [['anio_publicacion'], 'safe'],
-            [['codigo_barras', 'isbn', 'cute'], 'string', 'max' => 100],
+            [['biblioteca_idbiblioteca'], 'integer'],
+            [['n_ejemplares', 'isbn', 'cute'], 'string', 'max' => 100],
             [['titulo', 'autor', 'editorial'], 'string', 'max' => 45],
             [['estado'], 'string', 'max' => 10],
             [['categoria_id', 'asignatura_id', 'pais_codigopais'], 'string', 'max' => 4],
-            [['codigo_barras', 'biblioteca_idbiblioteca'], 'unique', 'targetAttribute' => ['codigo_barras', 'biblioteca_idbiblioteca']],
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_id' => 'id']],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
@@ -64,19 +63,19 @@ class Libro extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'codigo_barras' => 'Código de Barras',
-            'n_ejemplares' => 'N° Ejemplares',
-            'titulo' => 'Título',
+            'codigo_barras' => 'id',
+            'n_ejemplares' => 'Código de Barra',
+            'titulo' => 'Titulo',
             'autor' => 'Autor',
             'isbn' => 'ISBN',
             'cute' => 'CUTE',
             'editorial' => 'Editorial',
-            'anio_publicacion' => 'Año',
+            'anio_publicacion' => 'Año de Publicación',
             'estado' => 'Estado',
             'categoria_id' => 'Categoría',
             'asignatura_id' => 'Asignatura',
             'pais_codigopais' => 'País',
-            'biblioteca_idbiblioteca' => 'Biblioteca',
+            'biblioteca_idbiblioteca' => 'Ubicación',
         ];
     }
 

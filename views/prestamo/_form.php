@@ -41,7 +41,7 @@ use yii\widgets\ActiveForm;
 
     <?=  $form->field($model, 'libro_codigo_barras')->dropDownList(
     \yii\helpers\ArrayHelper::map(\app\models\Libro::find()->all(), 'codigo_barras', function ($model) {
-        return $model->codigo_barras . ' - ' . $model->titulo;
+        return $model->n_ejemplares . ' - ' . $model->titulo;
     }),
     ['prompt' => 'Seleccione el libro']) ?>
 

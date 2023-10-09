@@ -99,7 +99,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'n_ejemplares')->textInput(['style' => 'width: 100%;'])->label('Número de Ejemplares') ?>
+            <?= $form->field($model, 'n_ejemplares')->textInput(['style' => 'width: 100%;'])?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'isbn')->textInput(['style' => 'width: 100%;'])->label('ISBN') ?>

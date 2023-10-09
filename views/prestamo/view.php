@@ -48,9 +48,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'pc_idpc',
             //'pc_biblioteca_idbiblioteca',
-            'libro_codigo_barras',
+            //'libro_codigo_barras',
             //'libro_biblioteca_idbiblioteca',
             //MAS DATOS DEL LIBRO
+            [
+                'attribute' => 'libro_codigo_barras', // Esto muestra el código
+                'label' => 'Código de Barra del Libro',
+                'value' => function ($model) {
+                    return $model->libroCodigoBarras ? $model->libroCodigoBarras->n_ejemplares : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
+                },
+            ],
             
             [
                 'attribute' => 'libro_codigo_barras', // Esto muestra el código

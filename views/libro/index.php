@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\LibroSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Libros';
+$this->title = 'Listado de Libros';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="libro-index">
@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'codigo_barras',
-           // 'n_ejemplares',
+            //'codigo_barras',
+            'n_ejemplares',
             'titulo',
             'autor',
             'isbn',

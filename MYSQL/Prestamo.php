@@ -14,7 +14,7 @@ use Yii;
  * @property int $biblioteca_idbiblioteca
  * @property string|null $pc_idpc
  * @property int|null $pc_biblioteca_idbiblioteca
- * @property int|null $libro_codigo_barras
+ * @property string|null $libro_codigo_barras
  * @property int|null $libro_biblioteca_idbiblioteca
  * @property string $personaldata_Ci
  *
@@ -42,9 +42,10 @@ class Prestamo extends \yii\db\ActiveRecord
         return [
             [['fecha_solicitud', 'intervalo_solicitado'], 'safe'],
             [['tipoprestamo_id', 'biblioteca_idbiblioteca', 'personaldata_Ci'], 'required'],
-            [['biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_codigo_barras', 'libro_biblioteca_idbiblioteca'], 'integer'],
+            [['biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_biblioteca_idbiblioteca'], 'integer'],
             [['tipoprestamo_id'], 'string', 'max' => 5],
             [['pc_idpc', 'personaldata_Ci'], 'string', 'max' => 15],
+            [['libro_codigo_barras'], 'string', 'max' => 100],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
             [['libro_codigo_barras', 'libro_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_codigo_barras' => 'codigo_barras', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
             [['pc_idpc', 'pc_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Pc::class, 'targetAttribute' => ['pc_idpc' => 'idpc', 'pc_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
@@ -61,14 +62,14 @@ class Prestamo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'fecha_solicitud' => 'Fecha de Solicitud',
-            'intervalo_solicitado' => 'Tiempo Solicitado',
+            'intervalo_solicitado' => 'Intervalo Solicitado',
             'tipoprestamo_id' => 'Tipo de Préstamo',
             'biblioteca_idbiblioteca' => 'Campus',
-            'pc_idpc' => 'Computador',
-            'pc_biblioteca_idbiblioteca' => 'Ubicación del Computador',
-            'libro_codigo_barras' => 'Libro',
-            'libro_biblioteca_idbiblioteca' => 'Ubicación del Libro',
-            'personaldata_Ci' => 'Cédula del Solicitante',
+            'pc_idpc' => 'Computador Solicitado',
+            'pc_biblioteca_idbiblioteca' => 'Ubicación Computador',
+            'libro_codigo_barras' => 'Libro Solicitado',
+            'libro_biblioteca_idbiblioteca' => 'Ubicación Libro',
+            'personaldata_Ci' => 'Solicitante',
         ];
     }
 
