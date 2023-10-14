@@ -3,14 +3,13 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Prestamo;
-use app\models\PrestamoSearch;
 use app\models\Libro;
 use app\models\Pc;
+use app\models\Prestamo;
+use app\models\PrestamoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
 
 /**
  * PrestamoController implements the CRUD actions for Prestamo model.
@@ -74,8 +73,6 @@ class PrestamoController extends Controller
     public function actionCreate()
     {
         $model = new Prestamo();
-        //$Cedula = \Yii::$app->user->identity->personaldata;
-        //$model->personaldata_Ci = $Cedula;
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -146,7 +143,6 @@ class PrestamoController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
     public function actionPrestarlibro($id)
     {    
         if (\Yii::$app->user->isGuest) {
@@ -155,7 +151,7 @@ class PrestamoController extends Controller
         }
         
         // Cargar el modelo de libro basado en el $id recibido        
-        $libro = Libro::findOne(['codigo_barras' => $id]);
+        $libro = Libro::findOne(['id' => $id]);
 
         // Verificar si el libro existe
         if (!$libro) {
@@ -172,14 +168,14 @@ class PrestamoController extends Controller
         $model->tipoprestamo_id = 'LIB';
         
         $model->biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; // Campus donde se encuentra el usuario... mejorar (Y)
-        $model->libro_codigo_barras = $id;
+        $model->libro_id = $id;
         $model->libro_biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; //Campus donde se encuentra el libro
 
         if ($model->load(\Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('prestarlib', [
             'model' => $model,
         ]);
     }
@@ -218,13 +214,13 @@ class PrestamoController extends Controller
             return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('prestarcomp', [
             'model' => $model,
         ]);
 }
 
 
-    public function actionPrestarespacio()
+ public function actionPrestarespacio()
     {    
             // Verificar si el usuario está autenticado
     if (\Yii::$app->user->isGuest) {
@@ -245,8 +241,10 @@ class PrestamoController extends Controller
             return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('prestaresp', [
             'model' => $model,
       ]);
     }
+
+
 }

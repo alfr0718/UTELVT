@@ -86,3 +86,14 @@ a.desc:after {
 .form-group {
     margin-bottom: 1rem;
 }
+
+.user-initials {
+    width: 50px; /* Ancho deseado */
+    height: 50px; /* Altura deseada */
+    background-color: #ff8800; /* Color de fondo deseado */
+    color: #ffffff; /* Color del texto deseado */
+    text-align: center; /* Centrar horizontalmente */
+    line-height: 50px; /* Centrar verticalmente */
+    border-radius: 50%; /* Forma de círculo */
+    font-size: 24px; /* Tamaño de fuente deseado */
+}

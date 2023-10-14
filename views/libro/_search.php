@@ -18,15 +18,15 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
+    <?php // $form->field($model, 'id') ?>
+
     <?php // $form->field($model, 'codigo_barras') ?>
 
-    <?php // $form->field($model, 'n_ejemplares') ?>
-    
-    <?php // $form->field($model, 'isbn') ?>
-    
     <?php // $form->field($model, 'titulo') ?>
 
     <?php // $form->field($model, 'autor') ?>
+
+    <?php // $form->field($model, 'isbn') ?>
 
     <?php // echo $form->field($model, 'cute') ?>
 
@@ -36,14 +36,15 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'estado') ?>
 
+    <?php // echo $form->field($model, 'n_ejemplares') ?>
+
+    <?php // echo $form->field($model, 'link') ?>
+
     <?php // echo $form->field($model, 'categoria_id') ?>
 
-    <?php //echo $form->field($model, 'asignatura_id')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Asignatura::find()->all(), 'id', 'Nombre'),
-    //['prompt' => 'Ingrese la asignatura']) ?>
-    
+    <?php // echo $form->field($model, 'asignatura_id') ?>
 
-    <?php // echo $form->field($model, 'pais_codigopais')->dropDownList( \yii\helpers\ArrayHelper::map(\app\models\Pais::find()->all(), 'codigopais', 'Nombrepais'),
-    //['prompt' => 'Ingrese el país']) ?>
+    <?php // echo $form->field($model, 'pais_codigopais') ?>
 
     <?php // echo $form->field($model, 'biblioteca_idbiblioteca') ?>
 
@@ -57,6 +58,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'autor')->textInput(['style' => 'width: 100%;'])->label('Autor') ?>
         </div>
     </div>
+    <?php // echo $form->field($model, 'link') ?>
 
     <div class="row">
         <div class="col-md-6">
@@ -99,7 +101,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'n_ejemplares')->textInput(['style' => 'width: 100%;'])?>
+            <?= $form->field($model, 'codigo_barras')->textInput(['style' => 'width: 100%;'])?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'isbn')->textInput(['style' => 'width: 100%;'])->label('ISBN') ?>
@@ -108,11 +110,9 @@ use yii\widgets\ActiveForm;
 </div>
 
 
-
-
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Restablecer', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

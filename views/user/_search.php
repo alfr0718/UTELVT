@@ -28,11 +28,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'Status') ?>
 
-    <?php // echo $form->field($model, 'tipo_usuario') ?>
+    <?= $form->field($model, 'tipo_usuario') ?>
 
-    <?php // echo $form->field($model, 'Created_at') ?>
+    <?= $form->field($model, 'Created_at') ?>
 
-    <?php // echo $form->field($model, 'Updated_at') ?>
+    <?= $form->field($model, 'Updated_at') ?>
 
     <?php // echo $form->field($model, 'Temporalpassword') ?>
 

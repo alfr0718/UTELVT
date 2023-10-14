@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Pc;
+use app\models\Biblioteca;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -10,16 +11,26 @@ use yii\widgets\Pjax;
 /** @var app\models\PcSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Computadores';
+$this->title = 'Lista de Computadores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="pc-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Ingresar PC', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+    $tipoUsuario = null; // Inicializamos la variable
+
+    if (!Yii::$app->user->isGuest) {
+        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+
+        if ($tipoUsuario === 8 || $tipoUsuario === 21) {
+            echo Html::a('Agregar PC', ['create'], ['class' => 'btn btn-success']);
+        }
+    }
+    ?>
+
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -31,27 +42,54 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'idpc',
-            'estado',
-          //  'biblioteca_idbiblioteca',
+            //'estado',
             [
-                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código de la biblioteca
+                'attribute' => 'estado',
                 'value' => function ($model) {
-                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre de la biblioteca
+                    $estados = [
+                        'D' => 'Disponible',
+                        'ND' => 'No Disponible',
+                        'F' => 'Fuera de servicio',
+                        'EM' => 'En Mantenimiento',
+                        'R' => 'Retirada',
+                    ];
+            
+                    return isset($estados[$model->estado]) ? $estados[$model->estado] : $model->estado;
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'estado', [
+                    'D' => 'Disponible',
+                    'ND' => 'No Disponible',
+                    'F' => 'Fuera de servicio',
+                    'EM' => 'En Mantenimiento',
+                    'R' => 'Retirada',
+                ], ['class' => 'form-control', 'prompt' => 'Todos']),
             ],
+            
+
+
+          //  'biblioteca_idbiblioteca',
+          [
+            'attribute' => 'biblioteca_idbiblioteca',
+            'value' => function ($model) {
+                return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre de la biblioteca
+            },
+            'filter' => Html::activeDropDownList($searchModel, 'biblioteca_idbiblioteca', 
+                \yii\helpers\ArrayHelper::map(Biblioteca::find()->all(), 'idbiblioteca', 'Campus'), 
+                ['class' => 'form-control', 'prompt' => 'Todos']
+            ),
+        ],
             //boton de Prestar
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => 'Acciones',
                 'template' => '{customButton}', // Agrega el botón personalizado
                 'buttons' => [
                     'customButton' => function ($url, $model, $key) {
-                        return Html::a('Prestar', ['prestamo/prestarpc', 'id' => $model->idpc], [
-                            'class' => 'btn btn-primary',
-                            'data' => [
-                                //'confirm' => '¿Estás seguro de que deseas prestar este computador?',
-                                'method' => 'post',
-                            ],
+                        return Html::button('<i class="fas fa-plus"></i>', [
+                            'class' => 'btn btn-success',
+                            'id' => 'open-modal-button',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#prestamo-modal',
+                            'data-remote' => Url::to(['/prestamo/prestarpc', 'id' => $model->idpc]),
                         ]);
                     },
                 ],
@@ -60,7 +98,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Pc $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'idpc' => $model->idpc, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
-                 }
+                 },
+                 'visible' => $tipoUsuario === 8 || $tipoUsuario === 21,
             ],
         ],
     ]); ?>
@@ -68,3 +107,48 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+
+
+
+<div class="modal fade" id="prestamo-modal" tabindex="-1" role="dialog" aria-labelledby="prestamo-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="prestamo-modal-label">Préstamo de Computador</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Contenido del modal cargado a través de AJAX -->
+                <div id="prestamo-modal-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+// Registro de JS para manejar la apertura del modal
+$this->registerJs('
+    $("#open-modal-button").on("click", function () {
+        $("#prestamo-modal-content").load($(this).data("remote"), function() {
+            // Una vez que se carga el contenido en el modal, escuchamos el evento clic del botón "Enviar".
+            $("#prestamo-modal-content #submit-button").on("click", function (e) {
+                e.preventDefault(); // Prevenir el envío automático del formulario
+                // Aquí puedes realizar validaciones del formulario si es necesario
+                // Si las validaciones son exitosas, puedes enviar el formulario con AJAX
+
+                $.ajax({
+                    type: "POST",
+                    url: "/prestamo/prestarlibro", // Reemplaza con la URL correcta
+                    data: $("#prestamo-formulario").serialize(), // Reemplaza "tu-formulario" con el ID de tu formulario
+                    success: function (data) {
+                        // Manejar la respuesta si es necesario
+                    }
+                });
+            });
+        });
+    });
+');
+?>
+

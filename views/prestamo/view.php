@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci], [
+        <?= Html::a('Actualizar', ['update', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '¿Estás seguro de eliminar este elemento?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -52,25 +52,25 @@ $this->params['breadcrumbs'][] = $this->title;
             //'libro_biblioteca_idbiblioteca',
             //MAS DATOS DEL LIBRO
             [
-                'attribute' => 'libro_codigo_barras', // Esto muestra el código
+                'attribute' => 'libro_id', // Esto muestra el código
                 'label' => 'Código de Barra del Libro',
                 'value' => function ($model) {
-                    return $model->libroCodigoBarras ? $model->libroCodigoBarras->n_ejemplares : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
+                    return $model->libro ? $model->libro->codigo_barras : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
                 },
             ],
             
             [
-                'attribute' => 'libro_codigo_barras', // Esto muestra el código
+                'attribute' => 'libro_id', // Esto muestra el código
                 'label' => 'Titulo solicitado',
                 'value' => function ($model) {
-                    return $model->libroCodigoBarras ? $model->libroCodigoBarras->titulo : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
+                    return $model->libro ? $model->libro->titulo : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
                 },
             ],
             [
-                'attribute' => 'libro_codigo_barras', // Esto muestra el código
+                'attribute' => 'libro_id', // Esto muestra el código
                 'label' => 'Asignatura',
                 'value' => function ($model) {
-                    return $model->libroCodigoBarras ? $model->libroCodigoBarras->asignatura->Nombre : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
+                    return $model->libro ? $model->libro->asignatura->Nombre : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
                 },
             ],
 

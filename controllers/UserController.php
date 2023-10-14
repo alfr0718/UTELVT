@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use app\models\User;
 use app\models\UserSearch;
+use app\models\ChangePasswordForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\i18n\Formatter;
+use Yii;
 /**
  * UserController implements the CRUD actions for User model.
  */
@@ -153,4 +155,57 @@ class UserController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    
+    public function actionChangePassword()
+    {
+        $model = new ChangePasswordForm();
+    
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // Validar la contraseña actual
+            if (Yii::$app->user->identity->validatePassword($model->currentPassword)) {
+                // Cambiar la contraseña del usuario
+                $user = Yii::$app->user->identity;
+                $user->setPassword($model->newPassword);
+                $user->save();
+                
+                Yii::$app->session->setFlash('success', 'Contraseña cambiada con éxito.');
+                //return $this->redirect(['view', 'id' => $user->id]);
+                return $this->redirect(['change-password']);
+            } else {
+                Yii::$app->session->setFlash('error', 'La contraseña actual es incorrecta.');
+            }
+        }
+    
+        return $this->render('change-password', [
+            'model' => $model,
+        ]);
+    }
+
+    /*public function actionCifrarContraseñas()
+    {
+        // Obtener todos los usuarios de la base de datos
+        $usuarios = User::find()->all();
+    
+        foreach ($usuarios as $usuario) {
+            // Obtener la contraseña en texto claro
+            $contraseña = $usuario->password;
+    
+            // Verificar si la contraseña no está cifrada
+            if (!Yii::$app->security->validatePassword($contraseña, $usuario->password_hash)) {
+                // La contraseña no está cifrada, cifrarla y guardarla
+                $usuario->password = Yii::$app->security->generatePasswordHash($contraseña);
+                
+                // Guardar los cambios en la base de datos
+                if ($usuario->save()) {
+                    echo "Usuario ID {$usuario->id} - Contraseña cifrada.\n";
+                } else {
+                    echo "Error al cifrar la contraseña del usuario ID {$usuario->id}.\n";
+                    // Puedes agregar manejo de errores aquí si es necesario
+                }
+            } else {
+                echo "Usuario ID {$usuario->id} - Contraseña ya cifrada.\n";
+            }
+        }
+    }*/
+
 }

@@ -10,16 +10,27 @@ use yii\widgets\Pjax;
 /** @var app\models\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Usuarios';
+$this->title = 'Lista de Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Ingresar Usuario', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+
+
+    <?php
+    $tipoUsuario = null; // Inicializamos la variable
+
+    if (!Yii::$app->user->isGuest) {
+        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+
+        if ($tipoUsuario === 8) {
+            echo Html::a('Ingresar Usuario', ['create'], ['class' => 'btn btn-success']);
+        }
+    }
+    ?>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -44,10 +55,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                 },
+                 'visible' => $tipoUsuario === 8,
             ],
         ],
     ]); ?>
+
+<?php
+            
+            echo Html::a('Cifrar Contraseñas', ['user/cifrarcontrasenas'], ['class' => 'btn btn-primary']) ?>
+
 
     <?php Pjax::end(); ?>
 

@@ -49,15 +49,15 @@ class LibroController extends Controller
 
     /**
      * Displays a single Libro model.
-     * @param string $codigo_barras Codigo Barras
+     * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($codigo_barras, $biblioteca_idbiblioteca)
+    public function actionView($id, $biblioteca_idbiblioteca)
     {
         return $this->render('view', [
-            'model' => $this->findModel($codigo_barras, $biblioteca_idbiblioteca),
+            'model' => $this->findModel($id, $biblioteca_idbiblioteca),
         ]);
     }
 
@@ -72,7 +72,7 @@ class LibroController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'codigo_barras' => $model->codigo_barras, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
             }
         } else {
             $model->loadDefaultValues();
@@ -86,17 +86,17 @@ class LibroController extends Controller
     /**
      * Updates an existing Libro model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $codigo_barras Codigo Barras
+     * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($codigo_barras, $biblioteca_idbiblioteca)
+    public function actionUpdate($id, $biblioteca_idbiblioteca)
     {
-        $model = $this->findModel($codigo_barras, $biblioteca_idbiblioteca);
+        $model = $this->findModel($id, $biblioteca_idbiblioteca);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'codigo_barras' => $model->codigo_barras, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
+            return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
         }
 
         return $this->render('update', [
@@ -107,14 +107,14 @@ class LibroController extends Controller
     /**
      * Deletes an existing Libro model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $codigo_barras Codigo Barras
+     * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($codigo_barras, $biblioteca_idbiblioteca)
+    public function actionDelete($id, $biblioteca_idbiblioteca)
     {
-        $this->findModel($codigo_barras, $biblioteca_idbiblioteca)->delete();
+        $this->findModel($id, $biblioteca_idbiblioteca)->delete();
 
         return $this->redirect(['index']);
     }
@@ -122,18 +122,17 @@ class LibroController extends Controller
     /**
      * Finds the Libro model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $codigo_barras Codigo Barras
+     * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
      * @return Libro the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($codigo_barras, $biblioteca_idbiblioteca)
+    protected function findModel($id, $biblioteca_idbiblioteca)
     {
-        if (($model = Libro::findOne(['codigo_barras' => $codigo_barras, 'biblioteca_idbiblioteca' => $biblioteca_idbiblioteca])) !== null) {
+        if (($model = Libro::findOne(['id' => $id, 'biblioteca_idbiblioteca' => $biblioteca_idbiblioteca])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-    
 }

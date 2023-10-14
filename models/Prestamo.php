@@ -10,16 +10,17 @@ use Yii;
  * @property int $id
  * @property string $fecha_solicitud
  * @property string|null $intervalo_solicitado
+ * @property string|null $fechaentrega
  * @property string $tipoprestamo_id
  * @property int $biblioteca_idbiblioteca
+ * @property string $personaldata_Ci
  * @property string|null $pc_idpc
  * @property int|null $pc_biblioteca_idbiblioteca
- * @property int|null $libro_codigo_barras
+ * @property int|null $libro_id
  * @property int|null $libro_biblioteca_idbiblioteca
- * @property string $personaldata_Ci
  *
  * @property Biblioteca $bibliotecaIdbiblioteca
- * @property Libro $libroCodigoBarras
+ * @property Libro $libro
  * @property Pc $pcIdpc
  * @property Personaldata $personaldataCi
  * @property Tipoprestamo $tipoprestamo
@@ -40,13 +41,13 @@ class Prestamo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha_solicitud', 'intervalo_solicitado'], 'safe'],
+            [['fecha_solicitud', 'intervalo_solicitado', 'fechaentrega'], 'safe'],
             [['tipoprestamo_id', 'biblioteca_idbiblioteca', 'personaldata_Ci'], 'required'],
-            [['biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_codigo_barras', 'libro_biblioteca_idbiblioteca'], 'integer'],
+            [['biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
             [['tipoprestamo_id'], 'string', 'max' => 5],
-            [['pc_idpc', 'personaldata_Ci'], 'string', 'max' => 15],
+            [['personaldata_Ci', 'pc_idpc'], 'string', 'max' => 15],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
-            [['libro_codigo_barras', 'libro_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_codigo_barras' => 'codigo_barras', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
+            [['libro_id', 'libro_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_id' => 'id', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
             [['pc_idpc', 'pc_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Pc::class, 'targetAttribute' => ['pc_idpc' => 'idpc', 'pc_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
             [['personaldata_Ci'], 'exist', 'skipOnError' => true, 'targetClass' => Personaldata::class, 'targetAttribute' => ['personaldata_Ci' => 'Ci']],
             [['tipoprestamo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoprestamo::class, 'targetAttribute' => ['tipoprestamo_id' => 'id']],
@@ -61,14 +62,15 @@ class Prestamo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'fecha_solicitud' => 'Fecha de Solicitud',
-            'intervalo_solicitado' => 'Tiempo Solicitado',
-            'tipoprestamo_id' => 'Tipo de Préstamo',
+            'intervalo_solicitado' => 'Intervalo de Solicitado',
+            'fechaentrega' => 'Fecha de entrega',
+            'tipoprestamo_id' => 'Tipo de préstamo',
             'biblioteca_idbiblioteca' => 'Campus',
+            'personaldata_Ci' => 'Cedula Solicitante',
             'pc_idpc' => 'Computador',
             'pc_biblioteca_idbiblioteca' => 'Ubicación del Computador',
-            'libro_codigo_barras' => 'Libro',
+            'libro_id' => 'Libro',
             'libro_biblioteca_idbiblioteca' => 'Ubicación del Libro',
-            'personaldata_Ci' => 'Cédula del Solicitante',
         ];
     }
 
@@ -83,13 +85,13 @@ class Prestamo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[LibroCodigoBarras]].
+     * Gets query for [[Libro]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getLibroCodigoBarras()
+    public function getLibro()
     {
-        return $this->hasOne(Libro::class, ['codigo_barras' => 'libro_codigo_barras', 'biblioteca_idbiblioteca' => 'libro_biblioteca_idbiblioteca']);
+        return $this->hasOne(Libro::class, ['id' => 'libro_id', 'biblioteca_idbiblioteca' => 'libro_biblioteca_idbiblioteca']);
     }
 
     /**

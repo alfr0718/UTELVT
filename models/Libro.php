@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "libro".
  *
- * @property int $codigo_barras
- * @property string|null $n_ejemplares
+ * @property int $id
+ * @property string|null $codigo_barras
  * @property string $titulo
  * @property string $autor
  * @property string|null $isbn
@@ -16,6 +16,8 @@ use Yii;
  * @property string $editorial
  * @property string|null $anio_publicacion
  * @property string|null $estado
+ * @property int|null $n_ejemplares
+ * @property string|null $link
  * @property string $categoria_id
  * @property string $asignatura_id
  * @property string $pais_codigopais
@@ -45,9 +47,8 @@ class Libro extends \yii\db\ActiveRecord
         return [
             [['titulo', 'autor', 'editorial', 'categoria_id', 'asignatura_id', 'pais_codigopais', 'biblioteca_idbiblioteca'], 'required'],
             [['anio_publicacion'], 'safe'],
-            [['biblioteca_idbiblioteca'], 'integer'],
-            [['n_ejemplares', 'isbn', 'cute'], 'string', 'max' => 100],
-            [['titulo', 'autor', 'editorial'], 'string', 'max' => 45],
+            [['n_ejemplares', 'biblioteca_idbiblioteca'], 'integer'],
+            [['codigo_barras', 'titulo', 'autor', 'isbn', 'cute', 'editorial', 'link'], 'string', 'max' => 100],
             [['estado'], 'string', 'max' => 10],
             [['categoria_id', 'asignatura_id', 'pais_codigopais'], 'string', 'max' => 4],
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_id' => 'id']],
@@ -63,19 +64,21 @@ class Libro extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'codigo_barras' => 'id',
-            'n_ejemplares' => 'Código de Barra',
-            'titulo' => 'Titulo',
+            'id' => 'ID',
+            'codigo_barras' => 'Código de Barras',
+            'titulo' => 'Título',
             'autor' => 'Autor',
             'isbn' => 'ISBN',
             'cute' => 'CUTE',
             'editorial' => 'Editorial',
             'anio_publicacion' => 'Año de Publicación',
             'estado' => 'Estado',
+            'n_ejemplares' => 'N de Ejemplares',
+            'link' => 'Link',
             'categoria_id' => 'Categoría',
             'asignatura_id' => 'Asignatura',
             'pais_codigopais' => 'País',
-            'biblioteca_idbiblioteca' => 'Ubicación',
+            'biblioteca_idbiblioteca' => 'Biblioteca',
         ];
     }
 
@@ -126,6 +129,6 @@ class Libro extends \yii\db\ActiveRecord
      */
     public function getPrestamos()
     {
-        return $this->hasMany(Prestamo::class, ['libro_codigo_barras' => 'codigo_barras', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']);
+        return $this->hasMany(Prestamo::class, ['libro_id' => 'id', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']);
     }
 }

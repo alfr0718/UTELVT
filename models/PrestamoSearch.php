@@ -17,8 +17,8 @@ class PrestamoSearch extends Prestamo
     public function rules()
     {
         return [
-            [['id', 'biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_biblioteca_idbiblioteca'], 'integer'],
-            [['fecha_solicitud', 'intervalo_solicitado', 'tipoprestamo_id', 'pc_idpc', 'libro_codigo_barras', 'personaldata_Ci'], 'safe'],
+            [['id', 'biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
+            [['fecha_solicitud', 'intervalo_solicitado', 'fechaentrega', 'tipoprestamo_id', 'personaldata_Ci', 'pc_idpc'], 'safe'],
         ];
     }
 
@@ -61,15 +61,16 @@ class PrestamoSearch extends Prestamo
             'id' => $this->id,
             'fecha_solicitud' => $this->fecha_solicitud,
             'intervalo_solicitado' => $this->intervalo_solicitado,
+            'fechaentrega' => $this->fechaentrega,
             'biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
             'pc_biblioteca_idbiblioteca' => $this->pc_biblioteca_idbiblioteca,
+            'libro_id' => $this->libro_id,
             'libro_biblioteca_idbiblioteca' => $this->libro_biblioteca_idbiblioteca,
         ]);
 
         $query->andFilterWhere(['like', 'tipoprestamo_id', $this->tipoprestamo_id])
-            ->andFilterWhere(['like', 'pc_idpc', $this->pc_idpc])
-            ->andFilterWhere(['like', 'libro_codigo_barras', $this->libro_codigo_barras])
-            ->andFilterWhere(['like', 'personaldata_Ci', $this->personaldata_Ci]);
+            ->andFilterWhere(['like', 'personaldata_Ci', $this->personaldata_Ci])
+            ->andFilterWhere(['like', 'pc_idpc', $this->pc_idpc]);
 
         return $dataProvider;
     }

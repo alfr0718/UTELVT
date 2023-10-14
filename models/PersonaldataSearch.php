@@ -17,7 +17,8 @@ class PersonaldataSearch extends Personaldata
     public function rules()
     {
         return [
-            [['Ci', 'Apellidos', 'Nombres', 'FechaNacimiento', 'Email', 'Genero', 'Institucion', 'Nivel'], 'safe'],
+            [['Ci', 'Apellidos', 'Nombres', 'FechaNacimiento', 'Email', 'Genero', 'Institucion', 'Nivel', 'Facultad'], 'safe'],
+            [['Ciclo'], 'integer'],
         ];
     }
 
@@ -58,6 +59,7 @@ class PersonaldataSearch extends Personaldata
         // grid filtering conditions
         $query->andFilterWhere([
             'FechaNacimiento' => $this->FechaNacimiento,
+            'Ciclo' => $this->Ciclo,
         ]);
 
         $query->andFilterWhere(['like', 'Ci', $this->Ci])
@@ -66,7 +68,8 @@ class PersonaldataSearch extends Personaldata
             ->andFilterWhere(['like', 'Email', $this->Email])
             ->andFilterWhere(['like', 'Genero', $this->Genero])
             ->andFilterWhere(['like', 'Institucion', $this->Institucion])
-            ->andFilterWhere(['like', 'Nivel', $this->Nivel]);
+            ->andFilterWhere(['like', 'Nivel', $this->Nivel])
+            ->andFilterWhere(['like', 'Facultad', $this->Facultad]);
 
         return $dataProvider;
     }

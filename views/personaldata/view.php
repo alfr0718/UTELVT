@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Personaldata $model */
 
-$this->title = $model->Nombres.' '.$model->Apellidos;
+$this->title = $model->Nombres .' '. $model->Apellidos;
 $this->params['breadcrumbs'][] = ['label' => 'Personaldatas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -16,14 +16,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'Ci' => $model->Ci], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'Ci' => $model->Ci], [
+        <?= Html::a('Actualizar', ['update', 'Ci' => $model->Ci], ['class' => 'btn btn-primary']) ?>
+        
+        <?= Html::a('Eliminar', ['delete', 'Ci' => $model->Ci], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '¿Estas seguro de eliminar este elemento?',
                 'method' => 'post',
             ],
         ]) ?>
+
+        <?php
+            $user = Yii::$app->user->identity;
+            if ($user->username === $model->Ci) {
+            echo Html::a('Cambiar Contraseña', ['user/change-password'], ['class' => 'btn btn-warning'], ['confirm' => '¿Estas seguro de cambiar tu contraseña?',]);
+            }
+        ?>
     </p>
 
     <?= DetailView::widget([
@@ -37,6 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'Genero',
             'Institucion',
             'Nivel',
+            'Facultad',
+            'Ciclo',
         ],
     ]) ?>
 

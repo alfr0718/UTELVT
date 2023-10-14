@@ -18,9 +18,19 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'Auth_key')->textInput(['maxlength' => true]) ?>
 
-    <?php // $form->field($model, 'Status')->textInput() ?>
+    <?= $form->field($model, 'Status')->dropDownList([
+                        '0' => 'Inactivo',
+                        '1' => 'Activo',
+                    ], ['prompt' => 'Seleccione el estado', 'class' => 'form-control']) ?>
 
-    <?php // $form->field($model, 'tipo_usuario')->textInput() ?>
+    <?= $form->field($model, 'tipo_usuario')->dropDownList([
+                        '1' => 'Externo',
+                        '13' => 'Estudiante',
+                        '18' => 'Docente',
+                        '21' => 'Personal',
+                        '7' => 'Gerente',
+                        '8' => 'Admin'
+                    ], ['prompt' => 'Seleccione el tipo de usuario', 'class' => 'form-control']) ?>
 
     <?php // $form->field($model, 'Created_at')->textInput() ?>
 

@@ -15,6 +15,8 @@ use Yii;
  * @property string $Genero
  * @property string|null $Institucion
  * @property string|null $Nivel
+ * @property string|null $Facultad
+ * @property int|null $Ciclo
  *
  * @property Prestamo[] $prestamos
  * @property User $user
@@ -42,9 +44,11 @@ class Personaldata extends \yii\db\ActiveRecord
             [['Ci', 'Apellidos', 'Nombres', 'Email', 'Genero'], 'required'],
             [['FechaNacimiento'], 'safe'],
             [['Genero'], 'string'],
+            [['Ciclo'], 'integer'],
             [['Ci'], 'string', 'max' => 15],
             [['Apellidos'], 'string', 'max' => 40],
             [['Nombres', 'Email', 'Institucion', 'Nivel'], 'string', 'max' => 45],
+            [['Facultad'], 'string', 'max' => 60],
             [['Ci'], 'unique'],
         ];
     }
@@ -61,8 +65,10 @@ class Personaldata extends \yii\db\ActiveRecord
             'FechaNacimiento' => 'Fecha de Nacimiento',
             'Email' => 'Email',
             'Genero' => 'Género',
-            'Institucion' => 'Institución',
+            'Institucion' => 'Afiliación',
             'Nivel' => 'Nivel Académico',
+            'Facultad' => 'Facultad',
+            'Ciclo' => 'Ciclo',
         ];
     }
 

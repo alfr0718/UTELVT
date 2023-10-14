@@ -2,16 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\Libro;
-use app\models\LibrolistSearch;
+use app\models\Biblioteca;
+use app\models\BibliotecaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * LibrolistController implements the CRUD actions for Libro model.
+ * BibliotecaController implements the CRUD actions for Biblioteca model.
  */
-class LibrolistController extends Controller
+class BibliotecaController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,13 +32,13 @@ class LibrolistController extends Controller
     }
 
     /**
-     * Lists all Libro models.
+     * Lists all Biblioteca models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new LibrolistSearch();
+        $searchModel = new BibliotecaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -48,31 +48,30 @@ class LibrolistController extends Controller
     }
 
     /**
-     * Displays a single Libro model.
-     * @param string $codigo_barras Codigo Barras
-     * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
+     * Displays a single Biblioteca model.
+     * @param int $idbiblioteca Idbiblioteca
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($codigo_barras, $biblioteca_idbiblioteca)
+    public function actionView($idbiblioteca)
     {
         return $this->render('view', [
-            'model' => $this->findModel($codigo_barras, $biblioteca_idbiblioteca),
+            'model' => $this->findModel($idbiblioteca),
         ]);
     }
 
     /**
-     * Creates a new Libro model.
+     * Creates a new Biblioteca model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Libro();
+        $model = new Biblioteca();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'codigo_barras' => $model->codigo_barras, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
+                return $this->redirect(['view', 'idbiblioteca' => $model->idbiblioteca]);
             }
         } else {
             $model->loadDefaultValues();
@@ -84,19 +83,18 @@ class LibrolistController extends Controller
     }
 
     /**
-     * Updates an existing Libro model.
+     * Updates an existing Biblioteca model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $codigo_barras Codigo Barras
-     * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
+     * @param int $idbiblioteca Idbiblioteca
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($codigo_barras, $biblioteca_idbiblioteca)
+    public function actionUpdate($idbiblioteca)
     {
-        $model = $this->findModel($codigo_barras, $biblioteca_idbiblioteca);
+        $model = $this->findModel($idbiblioteca);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'codigo_barras' => $model->codigo_barras, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
+            return $this->redirect(['view', 'idbiblioteca' => $model->idbiblioteca]);
         }
 
         return $this->render('update', [
@@ -105,31 +103,29 @@ class LibrolistController extends Controller
     }
 
     /**
-     * Deletes an existing Libro model.
+     * Deletes an existing Biblioteca model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $codigo_barras Codigo Barras
-     * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
+     * @param int $idbiblioteca Idbiblioteca
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($codigo_barras, $biblioteca_idbiblioteca)
+    public function actionDelete($idbiblioteca)
     {
-        $this->findModel($codigo_barras, $biblioteca_idbiblioteca)->delete();
+        $this->findModel($idbiblioteca)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Libro model based on its primary key value.
+     * Finds the Biblioteca model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $codigo_barras Codigo Barras
-     * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
-     * @return Libro the loaded model
+     * @param int $idbiblioteca Idbiblioteca
+     * @return Biblioteca the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($codigo_barras, $biblioteca_idbiblioteca)
+    protected function findModel($idbiblioteca)
     {
-        if (($model = Libro::findOne(['codigo_barras' => $codigo_barras, 'biblioteca_idbiblioteca' => $biblioteca_idbiblioteca])) !== null) {
+        if (($model = Biblioteca::findOne(['idbiblioteca' => $idbiblioteca])) !== null) {
             return $model;
         }
 
