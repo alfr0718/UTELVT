@@ -160,6 +160,9 @@ class SiteController extends Controller
         if ($User->save()) {
             // El usuario se creó con éxito. Datos personales también
             \Yii::$app->session->setFlash('success', 'Usuario creado con éxito.');
+            return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta de tu página de inicio de sesión
+        
+        
 
             // Redirige al usuario a la página de inicio de sesión (ajusta la URL según tu configuración).
            // return $this->redirect(['site/login']); // Cambia 'site/login' a la URL real de tu página de inicio de sesión.

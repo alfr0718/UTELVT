@@ -16,20 +16,33 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Actualizar', ['update', 'Ci' => $model->Ci], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Actualizar', ['update', 'Ci' => $model->Ci], ['class' => 'btn btn-primary']) ?>
+    <?php
+    $tipoUsuario = null; // Inicializamos la variable
+
+    if (!Yii::$app->user->isGuest) {
+        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+
+        if ($tipoUsuario === 8) {
+            echo Html::a('Eliminar', ['delete', 'Ci' => $model->Ci], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => '¿Estás seguro de eliminar este elemento?',
+                    'method' => 'post',
+                ],
+            ]);
+        }
+    }
+    ?>
+
         
-        <?= Html::a('Eliminar', ['delete', 'Ci' => $model->Ci], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => '¿Estas seguro de eliminar este elemento?',
-                'method' => 'post',
-            ],
-        ]) ?>
 
         <?php
             $user = Yii::$app->user->identity;
             if ($user->username === $model->Ci) {
             echo Html::a('Cambiar Contraseña', ['user/change-password'], ['class' => 'btn btn-warning'], ['confirm' => '¿Estas seguro de cambiar tu contraseña?',]);
+
             }
         ?>
     </p>
