@@ -8,6 +8,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 // Estilos CSS personalizados
 $this->registerCss("
+
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
 .site-about {
     padding: 30px 0;
     color: #333;
@@ -21,6 +25,10 @@ $this->registerCss("
 .site-about h1 {
     font-size: 2.5em;
     margin: 20px 0;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase; /* Convierte el texto a mayúsculas, si es necesario */
+
 }
 
 .site-about p {
@@ -28,22 +36,6 @@ $this->registerCss("
     margin-bottom: 20px;
 }
 
-.site-about .btn-success,
-.site-about .btn-primary {
-    font-size: 1.2em;
-    padding: 15px 20px;
-    background-color: #5EB400;
-    border: none;
-    color: #FFF;
-    transition: background-color 0.3s, transform 0.2s;
-    margin: 10px;
-}
-
-.site-about .btn-success:hover,
-.site-about .btn-primary:hover {
-    background-color: #4E9A00;
-    transform: scale(1.05);
-}
 
 .container {
     max-width: 960px;
@@ -83,3 +75,4 @@ $this->registerCss("
         </p>
     </div>
 </div>
+<?php //FRANCO M. ESTUVO AQUÍ?> 

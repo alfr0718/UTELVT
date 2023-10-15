@@ -4,149 +4,106 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Registro';
+
 $this->registerCss("
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 
-.welcome-container {
+body {
+    background-image: url('/img/3.jpeg'); /* Reemplaza con la ruta real de tu imagen de fondo */
     background-size: cover;
-    background-position: center;
-    animation: backgroundAnimation 60s infinite alternate;
-    transition: background-image 2s ease-in-out; /* Agregamos una transición suave */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.registro-form {
+    max-width: 90vw;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f8ff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes backgroundAnimation {
-    0% {
-        background-image: url('/img/1.jpg');
-    }
-    25% {
-        background-image: url('/img/2.jpeg');
-    }
-    50% {
-        background-image: url('/img/3.jpeg');
-    }
-    75% {
-        background-image: url('/img/4.jpeg');
-    }
-    100% {
-        background-image: url('/img/1.jpeg');
-    }
-}
-
-.site-index {
-    text-align: center;
-    padding: 30px 0;
-    color: #FFF; /* Color del texto en blanco */
-    font-family: 'Raleway', sans-serif;
-    font-size: 1.2em;
+.registro-form label {
     font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombreado del texto */
 }
 
-
-.site-index h1 {
-    font-size: 3em;
-    margin: 20px 0;
-    transition: font-size 0.3s;
-}
-
-.site-index:hover h1 {
-    font-size: 3.5em;
-}
-
-.site-index .lead {
-    font-size: 1.2em;
+.registro-form .form-group {
     margin-bottom: 20px;
 }
 
-.site-index .btn-success,
-.site-index .btn-primary {
-    font-size: 1em;
-    padding: 15px 20px;
+.registro-form .btn-primary {
     background-color: #5EB400;
-    border: none;
     color: #FFF;
-    transition: background-color 0.3s, transform 0.2s;
-    margin: 10px;
-}
-
-.site-index .btn-success:hover,
-.site-index .btn-primary:hover {
-    background-color: #4E9A00;
-    transform: scale(1.05);
-}
-
-.col-lg-4 {
-    flex: 1;
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #FFF;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-
-.col-lg-4:hover {
-    transform: scale(1.05);
-}
-
-.col-lg-4 p {
-    font-size: 1em;
-    margin-bottom: 10px;
-}
-
-.btn-outline-secondary {
-    font-size: 1em;
     padding: 15px 20px;
-    background-color: #FF6B00;
-    color: #FFF;
     border: none;
 }
 
-.btn-outline-secondary:hover {
-    background-color: #E95A00;
+.registro-form .btn-primary:hover {
+    background-color: #4E9A00;
 }
+
+/* Estilo adicional para el título */
+.registro-title {
+    font-size: 2em;
+    margin: 20px 0;
+    color: #191970; /* Color del texto para el título */
+    font-family: 'Raleway', sans-serif;
+    font-size: 2em;
+    font-weight: 700;
+    letter-spacing: 2px; /* Ajusta el espaciado entre letras */
+    text-transform: uppercase; /* Convierte el texto a mayúsculas, si es necesario */
+
 }
 ");
 
 ?>
-<style >
-    /* Estilos para el título */
-    h1 {
-        text-align: center;
-        color: #5EB400;
-    }
 
-    /* Estilos para los campos del formulario */
-    .form-group {
-        margin-bottom: 20px;
-    }
+<?php if (Yii::$app->session->hasFlash('error')): ?>
+<?= \hail812\adminlte\widgets\Alert::widget([
+    'type' => 'danger',
+    'body' => Yii::$app->session->getFlash('error'),
+]) ?>
+<?php endif; ?>
 
-    /* Estilos para el botón de enviar */
-    .btn-primary {
-        background-color: #5EB400;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-</style>
+<div class="registro-form">
+    <h1 class="registro-title"><?= Html::encode($this->title) ?></h1>
+    <?php $form = ActiveForm::begin(); ?>
 
-<h1><?= Html::encode($this->title) ?></h1>
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'Ci')->textInput(['maxlength' => true]) ?>
+    </div>
 
-<?php $form = ActiveForm::begin(); ?>
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'Apellidos')->textInput(['maxlength' => true]) ?>
+    </div>
 
-<?= $form->field($PersonalD, 'Ci', ['options' => ['class' => 'form-group']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($PersonalD, 'Apellidos', ['options' => ['class' => 'form-group']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($PersonalD, 'Nombres', ['options' => ['class' => 'form-group']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($PersonalD, 'FechaNacimiento', ['options' => ['class' => 'form-group']])->input('date') ?>
-<?= $form->field($PersonalD, 'Email', ['options' => ['class' => 'form-group']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($PersonalD, 'Genero', ['options' => ['class' => 'form-group']])->dropDownList(['M' => 'Masculino', 'F' => 'Femenino'], ['prompt' => 'Seleccione su género']) ?>
-<?= $form->field($PersonalD, 'Institucion', ['options' => ['class' => 'form-group']])->textInput(['maxlength' => true]) ?>
-<?= $form->field($PersonalD, 'Nivel', ['options' => ['class' => 'form-group']])->dropDownList(['Bachiller' => 'Bachiller', 'Universidad' => 'Universidad', 'Posgrado' => 'Posgrado'], ['prompt' => 'Seleccione su Nivel Académico']) ?>
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'Nombres')->textInput(['maxlength' => true]) ?>
+    </div>
 
-<div class="form-group">
-    <?= Html::submitButton('Iniciar Registro', ['class' => 'btn btn-outline-primary']) ?>
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'FechaNacimiento')->input('date') ?>
+    </div>
+
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'Email')->textInput(['maxlength' => true]) ?>
+    </div>
+
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'Genero')->dropDownList(['M' => 'Masculino', 'F' => 'Femenino'], ['prompt' => 'Seleccione su género']) ?>
+    </div>
+
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'Institucion')->textInput(['maxlength' => true]) ?>
+    </div>
+
+    <div class="form-group">
+        <?= $form->field($PersonalD, 'Nivel')->dropDownList(['Bachiller' => 'Bachiller', 'Universidad' => 'Universidad', 'Posgrado' => 'Posgrado'], ['prompt' => 'Seleccione su Nivel Académico']) ?>
+    </div>
+
+    <div class="form-group">
+        <?= Html::submitButton('Iniciar Registro', ['class' => 'btn btn-primary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 </div>
-
-<?php ActiveForm::end(); ?>

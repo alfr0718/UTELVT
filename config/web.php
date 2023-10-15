@@ -39,19 +39,19 @@ $config = [
             'on afterLogin' => function ($event) {
                 $user = $event->identity;
                 $auth = Yii::$app->authManager;
-                if ($user->tipo_usuario == 8) {
-                    $auth->revokeAll($user->getId()); // Elimina cualquier rol anteriormente asignado
-                    $role = $auth->getRole('admin'); // Nombre del rol de administrador
-                    $auth->assign($role, $user->getId());
-                } elseif ($user->tipo_usuario == 21 || $user->tipo_usuario == 7) {
-                    $auth->revokeAll($user->getId()); // Elimina cualquier rol anteriormente asignado
-                    $role = $auth->getRole('personal'); // Nombre del rol de personal
-                    $auth->assign($role, $user->getId());
-                }else {
-                    $auth->revokeAll($user->getId()); // Elimina cualquier rol anteriormente asignado
-                    $role = $auth->getRole('usuario'); // Nombre del rol de usuario
+
+                if (empty($auth->getRolesByUser($user->getId()))) {
+                    if ($user->tipo_usuario == 8) {
+                        $role = $auth->getRole('admin'); // Nombre del rol de administrador
+                    } elseif ($user->tipo_usuario == 21 || $user->tipo_usuario == 7) {
+                        $role = $auth->getRole('personal'); // Nombre del rol de personal
+                    } else {
+                        $role = $auth->getRole('usuario'); // Nombre del rol de usuario
+                    }
+                    
                     $auth->assign($role, $user->getId());
                 }
+
             },
         ],
         'errorHandler' => [

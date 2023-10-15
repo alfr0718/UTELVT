@@ -16,6 +16,17 @@ class ChangePasswordForm extends Model
             ['confirmPassword', 'compare', 'compareAttribute' => 'newPassword'],
         ];
     }
+
+
+    public function attributeLabels()
+    {
+        return [
+            'currentPassword' => 'Contraseña Actual',
+            'newPassword' => 'Nueva Contraseña',
+            'confirmPassword' => 'Confirmar Contraseña',
+        ];
+    }
+
 }
 
 ?>

@@ -48,6 +48,8 @@ $this->registerCss("
     font-size: 1.2em;
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombreado del texto */
+    text-transform: uppercase; /* Convierte el texto a mayúsculas, si es necesario */
+
 }
 
 
@@ -149,7 +151,7 @@ $this->registerCss("
 
     <div class="row">
         <div class="col-12 col-lg-4">
-            <h2>¡Bienvenido a Nuestra Biblioteca!</h2>
+            <h2>Actualiza para Disfrutar</h2>
                 <?php if (!Yii::$app->user->isGuest): ?>
                     <?php
                     //$ciParam = Yii::$app->user->isGuest ? null : Yii::$app->user->identity->personaldata->Ci;
