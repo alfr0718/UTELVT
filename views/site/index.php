@@ -1,10 +1,7 @@
 <?php
 
 /** @var yii\web\View $this */
-use app\models\PersonalData;
-use app\models\Prestamo;
-use app\models\User;
-use yii\widgets\ActiveForm;
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -36,7 +33,7 @@ $this->registerCss("
         background-image: url('/img/4.jpeg');
     }
     100% {
-        background-image: url('/img/1.jpeg');
+        background-image: url('/img/1.jpg');
     }
 }
 
@@ -118,74 +115,74 @@ $this->registerCss("
 ");
 
 ?>
-    <div class="site-index welcome-container">
+<div class="site-index welcome-container">
 
-        <?php if (Yii::$app->user->isGuest): ?>
-    
-            <h1 class="display-4">¡Bienvenido!</h1>
-    
-        <?php else: ?>
-        
+    <?php if (Yii::$app->user->isGuest) : ?>
+
+        <h1 class="display-4">¡Bienvenido!</h1>
+
+    <?php else : ?>
+
         <?php $userData = Yii::$app->user->identity->personaldata; ?>
-        
-            <h1 class="display-4">¡Bienvenido, <?= $userData->Nombres ?>!</h1>
-    
-        <?php endif; ?>
 
-        <p class="lead">"Te deseamos una experiencia enriquecedora y llena de inspiración."</p>
-        <?php if (!Yii::$app->user->isGuest): ?>
-            <?php echo Html::button('Registra tu visita', [
-                    'class' => 'btn btn-success',
-                    'id' => 'open-modal-button',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#prestamo-modal',
-                    'data-remote' => Url::to(['/prestamo/prestarespacio']), // URL de la acción
-                 ]);
-            ?>
-        
-        <?php endif; ?>
-   
-    </div>
+        <h1 class="display-4">¡Bienvenido, <?= $userData->Nombres ?>!</h1>
 
-    <div class="body-content">
+    <?php endif; ?>
+
+    <p class="lead">"Te deseamos una experiencia enriquecedora y llena de inspiración."</p>
+    <?php if (!Yii::$app->user->isGuest) : ?>
+        <?php echo Html::button('Registra tu visita', [
+            'class' => 'btn btn-success',
+            'id' => 'open-modal-button',
+            'data-toggle' => 'modal',
+            'data-target' => '#prestamo-modal',
+            'data-remote' => Url::to(['/prestamo/prestarespacio']), // URL de la acción
+        ]);
+        ?>
+
+    <?php endif; ?>
+
+</div>
+
+<div class="body-content">
 
     <div class="row">
         <div class="col-12 col-lg-4">
             <h2>Actualiza para Disfrutar</h2>
-                <?php if (!Yii::$app->user->isGuest): ?>
-                    <?php
-                    //$ciParam = Yii::$app->user->isGuest ? null : Yii::$app->user->identity->personaldata->Ci;
-                    $url = ['/personaldata/update', 'Ci' => $userData->Ci];
-                    ?>
-                    <p>¡Gracias por ser parte de nuestra comunidad! Actualiza tus datos ahora para brindarte una experiencia aún mejor. </p>
-                    <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl($url) ?>">Actualizar datos  &raquo;</a></p>
-                <?php else: ?>
-                    <p>¡Gracias por visitarnos! Para disfrutar de una experiencia aún mejor, te animamos a iniciar sesión.</p>
-                    <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión  &raquo;</a></p>
-                <?php endif; ?>
-            
+            <?php if (!Yii::$app->user->isGuest) : ?>
+                <?php
+                //$ciParam = Yii::$app->user->isGuest ? null : Yii::$app->user->identity->personaldata->Ci;
+                $url = ['/personaldata/update', 'Ci' => $userData->Ci];
+                ?>
+                <p>¡Gracias por ser parte de nuestra comunidad! Actualiza tus datos ahora para brindarte una experiencia aún mejor. </p>
+                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl($url) ?>">Actualizar datos &raquo;</a></p>
+            <?php else : ?>
+                <p>¡Gracias por visitarnos! Para disfrutar de una experiencia aún mejor, te animamos a iniciar sesión.</p>
+                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión &raquo;</a></p>
+            <?php endif; ?>
+
         </div>
         <div class="col-12 col-lg-4">
             <h2>Catálogo de Libros</h2>
 
             <p>Explora nuestra amplia colección de libros. Sumérgete en el mundo de la literatura y descubre nuevas historias y conocimientos.</p>
-            <?php  if (!Yii::$app->user->isGuest): ?>
-                 <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/libro/index']) ?>">Ver libros disponibles &raquo;</a></p>
-            <?php  else: ?>
-                 <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión  &raquo;</a></p>
-            <?php  endif; ?>
+            <?php if (!Yii::$app->user->isGuest) : ?>
+                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/libro/index']) ?>">Ver libros disponibles &raquo;</a></p>
+            <?php else : ?>
+                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión &raquo;</a></p>
+            <?php endif; ?>
         </div>
-    
+
         <div class="col-12 col-lg-4">
             <h2>Solicitud de Préstamo</h2>
 
             <p>¿Necesitas un computador para tus tareas o proyectos? También ofrecemos la posibilidad de solicitar préstamo de computadoras.</p>
 
-            <?php if (!Yii::$app->user->isGuest): ?>
-            <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/pc/index']) ?>">Solicitar préstamo&raquo;</a></p>
-            <?php else: ?>
-                 <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión  &raquo;</a></p>
-            <?php  endif; ?>
+            <?php if (!Yii::$app->user->isGuest) : ?>
+                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/pc/index']) ?>">Solicitar préstamo&raquo;</a></p>
+            <?php else : ?>
+                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión &raquo;</a></p>
+            <?php endif; ?>
         </div>
 
     </div>

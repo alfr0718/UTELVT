@@ -46,12 +46,12 @@ class Biblioteca extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idbiblioteca' => 'Idbiblioteca',
+            'idbiblioteca' => 'id',
             'Campus' => 'Campus',
             'Apertura' => 'Apertura',
             'Cierre' => 'Cierre',
             'Email' => 'Email',
-            'Telefono' => 'Telefono',
+            'Telefono' => 'Teléfono',
         ];
     }
 

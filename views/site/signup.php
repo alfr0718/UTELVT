@@ -1,5 +1,4 @@
 <?php
-use yii2mod\admin\helper\LayoutHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -61,6 +60,7 @@ body {
 <?php if (Yii::$app->session->hasFlash('error')): ?>
 <?= \hail812\adminlte\widgets\Alert::widget([
     'type' => 'danger',
+    'title' => 'Error', 
     'body' => Yii::$app->session->getFlash('error'),
 ]) ?>
 <?php endif; ?>
@@ -70,40 +70,58 @@ body {
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'Ci')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'Ci')->textInput(['maxlength' => true]) ?>
     </div>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'Apellidos')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'Apellidos')->textInput(['maxlength' => true]) ?>
     </div>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'Nombres')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'Nombres')->textInput(['maxlength' => true]) ?>
     </div>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'FechaNacimiento')->input('date') ?>
+        <?= $form->field($model, 'FechaNacimiento')->input('date') ?>
     </div>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'Email')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'Email')->textInput(['maxlength' => true]) ?>
     </div>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'Genero')->dropDownList(['M' => 'Masculino', 'F' => 'Femenino'], ['prompt' => 'Seleccione su género']) ?>
+        <?= $form->field($model, 'Genero')->dropDownList(['M' => 'Masculino', 'F' => 'Femenino'], ['prompt' => 'Seleccione su género']) ?>
     </div>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'Institucion')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'Institucion')->textInput(['maxlength' => true]) ?>
     </div>
 
     <div class="form-group">
-        <?= $form->field($PersonalD, 'Nivel')->dropDownList(['Bachiller' => 'Bachiller', 'Universidad' => 'Universidad', 'Posgrado' => 'Posgrado'], ['prompt' => 'Seleccione su Nivel Académico']) ?>
+        <?= $form->field($model, 'Nivel')->dropDownList(['Bachiller' => 'Bachiller', 'Universidad' => 'Universidad', 'Posgrado' => 'Posgrado'], ['prompt' => 'Seleccione su Nivel Académico']) ?>
     </div>
 
-    <div class="form-group">
-        <?= Html::submitButton('Iniciar Registro', ['class' => 'btn btn-primary']) ?>
-    </div>
+<div class="form-group">
+    <button id="submitButton" class="btn btn-primary">Iniciar Registro</button>
+</div>
 
     <?php ActiveForm::end(); ?>
+
+    
+<script>
+    // Agrega un evento de clic al botón de envío
+    document.getElementById("submitButton").addEventListener("click", function(event) {
+        // Pregunta al usuario si está seguro de realizar la acción
+        if (confirm("¿Estás seguro de que deseas unirte a esta comunidad?")) {
+            // Si el usuario hace clic en "Aceptar" en el cuadro de confirmación, se envía el formulario
+            // Si el usuario hace clic en "Cancelar", no se envía el formulario
+            // Puedes poner aquí el código para enviar el formulario si se confirma
+        } else {
+            // Cancela el evento de clic para que el formulario no se envíe
+            event.preventDefault();
+        }
+    });
+</script>
+
 </div>
+

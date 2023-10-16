@@ -8,7 +8,6 @@ use app\models\ChangePasswordForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\i18n\Formatter;
 use Yii;
 /**
  * UserController implements the CRUD actions for User model.
@@ -180,32 +179,5 @@ class UserController extends Controller
             'model' => $model,
         ]);
     }
-
-    /*public function actionCifrarContraseñas()
-    {
-        // Obtener todos los usuarios de la base de datos
-        $usuarios = User::find()->all();
-    
-        foreach ($usuarios as $usuario) {
-            // Obtener la contraseña en texto claro
-            $contraseña = $usuario->password;
-    
-            // Verificar si la contraseña no está cifrada
-            if (!Yii::$app->security->validatePassword($contraseña, $usuario->password_hash)) {
-                // La contraseña no está cifrada, cifrarla y guardarla
-                $usuario->password = Yii::$app->security->generatePasswordHash($contraseña);
-                
-                // Guardar los cambios en la base de datos
-                if ($usuario->save()) {
-                    echo "Usuario ID {$usuario->id} - Contraseña cifrada.\n";
-                } else {
-                    echo "Error al cifrar la contraseña del usuario ID {$usuario->id}.\n";
-                    // Puedes agregar manejo de errores aquí si es necesario
-                }
-            } else {
-                echo "Usuario ID {$usuario->id} - Contraseña ya cifrada.\n";
-            }
-        }
-    }*/
 
 }

@@ -144,12 +144,12 @@ class PrestamoController extends Controller
     }
 
     public function actionPrestarlibro($id)
-    {    
+    {
         if (\Yii::$app->user->isGuest) {
             // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
             return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta a tu página de inicio de sesión
         }
-        
+
         // Cargar el modelo de libro basado en el $id recibido        
         $libro = Libro::findOne(['id' => $id]);
 
@@ -157,7 +157,7 @@ class PrestamoController extends Controller
         if (!$libro) {
             throw new NotFoundHttpException('El libro no se encontró.');
         }
-        
+
         $model = new Prestamo();
 
         // Obtener el usuario actual
@@ -166,7 +166,7 @@ class PrestamoController extends Controller
         // Asignar valores al modelo de Prestamo
         $model->personaldata_Ci = $usuario->personaldata;
         $model->tipoprestamo_id = 'LIB';
-        
+
         $model->biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; // Campus donde se encuentra el usuario... mejorar (Y)
         $model->libro_id = $id;
         $model->libro_biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; //Campus donde se encuentra el libro
@@ -182,27 +182,27 @@ class PrestamoController extends Controller
 
 
     public function actionPrestarpc($id)
-    {    
+    {
         if (\Yii::$app->user->isGuest) {
             // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
             return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta a tu página de inicio de sesión
         }
-        
+
         // Cargar el modelo del computador basado en el $id recibido
-        
+
         $pc = Pc::findOne(['idpc' => $id]);
 
-    // Verificar si el computador existe
+        // Verificar si el computador existe
         if (!$pc) {
             throw new NotFoundHttpException('El computador no se encontró.');
         }
 
         $model = new Prestamo();
 
-    // Obtener el usuario actual
+        // Obtener el usuario actual
         $usuario = \Yii::$app->user->identity;
 
-    // Asignar valores al modelo de Prestamo
+        // Asignar valores al modelo de Prestamo
         $model->personaldata_Ci = $usuario->personaldata;
         $model->intervalo_solicitado = '01:00:00';
         $model->tipoprestamo_id = 'COMP';
@@ -217,16 +217,16 @@ class PrestamoController extends Controller
         return $this->renderAjax('prestarcomp', [
             'model' => $model,
         ]);
-}
-
-
- public function actionPrestarespacio()
-    {    
-            // Verificar si el usuario está autenticado
-    if (\Yii::$app->user->isGuest) {
-        // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
-        return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta a tu página de inicio de sesión
     }
+
+
+    public function actionPrestarespacio()
+    {
+        // Verificar si el usuario está autenticado
+        if (\Yii::$app->user->isGuest) {
+            // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
+            return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta a tu página de inicio de sesión
+        }
 
         $model = new Prestamo();
 
@@ -236,15 +236,13 @@ class PrestamoController extends Controller
         // Asignar valores al modelo de Prestamo
         $model->personaldata_Ci = $usuario->personaldata;
         $model->tipoprestamo_id = 'ESP';
-       
+
         if ($model->load(\Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
         }
 
         return $this->renderAjax('prestaresp', [
             'model' => $model,
-      ]);
+        ]);
     }
-
-
 }

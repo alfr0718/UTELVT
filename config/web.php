@@ -23,7 +23,7 @@ $config = [
     'components' => [
        'authManager' => [
             'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager
-            'defaultRoles' => ['guest', 'user'],
+            //'defaultRoles' => ['guest', 'user'],
          ],
          
         'request' => [
@@ -39,20 +39,22 @@ $config = [
             'on afterLogin' => function ($event) {
                 $user = $event->identity;
                 $auth = Yii::$app->authManager;
-
-                if (empty($auth->getRolesByUser($user->getId()))) {
-                    if ($user->tipo_usuario == 8) {
-                        $role = $auth->getRole('admin'); // Nombre del rol de administrador
-                    } elseif ($user->tipo_usuario == 21 || $user->tipo_usuario == 7) {
-                        $role = $auth->getRole('personal'); // Nombre del rol de personal
-                    } else {
-                        $role = $auth->getRole('usuario'); // Nombre del rol de usuario
-                    }
-                    
+            
+                if ($user->tipo_usuario == 8) {
+                    $role = $auth->getRole('admin'); // Nombre del rol de administrador
+                } elseif ($user->tipo_usuario == 21 || $user->tipo_usuario == 7) {
+                    $role = $auth->getRole('personal'); // Nombre del rol de personal
+                } else {
+                    $role = $auth->getRole('usuario'); // Nombre del rol de usuario
+                }
+                // Verificar si el usuario ya tiene el rol asignado
+                if (!$auth->checkAccess($user->getId(), $role->name)) {
+                    // Quitar cualquier rol anterior y asignar el nuevo rol
+                    $auth->revokeAll($user->getId());
                     $auth->assign($role, $user->getId());
                 }
-
             },
+            
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

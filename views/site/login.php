@@ -1,4 +1,5 @@
 <?php
+
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 
@@ -86,28 +87,28 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
 
                         <div class="form-group text-center">
-                        <?= Html::a('Registrarse', ['site/signup'], [
-                            'class' => 'btn btn-success btn-block btn-lg',
-                        ]) ?>
+                            <?= Html::a('Registrarse', ['site/signup'], [
+                                'class' => 'btn btn-success btn-block btn-lg',
+                            ]) ?>
                         </div>
                         <?php ActiveForm::end(); ?>
                     </div>
                 </div>
             </div>
+
+            <?php if (Yii::$app->session->hasFlash('success')) : ?>
+                <?= \hail812\adminlte\widgets\Alert::widget([
+                    'type' => 'success',
+                    'icon' => 'fas fa-check', // Cambia el icono a un ícono de check (opcional)
+                    'closeButton' => false, // Oculta el botón de cierre (opcional)
+                    'options' => [
+                        'class' => 'alert alert-success', // Agrega una clase CSS personalizada (opcional)
+                    ],
+                    'title' => '¡Éxito!', 
+                    'body' => Yii::$app->session->getFlash('success'), // Mostrar mensaje de éxito
+                ]) ?>
+            <?php endif; ?>
+
         </div>
     </div>
-
-    <?php if (Yii::$app->session->hasFlash('success')): ?>
-    <?= \hail812\adminlte\widgets\Alert::widget([
-    'type' => 'success',
-    'icon' => 'fas fa-check', // Cambia el icono a un ícono de check (opcional)
-    'closeButton' => false, // Oculta el botón de cierre (opcional)
-    'options' => [
-        'class' => 'alert alert-success', // Agrega una clase CSS personalizada (opcional)
-    ],
-    'body' => Yii::$app->session->getFlash('success'), // Mostrar mensaje de éxito
-    ]) ?>
-    <?php endif; ?>
-
-
 </div>

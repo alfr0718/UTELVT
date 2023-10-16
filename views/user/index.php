@@ -61,10 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-<?php
-            
-            echo Html::a('Cifrar Contraseñas', ['user/cifrarcontrasenas'], ['class' => 'btn btn-primary']) ?>
-
 
     <?php Pjax::end(); ?>
 

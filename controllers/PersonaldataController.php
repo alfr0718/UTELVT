@@ -7,7 +7,6 @@ use app\models\PersonaldataSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\User as User;
 
 /**
  * PersonaldataController implements the CRUD actions for Personaldata model.

@@ -50,6 +50,8 @@ class Personaldata extends \yii\db\ActiveRecord
             [['Nombres', 'Email', 'Institucion', 'Nivel'], 'string', 'max' => 45],
             [['Facultad'], 'string', 'max' => 60],
             [['Ci'], 'unique'],
+            [['Email'], 'email'],
+            [['FechaNacimiento'], 'validateFechaNacimiento'],       
         ];
     }
 
@@ -90,5 +92,14 @@ class Personaldata extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['username' => 'Ci']);
+    }
+
+
+
+    public function validateFechaNacimiento($attribute, $params)
+    {
+        if ($this->$attribute > date('Y-m-d')) {
+            $this->addError($attribute, 'Ingrese una fecha válida.');
+        }
     }
 }

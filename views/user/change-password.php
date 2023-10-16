@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <?= \hail812\adminlte\widgets\Alert::widget([
         'type' => 'success',
+        'title' => '¡Éxito!', 
         'body' => Yii::$app->session->getFlash('success'), // Mostrar mensaje de éxito
     ]) ?>
     <?php endif; ?>
@@ -40,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if (Yii::$app->session->hasFlash('error')): ?>
         <?= \hail812\adminlte\widgets\Alert::widget([
         'type' => 'danger',
+        'title' => 'Error', 
         'body' => Yii::$app->session->getFlash('error'), // Mostrar mensaje de error
     ]) ?>
      <?php endif; ?>
