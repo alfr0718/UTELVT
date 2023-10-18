@@ -1,5 +1,5 @@
 
-<aside class="main-sidebar sidebar-light-primary elevation-4">
+<aside class="main-sidebar sidebar-light-success elevation-4">
     <!-- Brand Logo -->
     <a href="/site/index" class="brand-link">
         <img src="<?= Yii::$app->urlManager->baseUrl ?>/img/ESCUDETO_UTE-LVT.png" alt="Universidad Luis Vargas Torres" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -57,11 +57,33 @@
 
     $personalMenuItems = [
         ['label' => 'Personal', 'header' => true],
-        ['label' => 'Libros', 'url' => ['/libro/index'], 'icon' => 'fas fa-book'],
+    [
+        'label' => 'Prestamo',
+        'icon' => 'fas fa-clipboard',
+        'items' => [
+            ['label' => 'Registro de Solicitudes', 'icon' => 'fas fa-file', 'url' => ['/prestamo/index']],
+            ['label' => 'Ingresar', 'icon' => 'fas fa-edit', 'url' => ['/prestamo/create']],
+        ]
+    ],
+    [
+        'label' => 'Libros',
+        'icon' => 'fas fa-book',
+        'items' => [
+            ['label' => 'Indíce', 'icon' => 'fas fa-book-reader', 'url' => ['/libro/index']],
+            ['label' => 'Ingresar', 'icon' => 'fas fa-book-open', 'url' => ['/libro/create']],
+        ]
+    ],
         ['label' => 'PC', 'url' => ['/pc/index'], 'icon' => 'fas fa-desktop'],
-        ['label' => 'Préstamos', 'url' => ['/prestamo/index'], 'icon' => 'fas fa-clipboard'],
-        // Otros elementos específicos para personal
-    ];
+    
+    [
+        'label' => 'Estadísticas',
+        'icon' => 'fas fa-chart-pie',
+        'items' => [
+        ['label' => 'General', 'icon' => 'fas fa-chart-area', 'url' => ['/prestamo/info']],
+        ['label' => 'Libros por Asignatura', 'icon' => 'fas fa-chart-bar', 'url' => ['/libro/info']],
+        ]
+    ],
+];
     
     $userType = $user->tipo_usuario;
     // Selecciona el conjunto de menuItems según el tipo de usuario

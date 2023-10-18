@@ -31,18 +31,28 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'fecha_solicitud',
-            'intervalo_solicitado',
-           //'tipoprestamo_id',
+            //'fechaentrega',
+            //'tipoprestamo_id',
+            [
+                'label' => 'Intervalo (horas)',
+                'value' => function ($model) {
+                    $fechaSolicitud = new DateTime($model->fecha_solicitud);
+                    $fechaEntrega = new DateTime($model->fechaentrega);
+                    $interval = $fechaSolicitud->diff($fechaEntrega);
+
+                    return $interval->format('%h horas');
+                },
+            ],
             [
                 'attribute' => 'tipoprestamo_id', // Esto muestra el código del país
                 'value' => function ($model) {

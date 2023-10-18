@@ -7,6 +7,7 @@ use app\models\LibroSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Query;
 
 /**
  * LibroController implements the CRUD actions for Libro model.
@@ -135,4 +136,88 @@ class LibroController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionInfo($mes = null, $anio = null, $asignatura = null, $biblioteca = null)
+    {
+        $query = (new Query())
+            ->select(['l.titulo AS libro', 'COUNT(*) AS cantidad'])
+            ->from('prestamo p')
+            ->innerJoin('libro l', 'p.libro_id = l.id')
+            ->innerJoin('asignatura a', 'l.asignatura_id = a.id');
+
+        if ($mes && $anio) {
+            $query->andWhere(['=', 'MONTH(p.fecha_solicitud)', $mes]);
+            $query->andWhere(['=', 'YEAR(p.fecha_solicitud)', $anio]);
+        }
+
+        if ($asignatura) {
+            $query->andWhere(['=', 'a.Nombre', $asignatura]);
+        }
+
+        $query->groupBy(['l.titulo'])
+            ->orderBy(['cantidad' => SORT_DESC])
+            ->limit(10);
+
+        $topBooksByAsignatura = $query->all();
+
+
+        $chartData = [
+            'labels' => [], // Inicializa las etiquetas
+            'data' => [],   // Inicializa los datos
+        ];
+
+        foreach ($topBooksByAsignatura as $item) {
+            $chartData['labels'][] = $item['libro'];
+            $chartData['data'][] = $item['cantidad'];
+        }
+
+        // Obtén la lista de meses y años para el formulario
+        $meses = [
+            '01' => 'Enero',
+            '02' => 'Febrero',
+            '03' => 'Marzo',
+            '04' => 'Abril',
+            '05' => 'Mayo',
+            '06' => 'Junio',
+            '07' => 'Julio',
+            '08' => 'Agosto',
+            '09' => 'Septiembre',
+            '10' => 'Octubre',
+            '11' => 'Noviembre',
+            '12' => 'Diciembre',
+        ];
+
+        $anios = array_unique((new Query())
+            ->select('YEAR(fecha_solicitud) as anio')
+            ->from('prestamo')
+            ->distinct()
+            ->orderBy(['anio' => SORT_DESC])
+            ->column());
+
+        $asignaturas = (new Query())
+            ->select('Nombre')
+            ->from('asignatura')
+            ->column();
+
+        // Corrige la consulta para obtener bibliotecas a través de la relación con Libro
+        $bibliotecas = (new Query())
+            ->select(['b.idbiblioteca', 'b.Campus'])
+            ->from('libro l')
+            ->leftJoin('biblioteca b', 'l.biblioteca_idbiblioteca = b.idbiblioteca')
+            ->distinct()
+            ->all();
+
+        return $this->render('info', [
+            'topBooksByAsignatura' => $topBooksByAsignatura,
+            'meses' => $meses,
+            'anios' => $anios,
+            'mesSeleccionado' => $mes,
+            'anioSeleccionado' => $anio,
+            'asignaturaSeleccionada' => $asignatura,
+            'asignaturas' => $asignaturas,
+            'bibliotecas' => $bibliotecas,
+            'chartData' => $chartData,
+        ]);
+    }
+
 }

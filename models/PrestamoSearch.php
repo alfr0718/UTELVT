@@ -5,7 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Prestamo;
-
+use Yii;
 /**
  * PrestamoSearch represents the model behind the search form of `app\models\Prestamo`.
  */
@@ -18,7 +18,7 @@ class PrestamoSearch extends Prestamo
     {
         return [
             [['id', 'biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
-            [['fecha_solicitud', 'intervalo_solicitado', 'fechaentrega', 'tipoprestamo_id', 'personaldata_Ci', 'pc_idpc'], 'safe'],
+            [['fecha_solicitud', 'fechaentrega', 'tipoprestamo_id', 'personaldata_Ci', 'pc_idpc'], 'safe'],
         ];
     }
 
@@ -56,11 +56,25 @@ class PrestamoSearch extends Prestamo
             return $dataProvider;
         }
 
+
+        if (!empty($this->fecha_solicitud)) {
+            // Cambiamos el formato de la fecha para hacerlo compatible con la base de datos
+            $fechaSolicitud = Yii::$app->formatter->asDatetime($this->fecha_solicitud, 'php:Y-m-d H:i:s');
+
+            // Separar la fecha en formato Y-m-d H:i:s en fecha y hora
+            list($fecha, $hora) = explode(' ', $fechaSolicitud);
+
+            // Convertir la fecha en formato Y-m-d a un rango de tiempo en ese día
+            $fechaInicio = $fecha . ' 00:00:00';
+            $fechaFin = $fecha . ' 23:59:59';
+
+            // Aplicar el filtro
+            $query->andFilterWhere(['between', 'fecha_solicitud', $fechaInicio, $fechaFin]);
+        }
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha_solicitud' => $this->fecha_solicitud,
-            'intervalo_solicitado' => $this->intervalo_solicitado,
             'fechaentrega' => $this->fechaentrega,
             'biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
             'pc_biblioteca_idbiblioteca' => $this->pc_biblioteca_idbiblioteca,

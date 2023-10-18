@@ -5,11 +5,15 @@ namespace app\controllers;
 use Yii;
 use app\models\Libro;
 use app\models\Pc;
+use app\models\Biblioteca;
 use app\models\Prestamo;
 use app\models\PrestamoSearch;
+use app\models\Tipoprestamo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Query;
+
 
 /**
  * PrestamoController implements the CRUD actions for Prestamo model.
@@ -100,8 +104,20 @@ class PrestamoController extends Controller
     {
         $model = $this->findModel($id, $biblioteca_idbiblioteca, $personaldata_Ci);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+        // Verificar si se envió un formulario
+        if ($model->load(\Yii::$app->request->post())) {
+            // Asignar valores y calcular la fecha de entrega
+            list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
+
+            $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+            $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
+            $fechaEntrega = $fechaSolicitud->add($intervalo);
+            $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
+
+            // Verificar si el modelo se guarda con éxito
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+            }
         }
 
         return $this->render('update', [
@@ -145,10 +161,6 @@ class PrestamoController extends Controller
 
     public function actionPrestarlibro($id)
     {
-        if (\Yii::$app->user->isGuest) {
-            // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
-            return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta a tu página de inicio de sesión
-        }
 
         // Cargar el modelo de libro basado en el $id recibido        
         $libro = Libro::findOne(['id' => $id]);
@@ -171,8 +183,20 @@ class PrestamoController extends Controller
         $model->libro_id = $id;
         $model->libro_biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; //Campus donde se encuentra el libro
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+        // Verificar si se envió un formulario
+        if ($model->load(\Yii::$app->request->post())) {
+            // Asignar valores y calcular la fecha de entrega
+            list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
+
+            $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+            $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
+            $fechaEntrega = $fechaSolicitud->add($intervalo);
+            $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
+
+            // Verificar si el modelo se guarda con éxito
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+            }
         }
 
         return $this->renderAjax('prestarlib', [
@@ -183,11 +207,6 @@ class PrestamoController extends Controller
 
     public function actionPrestarpc($id)
     {
-        if (\Yii::$app->user->isGuest) {
-            // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
-            return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta a tu página de inicio de sesión
-        }
-
         // Cargar el modelo del computador basado en el $id recibido
 
         $pc = Pc::findOne(['idpc' => $id]);
@@ -210,8 +229,20 @@ class PrestamoController extends Controller
         $model->pc_idpc = $id;
         $model->pc_biblioteca_idbiblioteca = $pc->biblioteca_idbiblioteca; //Campus donde se encuentra el computador
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+        // Verificar si se envió un formulario
+        if ($model->load(\Yii::$app->request->post())) {
+            // Asignar valores y calcular la fecha de entrega
+            list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
+
+            $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+            $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
+            $fechaEntrega = $fechaSolicitud->add($intervalo);
+            $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
+
+            // Verificar si el modelo se guarda con éxito
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+            }
         }
 
         return $this->renderAjax('prestarcomp', [
@@ -222,14 +253,8 @@ class PrestamoController extends Controller
 
     public function actionPrestarespacio()
     {
-        // Verificar si el usuario está autenticado
-        if (\Yii::$app->user->isGuest) {
-            // El usuario no está autenticado, redirigirlo a la página de inicio de sesión
-            return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta a tu página de inicio de sesión
-        }
 
         $model = new Prestamo();
-
         // Obtener el usuario actual
         $usuario = \Yii::$app->user->identity;
 
@@ -237,12 +262,146 @@ class PrestamoController extends Controller
         $model->personaldata_Ci = $usuario->personaldata;
         $model->tipoprestamo_id = 'ESP';
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+        //$biblioteca = \Yii::$app->controller->findBibliotecaById(['idbiblioteca' => $model->biblioteca_idbiblioteca]);
+
+
+        // Verificar si se envió un formulario
+        if ($model->load(\Yii::$app->request->post())) {
+            // Asignar valores y calcular la fecha de entrega
+            list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
+            
+            $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+            $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
+            $fechaEntrega = $fechaSolicitud->add($intervalo);
+            $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
+
+            // Verificar si el modelo se guarda con éxito
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+            }
         }
 
         return $this->renderAjax('prestaresp', [
             'model' => $model,
         ]);
     }
+
+
+    public function actionInfo()
+    {
+        $mesSeleccionado = Yii::$app->request->get('mes', date('m'));
+        $anioSeleccionado = Yii::$app->request->get('anio', date('Y'));
+        $bibliotecaSeleccionada = Yii::$app->request->get('biblioteca_idbiblioteca', null);
+
+        // Obtén las bibliotecas disponibles
+        $bibliotecas = Biblioteca::find()->all();
+
+        // Obtener los datos de libro limitando a 10 elementos
+        $queryLibro = new \yii\db\Query();
+        $queryLibro->select(['MONTH(fecha_solicitud) AS mes', 'libro_id', 'COUNT(*) AS cantidad'])
+            ->from('prestamo')
+            ->where(['MONTH(fecha_solicitud)' => $mesSeleccionado, 'YEAR(fecha_solicitud)' => $anioSeleccionado])
+            ->andFilterWhere(['biblioteca_idbiblioteca' => $bibliotecaSeleccionada]) // Cambio aquí
+            ->groupBy(['mes', 'libro_id'])
+            ->orderBy(['mes' => SORT_ASC, 'cantidad' => SORT_DESC])
+            ->distinct()
+            ->limit(10); // Limitar a 10 elementos
+
+        $dataLibro = $queryLibro->all();
+
+        $books = [];
+
+        foreach ($dataLibro as $row) {
+            $mes = $row['mes'];
+            $libroId = $row['libro_id'];
+            $cantidad = $row['cantidad'];
+
+            // Obtén información del libro, incluyendo el nombre
+            $libro = Libro::findOne($libroId);
+
+            if ($libro && $libro->titulo !== null && $libro->titulo !== 'No disponible') {
+                $nombreLibro = $libro->titulo;
+                $books[] = [
+                    'mes' => $mes,
+                    'libro' => $nombreLibro,
+                    'cantidad' => $cantidad,
+                ];
+            }
+        }
+
+        // Obtener los datos de computadora limitando a 10 elementos
+        $queryPc = new \yii\db\Query();
+        $queryPc->select(['MONTH(fecha_solicitud) AS mes', 'pc_idpc', 'COUNT(*) AS cantidad'])
+            ->from('prestamo')
+            ->where(['MONTH(fecha_solicitud)' => $mesSeleccionado, 'YEAR(fecha_solicitud)' => $anioSeleccionado])
+            ->andFilterWhere(['biblioteca_idbiblioteca' => $bibliotecaSeleccionada]) // Cambio aquí
+            ->groupBy(['mes', 'pc_idpc'])
+            ->orderBy(['mes' => SORT_ASC, 'cantidad' => SORT_DESC])
+            ->distinct()
+            ->limit(10); // Limitar a 10 elementos
+
+        $dataPc = $queryPc->all();
+
+        $computadoras = [];
+
+        foreach ($dataPc as $row) {
+            $mes = $row['mes'];
+            $pcId = $row['pc_idpc'];
+            $cantidad = $row['cantidad'];
+
+            // Obtén información de la computadora, incluyendo el nombre
+            $computadora = Pc::findOne($pcId);
+
+            if ($computadora && $computadora->idpc !== null && $computadora->idpc !== 'No disponible') {
+                $nombreComputadora = $computadora->idpc;
+                $computadoras[] = [
+                    'mes' => $mes,
+                    'computadora' => $nombreComputadora,
+                    'cantidad' => $cantidad,
+                ];
+            }
+        }
+
+        // Obtener los datos de tipo de préstamo
+        $queryTipoPrestamo = new \yii\db\Query();
+        $queryTipoPrestamo->select(['tipoprestamo_id', 'COUNT(*) AS cantidad'])
+            ->from('prestamo')
+            ->where(['MONTH(fecha_solicitud)' => $mesSeleccionado, 'YEAR(fecha_solicitud)' => $anioSeleccionado])
+            ->andFilterWhere(['biblioteca_idbiblioteca' => $bibliotecaSeleccionada]) // Cambio aquí
+            ->groupBy('tipoprestamo_id');
+
+        $dataTipoPrestamo = $queryTipoPrestamo->all();
+
+        $tiposPrestamo = [];
+
+        foreach ($dataTipoPrestamo as $row) {
+            $tipoPrestamoId = $row['tipoprestamo_id'];
+            $cantidad = $row['cantidad'];
+
+            // Obtén información del tipo de préstamo
+            $tipoPrestamo = Tipoprestamo::findOne($tipoPrestamoId);
+
+            $tiposPrestamo[] = [
+                'nombre' => $tipoPrestamo->nombre_tipo,
+                'cantidad' => $cantidad,
+            ];
+        }
+
+        return $this->render('info', [
+            'mesSeleccionado' => $mesSeleccionado,
+            'anioSeleccionado' => $anioSeleccionado,
+            'bibliotecas' => $bibliotecas,
+            'bibliotecaSeleccionada' => $bibliotecaSeleccionada,
+            'books' => $books,
+            'computadoras' => $computadoras,
+            'tiposPrestamo' => $tiposPrestamo,
+        ]);
+    }
+
+
+
+
+
+
+
 }

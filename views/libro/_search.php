@@ -49,7 +49,7 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'biblioteca_idbiblioteca') ?>
 
 
-    <div class="container">
+    
     <div class="row">
         <div class="col-md-6">
             <?= $form->field($model, 'titulo')->textInput(['style' => 'width: 100%;'])->label('Título') ?>
@@ -107,7 +107,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'isbn')->textInput(['style' => 'width: 100%;'])->label('ISBN') ?>
         </div>
     </div>
-</div>
+
 
 
     <div class="form-group">

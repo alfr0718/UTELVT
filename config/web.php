@@ -84,6 +84,7 @@ $config = [
             'timeFormat' => 'php:H:i:s', // Formato de hora (hora:minuto:segundo)
             'datetimeFormat' => 'php:d/m/Y H:i:s', // Formato de fecha y hora
             'timeZone' => 'America/Guayaquil', // Zona horaria de Ecuador
+            'defaultTimeZone' => 'America/Guayaquil',
         ],
         'db' => $db,
         'urlManager' => [
@@ -95,7 +96,7 @@ $config = [
                 'prestamo/prestarpc/<id:\d+>' => 'prestamo/pretarpc',
                 'user/change-password' => 'user/change-password',
                 'prestamo/prestarespacio' => 'prestamo/prestarespacio',
-            ],
+                        ],
         ],
         'i18n' => [
             'translations' => [

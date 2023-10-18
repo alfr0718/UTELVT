@@ -26,16 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
         $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
 
         if ($tipoUsuario === 8 || $tipoUsuario === 21) {
-            echo Html::a('Ingresar Libro', ['create'], ['class' => 'btn btn-success']);
+            echo Html::a('Ingresar Libro', ['create'], ['class' => 'btn btn-success my-3']); // Agregar la clase my-2 para espacio vertical
         }
     }
     ?>
 
-<?php $isDesktop = Yii::$app->request->userAgent && strpos(Yii::$app->request->userAgent, 'Mobile') === false; ?>
-    
-<?php Pjax::begin(); ?>
+    <?php $isDesktop = Yii::$app->request->userAgent && strpos(Yii::$app->request->userAgent, 'Mobile') === false; ?>
+
+    <?php Pjax::begin(); ?>
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return $model->categoria->Categoría;
                 },
-                
+
             ],
             [
                 'attribute' => 'asignatura_id', // Esto muestra el código de la asignatura
@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return $model->asignatura->Nombre; // Accede al nombre de la asignatura relacionada
                 },
-                
+
             ],
             [
                 'attribute' => 'pais_codigopais', // Esto muestra el código del país
@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return $model->paisCodigopais->Nombrepais; // Accede al nombre del país relacionado
                 },
-                
+
             ],
             [
                 'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código de la biblioteca
@@ -92,27 +92,27 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => '',
-                'template' => '{customButton}', // Agrega el botón personalizado
+                'template' => '{prestar} {otra-accion}', // Agrega otros botones personalizados si es necesario
                 'buttons' => [
-                    'customButton' => function ($url, $model, $key) {
+                    'prestar' => function ($url, $model, $key) {
+                        $buttonId = 'open-modal-button-' . $model->id; // Id único para el botón
                         return Html::button('<i class="fas fa-plus"></i>', [
                             'class' => 'btn btn-success',
-                            'id' => 'open-modal-button',
+                            'id' => $buttonId, // Id único para cada botón
                             'data-toggle' => 'modal',
                             'data-target' => '#prestamo-modal',
                             'data-remote' => Url::to(['/prestamo/prestarlibro', 'id' => $model->id]), // URL de la acción
-                         ]);
+                        ]);
                     },
                 ],
-            ],   
-            
+            ],
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
-                 },
-                 'visible' => $tipoUsuario === 8 || $tipoUsuario === 21,
+                },
+                'visible' => $tipoUsuario === 8 || $tipoUsuario === 21,
             ],
         ],
     ]); ?>
@@ -120,8 +120,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
-
-
 
 
 <div class="modal fade" id="prestamo-modal" tabindex="-1" role="dialog" aria-labelledby="prestamo-modal-label" aria-hidden="true">
@@ -144,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 // Registro de JS para manejar la apertura del modal
 $this->registerJs('
-    $("#open-modal-button").on("click", function () {
+    $("button[id^=open-modal-button]").on("click", function () {
         $("#prestamo-modal-content").load($(this).data("remote"), function() {
             // Una vez que se carga el contenido en el modal, escuchamos el evento clic del botón "Enviar".
             $("#prestamo-modal-content #submit-button").on("click", function (e) {

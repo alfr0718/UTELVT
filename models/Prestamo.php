@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property string $fecha_solicitud
- * @property string|null $intervalo_solicitado
  * @property string|null $fechaentrega
  * @property string $tipoprestamo_id
  * @property int $biblioteca_idbiblioteca
@@ -27,6 +26,7 @@ use Yii;
  */
 class Prestamo extends \yii\db\ActiveRecord
 {
+    public $intervalo_solicitado;
     /**
      * {@inheritdoc}
      */
@@ -61,10 +61,9 @@ class Prestamo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fecha_solicitud' => 'Fecha de Solicitud',
-            'intervalo_solicitado' => 'Intervalo de Solicitado',
             'fechaentrega' => 'Fecha de entrega',
             'tipoprestamo_id' => 'Tipo de préstamo',
+            'intervalo_solicitado' => 'Tiempo Solicitado',
             'biblioteca_idbiblioteca' => 'Campus',
             'personaldata_Ci' => 'Cedula Solicitante',
             'pc_idpc' => 'Computador',

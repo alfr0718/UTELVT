@@ -16,14 +16,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Actualizar', ['update', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => '¿Estás seguro de eliminar este elemento?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?php
+        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+
+        if ($tipoUsuario === 8 || $tipoUsuario === 21) :
+        ?>
+            <a href="<?= \yii\helpers\Url::to(['update', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]) ?>" class="btn btn-primary">Actualizar</a>
+            <a href="<?= \yii\helpers\Url::to(['delete', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]) ?>" class="btn btn-danger" data-confirm="¿Estás seguro de eliminar este elemento?" data-method="post">Eliminar</a>
+        <?php endif; ?>
     </p>
 
     <?= DetailView::widget([
@@ -31,7 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'fecha_solicitud',
-            'intervalo_solicitado',
+            'fechaentrega',
+            [
+                'label' => 'Intervalo (horas)',
+                'value' => function ($model) {
+                    $fechaSolicitud = new DateTime($model->fecha_solicitud);
+                    $fechaEntrega = new DateTime($model->fechaentrega);
+                    $interval = $fechaSolicitud->diff($fechaEntrega);
+
+                    return $interval->format('%h horas');
+                },
+            ],
+            //'intervalo_solicitado',
             //'tipoprestamo_id',
             [
                 'attribute' => 'tipoprestamo_id', // Esto muestra el código del país
@@ -58,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->libro ? $model->libro->codigo_barras : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
                 },
             ],
-            
+
             [
                 'attribute' => 'libro_id', // Esto muestra el código
                 'label' => 'Titulo solicitado',

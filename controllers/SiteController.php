@@ -131,14 +131,6 @@ class SiteController extends Controller
     }
 
 
-    public function actionAlert()
-    {
-
-        return $this->render('alert');;
-    }
-
-
-
     public function actionSignup()
     {
         $PersonalD = new PersonalD(); // Ajusta el modelo de Datos Personales según tu aplicación.

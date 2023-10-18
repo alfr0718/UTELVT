@@ -18,29 +18,57 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'fecha_solicitud') ?>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $form->field($model, 'id') ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'fecha_solicitud')->input('datetime') ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'tipoprestamo_id')->dropDownList(
+                \yii\helpers\ArrayHelper::map(\app\models\Tipoprestamo::find()->all(), 'id', 'nombre_tipo'),
+                ['prompt' => 'Seleccione un tipo de préstamo']
+            ) ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'intervalo_solicitado') ?>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $form->field($model, 'biblioteca_idbiblioteca')->dropDownList(
+                \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
+                ['prompt' => 'Seleccione una biblioteca']
+            ) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'pc_idpc') ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'personaldata_Ci') ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'tipoprestamo_id') ?>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $form->field($model, 'libro_id') ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'biblioteca_idbiblioteca') ?>
+    <?php // $form->field($model, 'fechaentrega') 
+    ?>
 
-    <?php // echo $form->field($model, 'pc_idpc') ?>
+    <?php // $form->field($model, 'intervalo_solicitado') 
+    ?>
+    <?php // echo $form->field($model, 'pc_biblioteca_idbiblioteca') 
+    ?>
+    <?php // echo $form->field($model, 'libro_biblioteca_idbiblioteca') 
+    ?>
 
-    <?php // echo $form->field($model, 'pc_biblioteca_idbiblioteca') ?>
-
-    <?php // echo $form->field($model, 'libro_codigo_barras') ?>
-
-    <?php // echo $form->field($model, 'libro_biblioteca_idbiblioteca') ?>
-
-    <?php // echo $form->field($model, 'personaldata_Ci') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Restablecer', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

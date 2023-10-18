@@ -15,16 +15,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Actualizar', ['update', 'idbiblioteca' => $model->idbiblioteca], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'idbiblioteca' => $model->idbiblioteca], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => '¿Estas seguro de eliminar este elemento?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <?php
+    $tipoUsuario = null; // Inicializamos la variable
+
+    if (!Yii::$app->user->isGuest) {
+        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+
+        if ($tipoUsuario === 8 || $tipoUsuario === 7) {
+            echo '<div style="margin-bottom: 10px;">'; // Aplicar un margen inferior
+            echo '<a href="' . Yii::$app->urlManager->createUrl(['update', 'idbiblioteca' => $model->idbiblioteca]) . '" class="btn btn-primary" style="margin-right: 10px;">Actualizar</a>';
+            echo '<a href="' . Yii::$app->urlManager->createUrl(['delete', 'idbiblioteca' => $model->idbiblioteca]) . '" class="btn btn-danger" style="margin-right: 10px;" data-confirm="¿Estás seguro de eliminar este elemento?" data-method="post">Eliminar</a>';
+            echo '</div>';
+        }
+    }
+    ?>
 
     <?= DetailView::widget([
         'model' => $model,

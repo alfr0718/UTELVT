@@ -46,7 +46,7 @@ use yii\widgets\ActiveForm;
     <?php // $form->field($model, 'libro_biblioteca_idbiblioteca')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Enviar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
