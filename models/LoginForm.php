@@ -83,8 +83,53 @@ class LoginForm extends Model
      */
     public function getUser()
     {
-        if ($this->_user === false) {
+    /*if ($this->_user === false) {
             $this->_user = User::findByUsername($this->username);
+            //VERIFICAR SI THIS->USER TIENE ALGUN USUARIO, O ENCONTRO EL USUARIO
+            //EN TAL CASO DE NO TENER USUARIOS CONSULTAR A LA TABLA DE ESTUDIANTES INFPERSONAL. BUSCAR POR CEDULA EN LA TABLA
+            //CASO CONTRARIO QUE NO ENCUENTRE USUARIOS BUSCAR EN LA TABLA DOCENTE
+            //EN CASO DE ENCONTRAR EL USUARIO EN LA TABLA DE ESTUDIANTES O DOCENTES AUTOMATICAMENTE CREAR EL USUARIO CON LOS DATOS OBTENIDOS
+        }*/
+
+
+        if ($this->_user === false) {
+            // Intenta encontrar al usuario por nombre de usuario en la tabla de Usuarios
+            $this->_user = User::findByUsername($this->username);
+
+            // Si no se encuentra al usuario en la tabla de Usuarios, busca en otras tablas
+            if ($this->_user === null) {
+                // Buscar en la tabla de Estudiantes por cédula
+                $student = Informacionpersonal::findByCedula($this->username);
+
+                // Buscar en la tabla de Docentes por cédula si no se encuentra en Estudiantes
+                if ($student === null) {
+                    $teacher = InformacionpersonalD::findByCedula($this->username);
+
+                    // Si se encuentra en la tabla de Docentes, crea un nuevo usuario con los datos de Docentes
+                    if ($teacher !== null) {
+                        $this->_user = new User();
+                        $this->_user->username = $teacher->CIInfPer; // Utiliza la cédula como nombre de usuario
+                        $now = \Yii::$app->formatter;
+                        $this->_user->tipo_usuario = 18;
+                        $this->_user->setPassword('mipassword');
+                        $this->_user->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
+                        $this->_user->Auth_key = \Yii::$app->security->generateRandomString();
+                        // Guarda el usuario
+                        $this->_user->save();
+                    }
+                } else {
+                    // Si se encuentra en la tabla de Estudiantes, crea un nuevo usuario con los datos de Estudiantes
+                    $this->_user = new User();
+                    $this->_user->username = $student->CIInfPer; // Utiliza la cédula como nombre de usuario
+                    $now = \Yii::$app->formatter;
+                    $this->_user->setPassword('mipassword');
+                    $this->_user->tipo_usuario = 13;
+                    $this->_user->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
+                    $this->_user->Auth_key = \Yii::$app->security->generateRandomString();
+                    // Guarda el usuario
+                    $this->_user->save();
+                }
+            }
         }
 
         return $this->_user;

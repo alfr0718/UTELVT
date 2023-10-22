@@ -17,7 +17,7 @@ use Yii;
  * @property string|null $anio_publicacion
  * @property string|null $estado
  * @property int|null $n_ejemplares
- * @property string|null $link
+ * @property string|null $ubicacion
  * @property string $categoria_id
  * @property string $asignatura_id
  * @property string $pais_codigopais
@@ -48,7 +48,7 @@ class Libro extends \yii\db\ActiveRecord
             [['titulo', 'autor', 'editorial', 'categoria_id', 'asignatura_id', 'pais_codigopais', 'biblioteca_idbiblioteca'], 'required'],
             [['anio_publicacion'], 'safe'],
             [['n_ejemplares', 'biblioteca_idbiblioteca'], 'integer'],
-            [['codigo_barras', 'titulo', 'autor', 'isbn', 'cute', 'editorial', 'link'], 'string', 'max' => 100],
+            [['codigo_barras', 'titulo', 'autor', 'isbn', 'cute', 'editorial', 'ubicacion'], 'string', 'max' => 100],
             [['estado'], 'string', 'max' => 10],
             [['categoria_id', 'asignatura_id', 'pais_codigopais'], 'string', 'max' => 4],
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_id' => 'id']],
@@ -74,7 +74,7 @@ class Libro extends \yii\db\ActiveRecord
             'anio_publicacion' => 'Año de Publicación',
             'estado' => 'Estado',
             'n_ejemplares' => 'N de Ejemplares',
-            'link' => 'Link',
+            'ubicacion' => 'Ubicación',
             'categoria_id' => 'Categoría',
             'asignatura_id' => 'Asignatura',
             'pais_codigopais' => 'País',

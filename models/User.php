@@ -17,10 +17,10 @@ use yii\db\ActiveRecord;
  * @property int $tipo_usuario
  * @property string $created_at
  * @property string $updated_at
- * @property string|null $temporal_password
- * @property string|null $temporal_password_time
- *
+ * @property InformacionpersonalD $informacionpersonalD
+ * @property Informacionpersonal $informacionpersonal
  * @property Personaldata $personaldata
+ * 
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -52,7 +52,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['Status', 'tipo_usuario'], 'integer'],
             [['Created_at', 'Updated_at', 'Tempralpasswordtime'], 'safe'],
             [['username'], 'string', 'max' => 15],
-            [['password', 'Temporalpassword'], 'string', 'max' => 255],
+            [['password'], 'string', 'max' => 255],
             [['Auth_key'], 'string', 'max' => 32],
             [['username'], 'unique'],
         ];
@@ -72,8 +72,6 @@ class User extends ActiveRecord implements IdentityInterface
             'tipo_usuario' => 'Tipo de Usuario',
             'Created_at' => 'Creación',
             'Updated_at' => 'Actualización',
-            'Temporal_password' => 'Temporal Password',
-            'Temporal_password_time' => 'Temporal Password Time',
         ];
     }
 
@@ -85,6 +83,28 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
+
+
+    /**
+     * Gets query for [[Informacionpersonal]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInformacionpersonal()
+    {
+        return $this->hasOne(Informacionpersonal::class, ['CIInfPer' => 'username']);
+    }
+
+    /**
+     * Gets query for [[Informacionpersonal_d]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInformacionpersonalD()
+    {
+        return $this->hasOne(InformacionpersonalD::class, ['CIInfPer' => 'username']);
+    }
+
 
     /**
      * Gets query for [[Personaldata]].

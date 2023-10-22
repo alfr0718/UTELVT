@@ -103,7 +103,6 @@ $this->registerCss("
 
 .btn-outline-secondary {
     font-size: 1em;
-    padding: 15px 20px;
     background-color: #FF6B00;
     color: #FFF;
     border: none;
@@ -117,17 +116,44 @@ $this->registerCss("
 ?>
 <div class="site-index welcome-container">
 
-    <?php if (Yii::$app->user->isGuest) : ?>
+    <?php
+    $cacheKey = 'user_' . Yii::$app->user->id;
+    $userData = Yii::$app->cache->get($cacheKey);
 
-        <h1 class="display-4">¡Bienvenido!</h1>
+    if ($userData === false) {
+        // Los datos del usuario no están en caché, obtén los datos de la base de datos o de donde corresponda
+        $userData = Yii::$app->user->identity;
 
-    <?php else : ?>
+        // Carga todas las relaciones necesarias en una sola consulta
+        $userData = app\models\User::find()
+            ->with('personaldata', 'informacionpersonal', 'informacionpersonalD')
+            ->where(['id' => Yii::$app->user->id])
+            ->one();
 
-        <?php $userData = Yii::$app->user->identity->personaldata; ?>
+        // Almacena los datos del usuario en la caché por un período de tiempo específico (por ejemplo, 3600 segundos o 1 hora)
+        Yii::$app->cache->set($cacheKey, $userData, 3600);
+    }
 
-        <h1 class="display-4">¡Bienvenido, <?= $userData->Nombres ?>!</h1>
+    // Ahora puedes acceder a los datos de las tablas relacionadas de manera más eficiente
+    $personalData = $userData->personaldata;
+    $informacionEstudiante = $userData->informacionpersonal;
+    $informacionDocente = $userData->informacionpersonalD;
 
-    <?php endif; ?>
+    if ($personalData !== null) {
+        $nombres = $personalData->Nombres;
+        $url = ['/personaldata/update', 'Ci' => $personalData->Ci];
+    } elseif ($informacionEstudiante !== null) {
+        $url = ['/informacionpersonal/update', 'CIInfPer' => $informacionEstudiante->CIInfPer];
+        $nombres = $informacionEstudiante->NombInfPer;
+    } elseif ($informacionDocente !== null) {
+        $url = ['/informacionpersonald/update', 'CIInfPer' => $informacionDocente->CIInfPer];
+        $nombres = $informacionDocente->NombInfPer;
+    }
+
+    ?>
+
+    <h1 class="display-4">¡Bienvenido, <?php echo $nombres ?>!</h1>
+
 
     <p class="lead">"Te deseamos una experiencia enriquecedora y llena de inspiración."</p>
     <?php if (!Yii::$app->user->isGuest) : ?>
@@ -147,30 +173,20 @@ $this->registerCss("
 <div class="body-content">
 
     <div class="row">
+
         <div class="col-12 col-lg-4">
             <h2>Actualiza para Disfrutar</h2>
-            <?php if (!Yii::$app->user->isGuest) : ?>
-                <?php
-                //$ciParam = Yii::$app->user->isGuest ? null : Yii::$app->user->identity->personaldata->Ci;
-                $url = ['/personaldata/update', 'Ci' => $userData->Ci];
-                ?>
-                <p>¡Gracias por ser parte de nuestra comunidad! Actualiza tus datos ahora para brindarte una experiencia aún mejor. </p>
-                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl($url) ?>">Actualizar datos &raquo;</a></p>
-            <?php else : ?>
-                <p>¡Gracias por visitarnos! Para disfrutar de una experiencia aún mejor, te animamos a iniciar sesión.</p>
-                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión &raquo;</a></p>
-            <?php endif; ?>
 
+            <p>¡Gracias por ser parte de nuestra comunidad! Actualiza tus datos ahora para brindarte una experiencia aún mejor. </p>
+            <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl($url) ?>">Actualizar datos &raquo;</a></p>
         </div>
+
         <div class="col-12 col-lg-4">
             <h2>Catálogo de Libros</h2>
 
             <p>Explora nuestra amplia colección de libros. Sumérgete en el mundo de la literatura y descubre nuevas historias y conocimientos.</p>
-            <?php if (!Yii::$app->user->isGuest) : ?>
-                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/libro/index']) ?>">Ver libros disponibles &raquo;</a></p>
-            <?php else : ?>
-                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión &raquo;</a></p>
-            <?php endif; ?>
+            <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/libro/index']) ?>">Ver libros disponibles &raquo;</a></p>
+
         </div>
 
         <div class="col-12 col-lg-4">
@@ -178,11 +194,7 @@ $this->registerCss("
 
             <p>¿Necesitas un computador para tus tareas o proyectos? También ofrecemos la posibilidad de solicitar préstamo de computadoras.</p>
 
-            <?php if (!Yii::$app->user->isGuest) : ?>
-                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/pc/index']) ?>">Solicitar préstamo&raquo;</a></p>
-            <?php else : ?>
-                <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/site/login']) ?>">Iniciar sesión &raquo;</a></p>
-            <?php endif; ?>
+            <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl(['/pc/index']) ?>">Solicitar préstamo&raquo;</a></p>
         </div>
 
     </div>
@@ -196,7 +208,7 @@ $this->registerCss("
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="prestamo-modal-label">Registro de Visita</h5>
+                <h5 class="modal-title" id="prestamo-modal-label"><i class="fas fa-university"></i> Registro de Visita</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -17,8 +17,8 @@ use app\models\Biblioteca;
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <?= $form->field($model, 'idpc', ['options' => ['class' => 'input-field']])
-                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'ID PC']) ?>
+                <?= $form->field($model, 'nombre', ['options' => ['class' => 'input-field']])
+                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Nombre de dispositivo']) ?>
             </div>
 
             <div class="form-group">
@@ -53,7 +53,7 @@ use app\models\Biblioteca;
 <style>
     .custom-form {
         background-color: #f7f7f7;
-        padding: 20px;
+        padding: 2em;
         border: 1px solid #e5e5e5;
         border-radius: 5px;
     }

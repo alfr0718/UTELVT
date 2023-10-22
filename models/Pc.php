@@ -7,7 +7,8 @@ use Yii;
 /**
  * This is the model class for table "pc".
  *
- * @property string $idpc
+ * @property int $idpc
+ * @property string $nombre
  * @property string $estado
  * @property int $biblioteca_idbiblioteca
  *
@@ -30,9 +31,9 @@ class Pc extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idpc', 'estado', 'biblioteca_idbiblioteca'], 'required'],
+            [['nombre', 'estado', 'biblioteca_idbiblioteca'], 'required'],
             [['biblioteca_idbiblioteca'], 'integer'],
-            [['idpc'], 'string', 'max' => 15],
+            [['nombre'], 'string', 'max' => 15],
             [['estado'], 'string', 'max' => 10],
             [['idpc', 'biblioteca_idbiblioteca'], 'unique', 'targetAttribute' => ['idpc', 'biblioteca_idbiblioteca']],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
@@ -46,6 +47,7 @@ class Pc extends \yii\db\ActiveRecord
     {
         return [
             'idpc' => 'Código de PC',
+            'nombre' => 'Nombre',
             'estado' => 'Estado',
             'biblioteca_idbiblioteca' => 'Campus',
         ];

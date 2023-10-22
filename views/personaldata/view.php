@@ -58,8 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'Genero',
             'Institucion',
             'Nivel',
-            'Facultad',
-            'Ciclo',
         ],
     ]) ?>
 

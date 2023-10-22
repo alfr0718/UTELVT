@@ -75,12 +75,14 @@ foreach ($computadoras as $item) {
                 </div>
 
                 <div class="form-group">
-                    <label for "anio">Año:</label>
-                    <input type="text" name="anio" id="anio" value="<?= $anioSeleccionado ?>">
+                    <label for="anio">Año:</label>
+                    <?= Html::textInput('anio', $anioSeleccionado, ['class' => 'form-control', 'placeholder' => 'Ingrese el año']); ?>
+
+                    <!-- <input type="text" name="anio" id="anio" value="<?php // = $anioSeleccionado ?>"> -->
                 </div>
 
                 <div class="form-group">
-                    <label for "biblioteca">Biblioteca:</label>
+                    <label for="biblioteca">Biblioteca:</label>
                     <select id="biblioteca_idbiblioteca" name="biblioteca_idbiblioteca" class="form-control">
                         <option value="" selected>Seleccione Biblioteca</option>
                         <?php foreach ($bibliotecas as $biblioteca) : ?>
@@ -167,7 +169,7 @@ $this->registerJs("
 
     var ctxComputadoras = document.getElementById('chartComputadoras').getContext('2d');
     var chartComputadoras = new Chart(ctxComputadoras, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: " . json_encode($labelsComputadoras) . ",
             datasets: [{

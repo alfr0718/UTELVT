@@ -98,7 +98,7 @@ body {
     </div>
 
     <div class="form-group">
-        <?= $form->field($model, 'Nivel')->dropDownList(['Bachiller' => 'Bachiller', 'Universidad' => 'Universidad', 'Posgrado' => 'Posgrado'], ['prompt' => 'Seleccione su Nivel Académico']) ?>
+        <?= $form->field($model, 'Nivel')->dropDownList($niveles, ['prompt' => 'Seleccione su Nivel Académico']) ?>
     </div>
 
 <div class="form-group">

@@ -17,7 +17,7 @@ class PcSearch extends Pc
     public function rules()
     {
         return [
-            [['idpc', 'estado'], 'safe'],
+            [['idpc', 'nombre', 'estado'], 'safe'],
             [['biblioteca_idbiblioteca'], 'integer'],
         ];
     }
@@ -62,6 +62,7 @@ class PcSearch extends Pc
         ]);
 
         $query->andFilterWhere(['like', 'idpc', $this->idpc])
+            ->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'estado', $this->estado]);
 
         return $dataProvider;

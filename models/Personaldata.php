@@ -15,17 +15,19 @@ use Yii;
  * @property string $Genero
  * @property string|null $Institucion
  * @property string|null $Nivel
- * @property string|null $Facultad
- * @property int|null $Ciclo
  *
  * @property Prestamo[] $prestamos
  * @property User $user
  */
 class Personaldata extends \yii\db\ActiveRecord
 {
-    const NIVEL_BACHILLER = '1';
-    const NIVEL_UNIVERSIDAD = '2';
-    const NIVEL_POSGRADO = '3';
+    public $niveles = [
+        'B'=>'Bachillerato'  ,
+        'BT'=>'Bachillerato Técnico' ,
+        'U'=> 'Tercer Nivel (Universidad)' ,
+        'T'=>'Tercer Nivel (Tecnológico)' ,
+        'PS'=> 'Posgrado' ,
+    ];
 
     /**
      * {@inheritdoc}

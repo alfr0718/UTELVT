@@ -9,8 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\Personaldata as PersonalD;
-use app\models\User as User;
+use app\models\Personaldata;
+use app\models\User;
 
 class SiteController extends Controller
 {
@@ -133,7 +133,7 @@ class SiteController extends Controller
 
     public function actionSignup()
     {
-        $PersonalD = new PersonalD(); // Ajusta el modelo de Datos Personales según tu aplicación.
+        $PersonalD = new Personaldata(); // Ajusta el modelo de Datos Personales según tu aplicación.
         $User = new User(); // Ajusta el modelo de Usuario según tu aplicación.
 
         if ($PersonalD->load(Yii::$app->request->post()) && $PersonalD->save()) {
@@ -164,7 +164,8 @@ class SiteController extends Controller
 
         // Renderiza la vista de registro.
         return $this->render('signup', [
-            'model' => $PersonalD    // Pasa el modelo de usuario si deseas mostrarlo en la vista.
+            'model' => $PersonalD, 
+            'niveles' => $PersonalD->niveles,   // Pasa el modelo de usuario si deseas mostrarlo en la vista.
         ]);
     }
 }

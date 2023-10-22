@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
@@ -14,7 +15,7 @@ use app\models\Biblioteca;
 
 <div class="libro-form">
     <?php $form = ActiveForm::begin(['options' => ['class' => 'custom-form']]); ?>
-    <h2 class="form-title">Formulario del Libro</h2>
+    <h2 class="form-title">Ficha del Libro</h2>
 
     <div class="row">
         <div class="col-md-6">
@@ -88,6 +89,11 @@ use app\models\Biblioteca;
                 <?= $form->field($model, 'biblioteca_idbiblioteca')
                     ->label('Campus')
                     ->dropDownList(ArrayHelper::map(Biblioteca::find()->all(), 'idbiblioteca', 'Campus'), ['prompt' => 'Seleccione el campus', 'class' => 'form-control']) ?>
+            </div>
+            <div class="form-group">
+                <?= $form->field($model, 'ubicacion')
+                    ->label('Ubicación')
+                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Ubicacion']) ?>
             </div>
         </div>
     </div>

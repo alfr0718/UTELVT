@@ -24,7 +24,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'id') ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'fecha_solicitud')->input('datetime') ?>
+            <?= $form->field($model, 'fecha_solicitud')->input('date') ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'tipoprestamo_id')->dropDownList(
@@ -45,7 +45,8 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'pc_idpc') ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'personaldata_Ci') ?>
+            <?= $form->field($model, 'cedula_solicitante')
+                ->label('Cédula Solicitante') ?>
         </div>
     </div>
 
@@ -68,7 +69,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Restablecer', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::a('Restablecer', ['index', 'reset-button' => 1], ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

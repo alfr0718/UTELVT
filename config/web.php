@@ -39,10 +39,14 @@ $config = [
             'on afterLogin' => function ($event) {
                 $user = $event->identity;
                 $auth = Yii::$app->authManager;
-            
+
                 if ($user->tipo_usuario == 8) {
                     $role = $auth->getRole('admin'); // Nombre del rol de administrador
-                } elseif ($user->tipo_usuario == 21 || $user->tipo_usuario == 7) {
+                } elseif ($user->tipo_usuario ==18) {
+                    $role = $auth->getRole('docente'); // Nombre del rol de docente
+                } elseif ($user->tipo_usuario == 13) {
+                    $role = $auth->getRole('estudiante'); // Nombre del rol de estudiante
+                } elseif ($user->tipo_usuario == 7 || $user->tipo_usuario == 21) {
                     $role = $auth->getRole('personal'); // Nombre del rol de personal
                 } else {
                     $role = $auth->getRole('usuario'); // Nombre del rol de usuario

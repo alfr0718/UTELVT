@@ -1,5 +1,6 @@
 <!-- Navbar -->
 <?php
+
 use yii\helpers\Html;
 ?>
 
@@ -10,12 +11,14 @@ use yii\helpers\Html;
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Inicio</a>
+            <a href="<?= \yii\helpers\Url::home() ?>" class="nav-link">Inicio</a>
         </li>
         <li class="nav-item dropdown">
             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Horarios de Atención</a>
             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=1']) ?>" class="dropdown-item">Nuevos Horizontes </a></li>
+                <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=3']) ?>" class="dropdown-item">Mutiles</a></li>
+                <li class="dropdown-divider"></li>
+                <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=1']) ?>" class="dropdown-item">Esmeraldas</a></li>
                 <li class="dropdown-divider"></li>
                 <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=2']) ?>" class="dropdown-item">La Concordia</a></li>
             </ul>
@@ -29,7 +32,7 @@ use yii\helpers\Html;
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <!-- Notifications Dropdown Menu -->
-       
+
         <li class="nav-item">
             <?= Html::a('<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </li>
@@ -40,7 +43,7 @@ use yii\helpers\Html;
             </a>
         </li>
 
-        
+
     </ul>
 </nav>
 <!-- /.navbar -->

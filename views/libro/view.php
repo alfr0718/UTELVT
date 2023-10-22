@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Eliminar', ['delete', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '¿Estás seguro de eliminar este elemento?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
                 },
             ],
-            'link',
+            'ubicacion',
         ],
     ]) ?>
 

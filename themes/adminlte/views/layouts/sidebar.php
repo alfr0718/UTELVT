@@ -1,4 +1,3 @@
-
 <aside class="main-sidebar sidebar-light-success elevation-4">
     <!-- Brand Logo -->
     <a href="/site/index" class="brand-link">
@@ -9,100 +8,140 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!--img-circle elevation-2 Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="user-panel  mt-3 pb-3 mb-3 d-flex align-items-center">
             <div class="image">
                 <?php if (!Yii::$app->user->isGuest) : ?>
                     <?php
-                        $user = Yii::$app->user->identity;
-                        $nombre = $user->personaldata->Nombres;
-                        $apellido = $user->personaldata->Apellidos;
-                        $iniciales = substr($nombre, 0, 1) . substr($apellido, 0, 1);
-                        echo '<div class="user-initials">' . $iniciales . '</div>';
+                    $cacheKey = 'user_' . Yii::$app->user->id;
+                    $userData = Yii::$app->cache->get($cacheKey);
+
+                    if ($userData === false) {
+                        // Los datos del usuario no están en caché, obtén los datos de la base de datos o de donde corresponda
+                        $userData = Yii::$app->user->identity;
+                        // Almacena los datos del usuario en la caché por un período de tiempo específico (por ejemplo, 3600 segundos o 1 hora)
+                        Yii::$app->cache->set($cacheKey, $userData, 3600);
+                    }
+
+                    $personalData = $userData->personaldata;
+                    if ($personalData !== null) {
+                        $nombre = $personalData->Nombres;
+                        $apellido = $personalData->Apellidos;
+                        $url = ['/personaldata/view', 'Ci' => $personalData->Ci];
+                        $perfil = $personalData->Nombres;
+                    }
+
+                    // Acceder a datos de la tabla InformacionPersonal
+                    $informacionEstudiante = $userData->informacionpersonal;
+                    if ($informacionEstudiante !== null) {
+                        $nombre = $informacionEstudiante->NombInfPer;
+                        $apellido = $informacionEstudiante->ApellInfPer;
+                        $perfil = $nombre . ' ' . $apellido;
+                        $url = ['/informacionpersonal/view', 'CIInfPer' => $informacionEstudiante->CIInfPer];
+                    }
+                    // Acceder a datos de la tabla InformacionPersonalD
+                    $informacionDocente = $userData->informacionpersonalD;
+                    if ($informacionDocente !== null) {
+                        $nombre = $informacionDocente->NombInfPer;
+                        $apellido = $informacionDocente->ApellInfPer;
+                        $perfil = $nombre . ' ' . $apellido;
+                        $url = ['/informacionpersonald/view', 'CIInfPer' => $informacionDocente->CIInfPer];
+                    }
+
+                    $iniciales = substr($nombre, 0, 1) . substr($apellido, 0, 1);
+                    echo '<div class="user-initials">' . $iniciales . '</div>';
                     ?>
-                    <?php else : ?>
+                <?php else : ?>
                     <div class="user-initials">¿?</div>
-                    <?php endif; ?>
-          </div>
+                <?php endif; ?>
+            </div>
             <div class="info">
                 <?php if (!Yii::$app->user->isGuest) : ?>
-                    <?= \yii\helpers\Html::a(Yii::$app->user->identity->personaldata->Nombres, // Nombre del usuario actual
-                ['/personaldata/view', 'Ci' => Yii::$app->user->identity->personaldata->Ci]) ?>
-                 <?php else : ?>
+                    <?= \yii\helpers\Html::a($perfil, $url) ?>
+                <?php else : ?>
                     <a href="#">¿Qué estas haciendo aquí?</a> <!-- O el texto que desees para usuarios no autenticados -->
-                <?php endif; ?>
-    </div>
-</div>
+            <?php endif; ?>
+            </div>
+        </div>
 
-<?php
-    $commonMenuItems = [
-        ['label' => 'Página Principal', 'icon' => 'fas fa-home', 'url' => ['/site/index']],
+        <?php
+        $commonMenuItems = [
+            ['label' => 'Página Principal', 'icon' => 'fas fa-home', 'url' => ['/site/index']],
         ];
 
-    $adminMenuItems = [
-        ['label' => 'ADMIN', 'header' => true],
-        ['label' => 'Usuarios', 'url' => ['/user/index'], 'icon' => 'fas fa-user'],
-        ['label' => 'Personas Naturales', 'url' => ['/personaldata/index'], 'icon' => 'fas fa-address-card'],
-        [
-            'label' => 'Roles y Permisos',
-            'icon' => 'fas fa-users',
-            'items' => [
-                ['label' => 'Rol', 'url' => ['/rbac/role'], 'target' => '_blank'],
-                ['label' => 'Asignación', 'url' => ['/rbac/assignment'], 'target' => '_blank'],
-                ['label' => 'Rutas', 'url' => ['/rbac/route'], 'target' => '_blank'],
-                ['label' => 'Permisos', 'url' => ['/rbac/permission'], 'target' => '_blank'],
-            ]
-        ],
-        // Otros elementos específicos para administradores
-    ];
+        $adminMenuItems = [
+            ['label' => 'ADMIN', 'header' => true],
+            ['label' => 'Usuarios', 'url' => ['/user/index'], 'icon' => 'fas fa-user'],
+            [
+                'label' => 'Registro de Personas',
+                'icon' => 'fas fa-address-card',
+                'items' => [
+                    ['label' => 'Estudiantes', 'icon' => 'fas fa-graduation-cap', 'url' => ['/informacionpersonal/index'],],
+                    ['label' => 'Docentes', 'icon' => 'fas fa-apple-alt', 'url' => ['/informacionpersonald/index'],],
+                    ['label' => 'Personas Externas', 'icon' => 'fas fa-user-circle', 'url' => ['/personaldata/index'],],
 
-    $personalMenuItems = [
-        ['label' => 'Personal', 'header' => true],
-    [
-        'label' => 'Prestamo',
-        'icon' => 'fas fa-clipboard',
-        'items' => [
-            ['label' => 'Registro de Solicitudes', 'icon' => 'fas fa-file', 'url' => ['/prestamo/index']],
-            ['label' => 'Ingresar', 'icon' => 'fas fa-edit', 'url' => ['/prestamo/create']],
-        ]
-    ],
-    [
-        'label' => 'Libros',
-        'icon' => 'fas fa-book',
-        'items' => [
-            ['label' => 'Indíce', 'icon' => 'fas fa-book-reader', 'url' => ['/libro/index']],
-            ['label' => 'Ingresar', 'icon' => 'fas fa-book-open', 'url' => ['/libro/create']],
-        ]
-    ],
-        ['label' => 'PC', 'url' => ['/pc/index'], 'icon' => 'fas fa-desktop'],
-    
-    [
-        'label' => 'Estadísticas',
-        'icon' => 'fas fa-chart-pie',
-        'items' => [
-        ['label' => 'General', 'icon' => 'fas fa-chart-area', 'url' => ['/prestamo/info']],
-        ['label' => 'Libros por Asignatura', 'icon' => 'fas fa-chart-bar', 'url' => ['/libro/info']],
-        ]
-    ],
-];
-    
-    $userType = $user->tipo_usuario;
-    // Selecciona el conjunto de menuItems según el tipo de usuario
-    if ($userType === 21 || $userType === 7 ) {
-        //personal
-        $menuItems = array_merge($commonMenuItems, $personalMenuItems);
-    } elseif ($userType === 8) {
-        //adminitradores
-        $menuItems = array_merge($commonMenuItems, $personalMenuItems, $adminMenuItems);
-    } else {
-        //usuarios comunes
-        $menuItems = $commonMenuItems;
-    }
+                ]
+            ],
+            [
+                'label' => 'Roles y Permisos',
+                'icon' => 'fas fa-users',
+                'items' => [
+                    ['label' => 'Rol', 'url' => ['/rbac/role'], 'target' => '_blank'],
+                    ['label' => 'Asignación', 'url' => ['/rbac/assignment'], 'target' => '_blank'],
+                    ['label' => 'Rutas', 'url' => ['/rbac/route'], 'target' => '_blank'],
+                    ['label' => 'Permisos', 'url' => ['/rbac/permission'], 'target' => '_blank'],
+                ]
+            ],
+            // Otros elementos específicos para administradores
+        ];
 
-    // Finalmente, pasa las variables definidas al widget de menú
-    echo \hail812\adminlte\widgets\Menu::widget([
-        'items' => $menuItems,
-    ]);
-    ?>
+        $personalMenuItems = [
+            ['label' => 'Personal', 'header' => true],
+            [
+                'label' => 'Prestamo',
+                'icon' => 'fas fa-clipboard',
+                'items' => [
+                    ['label' => 'Registro de Solicitudes', 'icon' => 'fas fa-file', 'url' => ['/prestamo/index']],
+                    ['label' => 'Ingresar', 'icon' => 'fas fa-edit', 'url' => ['/prestamo/create']],
+                ]
+            ],
+            [
+                'label' => 'Libros',
+                'icon' => 'fas fa-book',
+                'items' => [
+                    ['label' => 'Indíce', 'icon' => 'fas fa-book-reader', 'url' => ['/libro/index']],
+                    ['label' => 'Ingresar', 'icon' => 'fas fa-book-open', 'url' => ['/libro/create']],
+                ]
+            ],
+            ['label' => 'PC', 'url' => ['/pc/index'], 'icon' => 'fas fa-desktop'],
+
+            [
+                'label' => 'Estadísticas',
+                'icon' => 'fas fa-chart-pie',
+                'items' => [
+                    ['label' => 'General', 'icon' => 'fas fa-chart-area', 'url' => ['/prestamo/info']],
+                    //['label' => 'Libros por Asignatura', 'icon' => 'fas fa-chart-bar', 'url' => ['/libro/estadistica']],
+                ]
+            ],
+        ];
+
+        $userType = $userData->tipo_usuario;
+        // Selecciona el conjunto de menuItems según el tipo de usuario
+        if ($userType === 21 || $userType === 7) {
+            //personal
+            $menuItems = array_merge($commonMenuItems, $personalMenuItems);
+        } elseif ($userType === 8) {
+            //adminitradores
+            $menuItems = array_merge($commonMenuItems, $personalMenuItems, $adminMenuItems);
+        } else {
+            //usuarios comunes
+            $menuItems = $commonMenuItems;
+        }
+
+        // Finalmente, pasa las variables definidas al widget de menú
+        echo \hail812\adminlte\widgets\Menu::widget([
+            'items' => $menuItems,
+        ]);
+        ?>
         </nav>
         <!-- /.sidebar-menu -->
     </div>

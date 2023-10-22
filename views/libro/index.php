@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 /** @var app\models\LibroSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Listado de Libros';
+$this->title = 'Catálogo de Libros';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="libro-index">
@@ -32,93 +32,111 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <?php $isDesktop = Yii::$app->request->userAgent && strpos(Yii::$app->request->userAgent, 'Mobile') === false; ?>
-
+    
     <?php Pjax::begin(); ?>
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            'codigo_barras',
-            'titulo',
-            'autor',
-            [
-                'attribute' => 'isbn',
-                'visible' => $isDesktop,
-            ],
-            //'cute',
-            //'editorial',
-            //'anio_publicacion',
-            //'estado',
-            //'n_ejemplares',
-            //'link',
-            //'categoria_id',
-            //'asignatura_id',
-            //'pais_codigopais',
-            //'biblioteca_idbiblioteca',
-            [
-                'attribute' => 'categoria_id',
-                'visible' => $isDesktop,
-                'value' => function ($model) {
-                    return $model->categoria->Categoría;
-                },
+    <div class="table-responsive">        
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            //'filterModel' => $searchModel,
+            'pager' => [
+                'options' => ['class' => 'pagination justify-content-center'], // Agrega una clase CSS personalizada al contenedor de paginación
+                'maxButtonCount' => 5, // Controla el número de botones de página que se muestran
+                'prevPageLabel' => 'Anterior',
+                'nextPageLabel' => 'Siguiente',
+                'prevPageCssClass' => 'page-item', // Clase CSS para el botón "Anterior"
+                'nextPageCssClass' => 'page-item', // Clase CSS para el botón "Siguiente"
+                'linkOptions' => ['class' => 'page-link'], // Agrega una clase CSS personalizada a los enlaces de página
+                'activePageCssClass' => 'page-item active', // Clase CSS para la página activa
+                'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link'], // Estilo de los botones deshabilitados
 
             ],
-            [
-                'attribute' => 'asignatura_id', // Esto muestra el código de la asignatura
-                'visible' => $isDesktop,
-                'value' => function ($model) {
-                    return $model->asignatura->Nombre; // Accede al nombre de la asignatura relacionada
-                },
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            ],
-            [
-                'attribute' => 'pais_codigopais', // Esto muestra el código del país
-                'visible' => $isDesktop,
-                'value' => function ($model) {
-                    return $model->paisCodigopais->Nombrepais; // Accede al nombre del país relacionado
-                },
-
-            ],
-            [
-                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código de la biblioteca
-                'value' => function ($model) {
-                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre de la biblioteca
-                },
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{prestar} {otra-accion}', // Agrega otros botones personalizados si es necesario
-                'buttons' => [
-                    'prestar' => function ($url, $model, $key) {
-                        $buttonId = 'open-modal-button-' . $model->id; // Id único para el botón
-                        return Html::button('<i class="fas fa-plus"></i>', [
-                            'class' => 'btn btn-success',
-                            'id' => $buttonId, // Id único para cada botón
-                            'data-toggle' => 'modal',
-                            'data-target' => '#prestamo-modal',
-                            'data-remote' => Url::to(['/prestamo/prestarlibro', 'id' => $model->id]), // URL de la acción
-                        ]);
+                //'id',
+                'codigo_barras',
+                'titulo',
+                'autor',
+                [
+                    'attribute' => 'isbn',
+                    'visible' => $isDesktop,
+                ],
+                //'cute',
+                //'editorial',
+                //'anio_publicacion',
+                //'estado',
+                //'n_ejemplares',
+                //'link',
+                //'categoria_id',
+                //'asignatura_id',
+                //'pais_codigopais',
+                //'biblioteca_idbiblioteca',
+                [
+                    'attribute' => 'categoria_id',
+                    'visible' => $isDesktop,
+                    'value' => function ($model) {
+                        return $model->categoria->Categoría;
                     },
+
+                ],
+                [
+                    'attribute' => 'asignatura_id', // Esto muestra el código de la asignatura
+                    'visible' => $isDesktop,
+                    'value' => function ($model) {
+                        return $model->asignatura->Nombre; // Accede al nombre de la asignatura relacionada
+                    },
+                ],
+                [
+                    'attribute' => 'pais_codigopais', // Esto muestra el código del país
+                    'visible' => $isDesktop,
+                    'value' => function ($model) {
+                        return $model->paisCodigopais->Nombrepais; // Accede al nombre del país relacionado
+                    },
+
+                ],
+                [
+                    'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código de la biblioteca
+                    'value' => function ($model) {
+                        return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre de la biblioteca
+                    },
+                ],
+                [
+                    'attribute' => 'ubicacion', // Esto muestra el código de la biblioteca
+                    'visible' => $tipoUsuario === 8 || $tipoUsuario === 21,
+
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{prestar}', // Agrega otros botones personalizados si es necesario
+                    'buttons' => [
+                        'prestar' => function ($url, $model, $key) {
+                            $buttonId = 'open-modal-button-' . $model->id; // Id único para el botón
+                            $url = Url::to(['/prestamo/prestarlibro', 'id' => $model->id]);
+                            return Html::button('<i class="fas fa-plus"></i>', [
+                                'class' => 'btn btn-success',
+                                'id' => $buttonId, // Id único para cada botón
+                                'data-toggle' => 'modal',
+                                'data-target' => '#prestamo-modal',
+                                'data-remote' => $url, // URL de la acción
+                            ]);
+                        },
+                    ],
+                ],
+
+                [
+                    'class' => ActionColumn::className(),
+                    'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
+                        return Url::toRoute([$action, 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
+                    },
+                    'visible' => $tipoUsuario === 8 || $tipoUsuario === 21,
                 ],
             ],
 
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
-                },
-                'visible' => $tipoUsuario === 8 || $tipoUsuario === 21,
-            ],
-        ],
-    ]); ?>
+        ]); ?>
 
-    <?php Pjax::end(); ?>
-
+        <?php Pjax::end(); ?>
+    </div>
 </div>
 
 
@@ -126,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="prestamo-modal-label">Préstamo de Libro</h5>
+                <h5 class="modal-title" id="prestamo-modal-label"> <i class="fas fa-book"></i> Préstamo de Libro</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

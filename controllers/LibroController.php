@@ -8,6 +8,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Query;
+use app\models\Asignatura;
+use app\models\Prestamo;
+use app\models\Biblioteca;
+use Yii;
 
 /**
  * LibroController implements the CRUD actions for Libro model.
@@ -41,6 +45,11 @@ class LibroController extends Controller
     {
         $searchModel = new LibroSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        if (Yii::$app->request->get('reset-button') !== null) {
+            // Se presionó el botón de restablecimiento, así que eliminamos los filtros de búsqueda
+            $searchModel = new LibroSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -137,14 +146,21 @@ class LibroController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionInfo($mes = null, $anio = null, $asignatura = null, $biblioteca = null)
+    /*public function actionInfo()
     {
+        $mes = Yii::$app->request->get('mes');
+        $anio = Yii::$app->request->get('anio');
+        $asignatura = Yii::$app->request->get('asignatura');
+        $biblioteca = Yii::$app->request->get('biblioteca');
+
+        // Crea un Query para la consulta de libros
         $query = (new Query())
             ->select(['l.titulo AS libro', 'COUNT(*) AS cantidad'])
             ->from('prestamo p')
             ->innerJoin('libro l', 'p.libro_id = l.id')
             ->innerJoin('asignatura a', 'l.asignatura_id = a.id');
 
+        // Aplica condiciones basadas en los valores del formulario
         if ($mes && $anio) {
             $query->andWhere(['=', 'MONTH(p.fecha_solicitud)', $mes]);
             $query->andWhere(['=', 'YEAR(p.fecha_solicitud)', $anio]);
@@ -154,12 +170,16 @@ class LibroController extends Controller
             $query->andWhere(['=', 'a.Nombre', $asignatura]);
         }
 
-        $query->groupBy(['l.titulo'])
+        if ($biblioteca) {
+            $query->andWhere(['=', 'l.biblioteca_idbiblioteca', $biblioteca]);
+        }
+
+        // Ejecuta la consulta y obtiene los resultados
+        $topBooksByAsignatura = $query
+            ->groupBy(['l.titulo'])
             ->orderBy(['cantidad' => SORT_DESC])
-            ->limit(10);
-
-        $topBooksByAsignatura = $query->all();
-
+            ->limit(10)
+            ->all();
 
         $chartData = [
             'labels' => [], // Inicializa las etiquetas
@@ -213,11 +233,16 @@ class LibroController extends Controller
             'anios' => $anios,
             'mesSeleccionado' => $mes,
             'anioSeleccionado' => $anio,
+            'bibliotecaSeleccionada' => $biblioteca,
             'asignaturaSeleccionada' => $asignatura,
             'asignaturas' => $asignaturas,
             'bibliotecas' => $bibliotecas,
             'chartData' => $chartData,
         ]);
-    }
 
+
+
+    }*/
+
+    
 }

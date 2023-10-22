@@ -3,8 +3,10 @@
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 
+
 $this->title = 'Iniciar Sesión | Biblioteca';
 $this->registerCss("
+
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 body::before {
     content: '';
@@ -37,6 +39,9 @@ body {
 .registro-form {
     text-align: center;
 }
+.registro-remember {
+    text-align: left;
+}
 
 .registro-link {
     text-align: center;
@@ -51,6 +56,7 @@ body {
     text-decoration: underline;
 }
 ");
+
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -67,28 +73,36 @@ $this->params['breadcrumbs'][] = $this->title;
                             'id' => 'login-form',
                         ]); ?>
 
-                        <?= $form->field($model, 'username')->textInput([
-                            'autofocus' => true,
-                            'placeholder' => 'Usuario',
-                        ])->label(false) ?>
+                        <div class="form-group">
+                            <?= $form->field($model, 'username')->textInput([
+                                'autofocus' => true,
+                                'class' => 'form-control',
+                                'placeholder' => 'Usuario',
+                            ])->label(false) ?>
+                        </div>
 
-                        <?= $form->field($model, 'password')->passwordInput([
-                            'placeholder' => 'Contraseña',
-                        ])->label(false) ?>
+                        <div class="form-group">
+                            <?= $form->field($model, 'password')->passwordInput([
+                                'class' => 'form-control',
+                                'placeholder' => 'Contraseña',
+                            ])->label(false) ?>
+                        </div>
 
-                        <?= $form->field($model, 'rememberMe')->checkbox([
-                            'template' => "<div class=\"custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-                        ])->label('Recuérdame') ?>
+                        <div class="registro-remember">
+                            <?= $form->field($model, 'rememberMe')->checkbox([
+                                'template' => "<div class=\"custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+                            ])->label('Recuérdame') ?>
+                        </div>
 
                         <div class="form-group text-center">
-                            <?= Html::submitButton('Acceder', [
+                            <?= Html::submitButton('Iniciar Sesión', [
                                 'class' => 'btn btn-primary btn-block btn-lg',
                             ]) ?>
                         </div>
 
                         <div class="form-group text-center">
-                            <?= Html::a('Registrarse', ['site/signup'], [
-                                'class' => 'btn btn-success btn-block btn-lg',
+                            <?= Html::a('¿Quieres formar parte de esta comunidad? ¡Únete!', ['site/signup'], [
+                                'class' => 'btn-link', // Clase para dar estilo de enlace
                             ]) ?>
                         </div>
                         <?php ActiveForm::end(); ?>
@@ -104,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'options' => [
                         'class' => 'alert alert-success', // Agrega una clase CSS personalizada (opcional)
                     ],
-                    'title' => '¡Éxito!', 
+                    'title' => '¡Éxito!',
                     'body' => Yii::$app->session->getFlash('success'), // Mostrar mensaje de éxito
                 ]) ?>
             <?php endif; ?>

@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var app\models\Personaldata $model */
 /** @var yii\widgets\ActiveForm $form */
+
 ?>
 
 <div class="personaldata-form">
@@ -26,31 +27,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'Institucion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Nivel')->dropDownList([ 'Bachiller' => 'Bachiller', 'Universidad' => 'Universidad', 'Posgrado'=> 'Posgrado', ], ['prompt' => 'Seleccione su Nivel Académico']) ?>
+    <?= $form->field($model, 'Nivel')->dropDownList($nivel, ['prompt' => 'Seleccione su nivel académico']) ?>
 
-    <?= $form->field($model, 'Facultad')->dropDownList([
-    'FACI' => 'Facultad de Ingenierías',
-    'FACAE' => 'Facultad de Ciencias Sociales y de Servicios',
-    'FACSOS' => 'Facultad de Ciencias Administrativas y Económicas',
-    'FACAP' => 'Facultad de Ciencias Agropecuarias',
-    'FACPED' => 'Facultad de la Pedagogía',
-]) ?>
+    <?php // $form->field($model, 'Facultad')->dropDownList($facultades, ['prompt' => 'Seleccione su facultad']) ?>
 
-
-<?= $form->field($model, 'Ciclo')->dropDownList([
-    '1' => '1',
-    '2' => '2',
-    '3' => '3',
-    '4' => '4',
-    '5' => '5',
-    '6' => '6',
-    '7' => '7',
-    '8' => '8',
-    '9' => '9',
-    '10' => '10',
-    '11' => '11',
-    '12' => '12',
-]) ?>
+    <?php // $form->field($model, 'Ciclo')->dropDownList($ciclo, ['prompt' => 'Seleccione su ciclo']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

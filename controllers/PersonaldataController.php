@@ -93,6 +93,7 @@ class PersonaldataController extends Controller
     {
         $model = $this->findModel($Ci);
 
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'Ci' => $model->Ci]);
         }

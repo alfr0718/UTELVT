@@ -12,7 +12,6 @@ use app\models\Tipoprestamo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\db\Query;
 
 
 /**
@@ -48,6 +47,12 @@ class PrestamoController extends Controller
         $searchModel = new PrestamoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        if (Yii::$app->request->get('reset-button') !== null) {
+            // Se presionó el botón de restablecimiento, así que eliminamos los filtros de búsqueda
+            $searchModel = new PrestamoSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        }
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -58,14 +63,13 @@ class PrestamoController extends Controller
      * Displays a single Prestamo model.
      * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
-     * @param string $personaldata_Ci Personaldata Ci
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id, $biblioteca_idbiblioteca, $personaldata_Ci)
+    public function actionView($id, $biblioteca_idbiblioteca)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id, $biblioteca_idbiblioteca, $personaldata_Ci),
+            'model' => $this->findModel($id, $biblioteca_idbiblioteca),
         ]);
     }
 
@@ -79,9 +83,24 @@ class PrestamoController extends Controller
         $model = new Prestamo();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+            if ($model->load($this->request->post())){
+
+                list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
+
+                $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+                $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
+                $fechaEntrega = $fechaSolicitud->add($intervalo);
+                $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
+                if ($model->pc_idpc !== null) {
+                    $model->pc_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
+                } elseif($model->libro_id !== null){
+                    $model->libro_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
+                }
+                
+            if($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
             }
+        }
         } else {
             $model->loadDefaultValues();
         }
@@ -96,13 +115,12 @@ class PrestamoController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
-     * @param string $personaldata_Ci Personaldata Ci
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id, $biblioteca_idbiblioteca, $personaldata_Ci)
+    public function actionUpdate($id, $biblioteca_idbiblioteca)
     {
-        $model = $this->findModel($id, $biblioteca_idbiblioteca, $personaldata_Ci);
+        $model = $this->findModel($id, $biblioteca_idbiblioteca);
 
         // Verificar si se envió un formulario
         if ($model->load(\Yii::$app->request->post())) {
@@ -116,7 +134,7 @@ class PrestamoController extends Controller
 
             // Verificar si el modelo se guarda con éxito
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
             }
         }
 
@@ -130,13 +148,12 @@ class PrestamoController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
-     * @param string $personaldata_Ci Personaldata Ci
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $biblioteca_idbiblioteca, $personaldata_Ci)
+    public function actionDelete($id, $biblioteca_idbiblioteca)
     {
-        $this->findModel($id, $biblioteca_idbiblioteca, $personaldata_Ci)->delete();
+        $this->findModel($id, $biblioteca_idbiblioteca)->delete();
 
         return $this->redirect(['index']);
     }
@@ -146,13 +163,12 @@ class PrestamoController extends Controller
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
      * @param int $biblioteca_idbiblioteca Biblioteca Idbiblioteca
-     * @param string $personaldata_Ci Personaldata Ci
      * @return Prestamo the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id, $biblioteca_idbiblioteca, $personaldata_Ci)
+    protected function findModel($id, $biblioteca_idbiblioteca)
     {
-        if (($model = Prestamo::findOne(['id' => $id, 'biblioteca_idbiblioteca' => $biblioteca_idbiblioteca, 'personaldata_Ci' => $personaldata_Ci])) !== null) {
+        if (($model = Prestamo::findOne(['id' => $id, 'biblioteca_idbiblioteca' => $biblioteca_idbiblioteca])) !== null) {
             return $model;
         }
 
@@ -161,7 +177,7 @@ class PrestamoController extends Controller
 
     public function actionPrestarlibro($id)
     {
-
+        
         // Cargar el modelo de libro basado en el $id recibido        
         $libro = Libro::findOne(['id' => $id]);
 
@@ -172,11 +188,22 @@ class PrestamoController extends Controller
 
         $model = new Prestamo();
 
-        // Obtener el usuario actual
-        $usuario = \Yii::$app->user->identity;
+        if (!Yii::$app->user->isGuest) {
+            $userData = Yii::$app->user->identity;
 
-        // Asignar valores al modelo de Prestamo
-        $model->personaldata_Ci = $usuario->personaldata;
+            // Verifica qué relación no es nula y asigna la cédula correspondiente
+            if ($userData->personaldata !== null) {
+                $model->cedula_solicitante = $userData->personaldata->Ci;
+                $model->personaldata_Ci = $model->cedula_solicitante;
+            } elseif ($userData->informacionpersonal !== null) {
+                $model->cedula_solicitante = $userData->informacionpersonal->CIInfPer;
+                $model->informacionpersonal_CIInfPer = $model->cedula_solicitante;
+            } elseif ($userData->informacionpersonalD !== null) {
+                $model->cedula_solicitante = $userData->informacionpersonalD->CIInfPer;
+                $model->informacionpersonal_d_CIInfPer = $model->cedula_solicitante;;
+            }
+        }
+
         $model->tipoprestamo_id = 'LIB';
 
         $model->biblioteca_idbiblioteca = $libro->biblioteca_idbiblioteca; // Campus donde se encuentra el usuario... mejorar (Y)
@@ -195,7 +222,7 @@ class PrestamoController extends Controller
 
             // Verificar si el modelo se guarda con éxito
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
             }
         }
 
@@ -207,8 +234,6 @@ class PrestamoController extends Controller
 
     public function actionPrestarpc($id)
     {
-        // Cargar el modelo del computador basado en el $id recibido
-
         $pc = Pc::findOne(['idpc' => $id]);
 
         // Verificar si el computador existe
@@ -218,11 +243,22 @@ class PrestamoController extends Controller
 
         $model = new Prestamo();
 
-        // Obtener el usuario actual
-        $usuario = \Yii::$app->user->identity;
+        if (!Yii::$app->user->isGuest) {
+            $userData = Yii::$app->user->identity;
 
-        // Asignar valores al modelo de Prestamo
-        $model->personaldata_Ci = $usuario->personaldata;
+            // Verifica qué relación no es nula y asigna la cédula correspondiente
+            if ($userData->personaldata !== null) {
+                $model->cedula_solicitante = $userData->personaldata->Ci;
+                $model->personaldata_Ci = $model->cedula_solicitante;
+            } elseif ($userData->informacionpersonal !== null) {
+                $model->cedula_solicitante = $userData->informacionpersonal->CIInfPer;
+                $model->informacionpersonal_CIInfPer = $model->cedula_solicitante;
+            } elseif ($userData->informacionpersonalD !== null) {
+                $model->cedula_solicitante = $userData->informacionpersonalD->CIInfPer;
+                $model->informacionpersonal_d_CIInfPer = $model->cedula_solicitante;;
+            }
+        }
+
         $model->intervalo_solicitado = '01:00:00';
         $model->tipoprestamo_id = 'COMP';
         $model->biblioteca_idbiblioteca = $pc->biblioteca_idbiblioteca; // Campus donde se encuentra el usuario... mejorar (Y)
@@ -241,7 +277,7 @@ class PrestamoController extends Controller
 
             // Verificar si el modelo se guarda con éxito
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
             }
         }
 
@@ -255,16 +291,26 @@ class PrestamoController extends Controller
     {
 
         $model = new Prestamo();
-        // Obtener el usuario actual
-        $usuario = \Yii::$app->user->identity;
 
+        if (!Yii::$app->user->isGuest) {
+            $userData = Yii::$app->user->identity;
+
+            // Verifica qué relación no es nula y asigna la cédula correspondiente
+            if ($userData->personaldata !== null) {
+                $model->cedula_solicitante = $userData->personaldata->Ci;
+                $model->personaldata_Ci = $model->cedula_solicitante;
+            } elseif ($userData->informacionpersonal !== null) {
+                $model->cedula_solicitante = $userData->informacionpersonal->CIInfPer;
+                $model->informacionpersonal_CIInfPer = $model->cedula_solicitante;
+            } elseif ($userData->informacionpersonalD !== null) {
+                $model->cedula_solicitante = $userData->informacionpersonalD->CIInfPer;
+                $model->informacionpersonal_d_CIInfPer = $model->cedula_solicitante;;
+            }
+        }
         // Asignar valores al modelo de Prestamo
-        $model->personaldata_Ci = $usuario->personaldata;
         $model->tipoprestamo_id = 'ESP';
 
         //$biblioteca = \Yii::$app->controller->findBibliotecaById(['idbiblioteca' => $model->biblioteca_idbiblioteca]);
-
-
         // Verificar si se envió un formulario
         if ($model->load(\Yii::$app->request->post())) {
             // Asignar valores y calcular la fecha de entrega
@@ -277,7 +323,7 @@ class PrestamoController extends Controller
 
             // Verificar si el modelo se guarda con éxito
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca, 'personaldata_Ci' => $model->personaldata_Ci]);
+                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
             }
         }
 
@@ -353,7 +399,7 @@ class PrestamoController extends Controller
             $computadora = Pc::findOne($pcId);
 
             if ($computadora && $computadora->idpc !== null && $computadora->idpc !== 'No disponible') {
-                $nombreComputadora = $computadora->idpc;
+                $nombreComputadora = $computadora->nombre;
                 $computadoras[] = [
                     'mes' => $mes,
                     'computadora' => $nombreComputadora,

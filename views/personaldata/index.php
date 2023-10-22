@@ -6,7 +6,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-$this->title = 'Lista de Personas';
+$this->title = 'Registro de Personas Externas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="personaldata-index">
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
 
         if ($tipoUsuario === 8) {
-            echo Html::a('Agregar Persona Natural', ['create'], ['class' => 'btn btn-success']);
+            echo Html::a('Ingresar Persona Natural', ['create'], ['class' => 'btn btn-success']);
         }
     }
     ?>
@@ -41,9 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'FechaNacimiento',
             'Genero',
             'Institucion',
-            'Nivel',
-            'Facultad',
-            'Ciclo',
+            //'Nivel',
+            //'Facultad',
+            //'Ciclo',
 
             [
                 'class' => ActionColumn::className(),

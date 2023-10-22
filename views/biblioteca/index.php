@@ -27,6 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pager' => [
+                'options' => ['class' => 'pagination justify-content-center'], // Agrega una clase CSS personalizada al contenedor de paginación
+                'maxButtonCount' => 5, // Controla el número de botones de página que se muestran
+                'prevPageLabel' => 'Anterior',
+                'nextPageLabel' => 'Siguiente',
+                'prevPageCssClass' => 'page-item', // Clase CSS para el botón "Anterior"
+                'nextPageCssClass' => 'page-item', // Clase CSS para el botón "Siguiente"
+                'linkOptions' => ['class' => 'page-link'], // Agrega una clase CSS personalizada a los enlaces de página
+                'activePageCssClass' => 'page-item active', // Clase CSS para la página activa
+                'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link'], // Estilo de los botones deshabilitados
+
+            ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

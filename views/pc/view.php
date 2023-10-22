@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Pc $model */
 
-$this->title = $model->idpc;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Pcs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -29,7 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'idpc',
+            //'idpc',
+            'nombre',
             'estado',
             //  'biblioteca_idbiblioteca',
             [
