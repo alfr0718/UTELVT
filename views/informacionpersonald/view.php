@@ -17,13 +17,35 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Actualizar', ['update', 'CIInfPer' => $model->CIInfPer], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'CIInfPer' => $model->CIInfPer], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => '¿Estas seguro de eliminar este elemento?',
-                'method' => 'post',
-            ],
-        ]) ?>
+    </p>
+
+
+
+    <?php
+    $tipoUsuario = null; // Inicializamos la variable
+
+    if (!Yii::$app->user->isGuest) {
+        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+
+        if ($tipoUsuario === 8) {
+            echo Html::a('Eliminar', ['delete', 'CIInfPer' => $model->CIInfPer], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => '¿Estás seguro de eliminar este elemento?',
+                    'method' => 'post',
+                ],
+            ]);
+        }
+    }
+    ?>
+
+    <?php
+    $user = Yii::$app->user->identity;
+    if ($user->username === $model->CIInfPer) {
+        echo Html::a('Cambiar Contraseña', ['user/change-password'], ['class' => 'btn btn-warning'], ['confirm' => '¿Estas seguro de cambiar tu contraseña?',]);
+    }
+    ?>
     </p>
 
     <?= DetailView::widget([
