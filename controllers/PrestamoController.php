@@ -91,9 +91,9 @@ class PrestamoController extends Controller
                 $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
                 $fechaEntrega = $fechaSolicitud->add($intervalo);
                 $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
-                if ($model->pc_idpc !== null) {
+                if ($model->tipoprestamo_id === 'COMP') {
                     $model->pc_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
-                } elseif($model->libro_id !== null){
+                } elseif($model->tipoprestamo_id === 'LIB'){
                     $model->libro_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
                 }
                 

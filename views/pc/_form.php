@@ -13,6 +13,7 @@ use app\models\Biblioteca;
 <div class="pc-form custom-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <h2 class="form-title">Ficha del Dispositivo</h2>
 
     <div class="row">
         <div class="col-md-6">

@@ -33,6 +33,7 @@ class Prestamo extends \yii\db\ActiveRecord
 {
     public $intervalo_solicitado;
     public $cedula_solicitante;
+    public $field_choice;
 
     /**
      * {@inheritdoc}

@@ -67,10 +67,10 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'titulo')->textInput(['style' => 'width: 100%;'])->label('Título') ?>
+            <?= $form->field($model, 'titulo')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Nombre del Libro'])->label('Título') ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'autor')->textInput(['style' => 'width: 100%;'])->label('Autor') ?>
+            <?= $form->field($model, 'autor')->textInput(['style' =>'width: 100%;', 'placeholder' => 'Autor de la Publicación'])->label('Autor') ?>
         </div>
     </div>
     <?php // echo $form->field($model, 'link') 
@@ -111,16 +111,16 @@ use yii\widgets\ActiveForm;
             )->label('País de Publicación') ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'anio_publicacion')->textInput(['style' => 'width: 100%;', 'type' => 'number', 'min' => 1900, 'max' => date('Y')])->label('Año de Publicación') ?>
+            <?= $form->field($model, 'anio_publicacion')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Año de Publicación', 'type' => 'number', 'min' => 1900, 'max' => date('Y')])->label('Año de Publicación') ?>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'codigo_barras')->textInput(['style' => 'width: 100%;']) ?>
+            <?= $form->field($model, 'codigo_barras')->textInput(['style' =>'width: 100%;', 'placeholder' => 'Código Interno']) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'isbn')->textInput(['style' => 'width: 100%;'])->label('ISBN') ?>
+            <?= $form->field($model, 'isbn')->textInput(['style' =>'width: 100%;', 'placeholder' => 'ISBN de la Publicación'])->label('ISBN') ?>
         </div>
     </div>
 

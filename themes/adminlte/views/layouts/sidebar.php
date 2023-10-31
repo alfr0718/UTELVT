@@ -76,7 +76,7 @@
                 'icon' => 'fas fa-address-card',
                 'items' => [
                     ['label' => 'Estudiantes', 'icon' => 'fas fa-graduation-cap', 'url' => ['/informacionpersonal/index'],],
-                    ['label' => 'Docentes', 'icon' => 'fas fa-apple-alt', 'url' => ['/informacionpersonald/index'],],
+                    ['label' => 'Personal Universitario', 'icon' => 'fas fa-apple-alt', 'url' => ['/informacionpersonald/index'],],
                     ['label' => 'Personas Externas', 'icon' => 'fas fa-user-circle', 'url' => ['/personaldata/index'],],
 
                 ]
@@ -97,7 +97,7 @@
         $personalMenuItems = [
             ['label' => 'Personal', 'header' => true],
             [
-                'label' => 'Prestamo',
+                'label' => 'Préstamo',
                 'icon' => 'fas fa-clipboard',
                 'items' => [
                     ['label' => 'Registro de Solicitudes', 'icon' => 'fas fa-file', 'url' => ['/prestamo/index']],

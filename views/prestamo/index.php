@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['style' => 'color: #0d75fd;'],
                     'value' => function ($model) {
                         if (!empty($model->informacionpersonal_d_CIInfPer)) {
-                            return 'Docente';
+                            return 'Personal Universitario';
                         } elseif (!empty($model->personaldata_Ci)) {
                             return 'Externo';
                         } elseif (!empty($model->informacionpersonal_CIInfPer)) {

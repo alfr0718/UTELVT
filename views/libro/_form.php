@@ -32,12 +32,12 @@ use app\models\Biblioteca;
             <div class="form-group">
                 <?= $form->field($model, 'titulo')
                     ->label('Título')
-                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Título']) ?>
+                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Título de la Publicación']) ?>
             </div>
             <div class="form-group">
                 <?= $form->field($model, 'autor')
                     ->label('Autor')
-                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Autor']) ?>
+                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Autor de la Publicación']) ?>
             </div>
             <div class="form-group">
                 <?= $form->field($model, 'isbn')
@@ -93,7 +93,7 @@ use app\models\Biblioteca;
             <div class="form-group">
                 <?= $form->field($model, 'ubicacion')
                     ->label('Ubicación')
-                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Ubicacion']) ?>
+                    ->textInput(['maxlength' => true, 'class' => 'form-control', 'placeholder' => 'Estante']) ?>
             </div>
         </div>
     </div>
