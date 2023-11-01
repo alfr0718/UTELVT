@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'id') ?>
+            <?= $form->field($model, 'id')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Código de Préstamo'])->label('N° Inicial del Formulario')?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'fecha_solicitud')->input('date') ?>
@@ -42,11 +42,10 @@ use yii\widgets\ActiveForm;
             ) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'pc_idpc')->label('Computador Solicitado') ?>
+            <?= $form->field($model, 'pc_idpc')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Nombre del Computador'])->label('Computador Solicitado')?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'cedula_solicitante')
-                ->label('Cédula Solicitante') ?>
+            <?= $form->field($model, 'cedula_solicitante')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Ingrese n° de Cédula'])->label('Cédula Solicitante')?>
         </div>
     </div>
 

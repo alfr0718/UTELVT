@@ -8,37 +8,40 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="prestamo-form">
+<style>
+    .custom-form {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+    }
+
+    .form-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="prestamo-form custom-form">
+    <h1 class="form-title">Detalles de Solicitud</h1>
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php $form->field($model, 'fecha_solicitud')->textInput() ?>
+    <?php //$form->field($model, 'fecha_solicitud')->textInput() ?>
 
     <?= $form->field($model, 'field_choice')->dropDownList([
         'personaldata_Ci' => 'Solicitante Externo',
         'informacionpersonal_CIInfPer' => 'Estudiante de la Institución',
         'informacionpersonal_d_CIInfPer' => 'Personal Universitario',
-
     ], ['prompt' => 'Seleccione Tipo de Solicitante'])->label('Tipo de Solicitante'); ?>
 
     <div id="dynamic-input-container"></div> <!-- Container for dynamic input fields -->
 
-
-    <?= $form->field($model, 'intervalo_solicitado')
-        ->textInput(['type' => 'time', 'value' => '01:00:00']) ?>
-
-    <?= $form->field($model, 'biblioteca_idbiblioteca')
-        ->dropDownList(
-            \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
-            ['prompt' => 'Seleccione Campus',]
-        ) ?>
-
     <?= $form->field($model, 'tipoprestamo_id')
         ->dropDownList(
             \yii\helpers\ArrayHelper::map(\app\models\Tipoprestamo::find()->all(), 'id', 'nombre_tipo',),
-        ['prompt' => 'Servicio Solicitado', 'id' => 'tipoprestamo-id']
+            ['prompt' => 'Servicio Solicitado', 'id' => 'tipoprestamo-id']
         ) ?>
-
 
     <div class="dynamic-fields" id="libro-fields" style="display: none">
         <?= $form->field($model, 'libro_id')
@@ -57,11 +60,15 @@ use yii\widgets\ActiveForm;
                 ['prompt' => 'Seleccione Dispositivo']
             ) ?>
     </div>
-    <?php // $form->field($model, 'pc_biblioteca_idbiblioteca')->textInput() 
-    ?>
 
-    <?php // $form->field($model, 'libro_biblioteca_idbiblioteca')->textInput() 
-    ?>
+
+<?= $form->field($model, 'intervalo_solicitado')
+->textInput(['type' => 'time', 'value' =>'01:00:00'])?>
+    <?= $form->field($model, 'biblioteca_idbiblioteca')
+        ->dropDownList(
+            \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
+            ['prompt' => 'Seleccione Campus']
+        ) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Enviar', ['class' => 'btn btn-success']) ?>
@@ -70,7 +77,6 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
-
 
 <?php
 $script = <<<JS
@@ -102,7 +108,6 @@ $('#tipoprestamo-id').on('change', function() {
         $('#pc-fields').hide();
     }
 });
-
 JS;
 $this->registerJs($script);
 ?>

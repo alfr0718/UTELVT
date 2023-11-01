@@ -20,7 +20,8 @@ class PrestamoSearch extends Prestamo
     public function rules()
     {
         return [
-            [['id', 'biblioteca_idbiblioteca', 'pc_idpc', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
+            [['pc_idpc'], 'string'],
+            [['id', 'biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
             [['cedula_solicitante', 'fecha_solicitud', 'fechaentrega', 'tipoprestamo_id', 'personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'], 'safe'],
         ];
     }
@@ -44,7 +45,7 @@ class PrestamoSearch extends Prestamo
     public function search($params)
     {
         $query = Prestamo::find();
-
+        $query->joinWith('pcIdpc'); // Realizar un join con la tabla datospersonalesed
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -83,13 +84,14 @@ class PrestamoSearch extends Prestamo
             //'fecha_solicitud' => $this->fecha_solicitud,
             'fechaentrega' => $this->fechaentrega,
             'biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
-            'pc_idpc' => $this->pc_idpc,
+
             'pc_biblioteca_idbiblioteca' => $this->pc_biblioteca_idbiblioteca,
             'libro_id' => $this->libro_id,
             'libro_biblioteca_idbiblioteca' => $this->libro_biblioteca_idbiblioteca,
         ]);
 
         $query->andFilterWhere(['like', 'tipoprestamo_id', $this->tipoprestamo_id])
+        ->andFilterWhere(['like', 'pc.nombre', $this->pc_idpc])
             /*->andFilterWhere(['like', 'personaldata_Ci', $this->personaldata_Ci])
             ->andFilterWhere(['like', 'informacionpersonal_d_CIInfPer', $this->informacionpersonal_d_CIInfPer])
             ->andFilterWhere(['like', 'informacionpersonal_CIInfPer', $this->informacionpersonal_CIInfPer]);*/

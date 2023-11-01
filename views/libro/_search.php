@@ -103,15 +103,19 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
+        <?php $paisesConLibros = \app\models\Pais::find()
+        ->where(['IN', 'codigopais', \app\models\Libro::find()->select('pais_codigopais')->distinct()])
+        ->orderBy(['Nombrepais' => SORT_ASC])
+        ->all();
+ ?>
+
             <?= $form->field($model, 'pais_codigopais')
-            ->dropDownList(
-                \yii\helpers\ArrayHelper::map(
-                    \app\models\Pais::find()->orderBy(['Nombrepais' => SORT_ASC])->all(),
-                    'codigopais',
-                    'Nombrepais'
-                ),
-                ['prompt' => 'Seleccionar País', 'style' => 'width: 100%;']
-            )->label('País de Publicación') ?>
+                ->dropDownList(
+                    \yii\helpers\ArrayHelper::map($paisesConLibros, 'codigopais', 'Nombrepais'),
+                    ['prompt' => 'Seleccionar País', 'style' => 'width: 100%;']
+                )
+                ->label('País de Publicación') ?>
+
         </div>
         <div class="col-md-6">
             <?= $form->field($model, 'anio_publicacion')
