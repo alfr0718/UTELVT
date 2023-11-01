@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
             ) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'pc_idpc') ?>
+            <?= $form->field($model, 'pc_idpc')->label('Computador Solicitado') ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'cedula_solicitante')
@@ -52,7 +52,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'libro_id') ?>
+            <?= $form->field($model, 'libro_id')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Código de Barras'])->label('Título Solicitado')?>
         </div>
     </div>
 

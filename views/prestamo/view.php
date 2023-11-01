@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
             ],
-            //DOCENTE
+            //PERSONAL UNIVERSITARIO
             //'informacionpersona_d_CIInfPer',
             [
                 'attribute' => 'informacionpersonal_d_CIInfPer',
@@ -147,8 +147,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Apellidos',
                 'visible' => !empty($model->informacionpersonal_d_CIInfPer),
                 'value' => function ($model) {
-                    if ($model->informacionpersonaDCIInfPer !== null) {
-                        return $model->informacionpersonaDCIInfPer->ApellInfPer . ' ' . $model->informacionpersonaDCIInfPer->ApellMatInfPer;
+                    if ($model->informacionpersonalDCIInfPer !== null) {
+                        return $model->informacionpersonalDCIInfPer->ApellInfPer . ' ' . $model->informacionpersonalDCIInfPer->ApellMatInfPer;
                     } else {
                         return 'No disponible'; // O cualquier otro mensaje adecuado
                     }
@@ -159,15 +159,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Nombres',
                 'visible' => !empty($model->informacionpersonal_d_CIInfPer),
                 'value' => function ($model) {
-                    if ($model->informacionpersonaDCIInfPer !== null) {
-                        return $model->informacionpersonaDCIInfPer->NombInfPer;
+                    if ($model->informacionpersonalDCIInfPer !== null) {
+                        return $model->informacionpersonalDCIInfPer->NombInfPer;
                     } else {
                         return 'No disponible'; // O cualquier otro mensaje adecuado
                     }
                 },
             ],
 
-            //PERSONA EXTERNA
+            //SOLICITANTE EXTERNO
             //'personaldata_Ci',
             [
                 'attribute' => 'personaldata_Ci',

@@ -78,7 +78,8 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'categoria_id')->dropDownList(
+            <?= $form->field($model, 'categoria_id')
+            ->dropDownList(
                 \yii\helpers\ArrayHelper::map(
                     \app\models\Categoria::find()->orderBy(['Categoría' => SORT_ASC])->all(),
                     'id',
@@ -88,7 +89,8 @@ use yii\widgets\ActiveForm;
             )->label('Categoría') ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'asignatura_id')->dropDownList(
+            <?= $form->field($model, 'asignatura_id')
+            ->dropDownList(
                 \yii\helpers\ArrayHelper::map(
                     \app\models\Asignatura::find()->orderBy(['Nombre' => SORT_ASC])->all(),
                     'id',
@@ -101,7 +103,8 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'pais_codigopais')->dropDownList(
+            <?= $form->field($model, 'pais_codigopais')
+            ->dropDownList(
                 \yii\helpers\ArrayHelper::map(
                     \app\models\Pais::find()->orderBy(['Nombrepais' => SORT_ASC])->all(),
                     'codigopais',
@@ -111,13 +114,16 @@ use yii\widgets\ActiveForm;
             )->label('País de Publicación') ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'anio_publicacion')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Año de Publicación', 'type' => 'number', 'min' => 1900, 'max' => date('Y')])->label('Año de Publicación') ?>
+            <?= $form->field($model, 'anio_publicacion')
+            ->textInput(['style' => 'width: 100%;', 'placeholder' => 'Año de Publicación', 'type' => 'number', 'min' => 1900, 'max' => date('Y')])
+            ->label('Año de Publicación') ?>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'codigo_barras')->textInput(['style' =>'width: 100%;', 'placeholder' => 'Código Interno']) ?>
+            <?= $form->field($model, 'codigo_barras')
+            ->textInput(['style' =>'width: 100%;', 'placeholder' => 'Código Interno']) ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'isbn')->textInput(['style' =>'width: 100%;', 'placeholder' => 'ISBN de la Publicación'])->label('ISBN') ?>

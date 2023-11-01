@@ -15,9 +15,9 @@ use yii\widgets\ActiveForm;
     <?php $form->field($model, 'fecha_solicitud')->textInput() ?>
 
     <?= $form->field($model, 'field_choice')->dropDownList([
-        'personaldata_Ci' => 'Persona Externa',
-        'informacionpersonal_Ci' => 'Estudiante',
-        'informacionpersonal_d_CI' => 'Personal Universitario',
+        'personaldata_Ci' => 'Solicitante Externo',
+        'informacionpersonal_CIInfPer' => 'Estudiante de la Institución',
+        'informacionpersonal_d_CIInfPer' => 'Personal Universitario',
 
     ], ['prompt' => 'Seleccione Tipo de Solicitante'])->label('Tipo de Solicitante'); ?>
 
@@ -81,10 +81,10 @@ $('#prestamo-field_choice').on('change', function() {
 
     if (choice === 'personaldata_Ci') {
         container.append('<input type="text" class="form-control" name="Prestamo[personaldata_Ci]" placeholder="Cédula de Persona Externa">');
-    } else if (choice === 'informacionpersonal_Ci') {
-        container.append('<input type="text" class="form-control" name="Prestamo[informacionpersonal_Ci]" placeholder="Cédula de Estudiante">');
-    } else if (choice === 'informacionpersonal_d_CI') {
-        container.append('<input type="text" class="form-control" name="Prestamo[informacionpersonal_d_CI]" placeholder="Cédula de Docente">');
+    } else if (choice === 'informacionpersonal_CIInfPer') {
+        container.append('<input type="text" class="form-control" name="Prestamo[informacionpersonal_CIInfPer]" placeholder="Cédula de Estudiante">');
+    } else if (choice === 'informacionpersonal_d_CIInfPer') {
+        container.append('<input type="text" class="form-control" name="Prestamo[informacionpersonal_d_CIInfPer]" placeholder="Cédula de Docente">');
     }
 });
 

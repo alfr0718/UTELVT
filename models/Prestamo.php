@@ -43,21 +43,64 @@ class Prestamo extends \yii\db\ActiveRecord
         return 'prestamo';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['fecha_solicitud', 'cedula_solicitante', 'intervalo_solicitado', 'fechaentrega'], 'safe'],
+            [['cedula_solicitante', 'intervalo_solicitado','fecha_solicitud', 'fechaentrega'], 'safe'],
             [['tipoprestamo_id', 'biblioteca_idbiblioteca'], 'required'],
             [['biblioteca_idbiblioteca', 'pc_idpc', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
             [['tipoprestamo_id'], 'string', 'max' => 5],
             [['personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'], 'string', 'max' => 15],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
-            [['informacionpersonal_CIInfPer'], 'exist', 'skipOnError' => true, 'targetClass' => Informacionpersonal::class, 'targetAttribute' => ['informacionpersonal_CIInfPer' => 'CIInfPer']],
-            [['informacionpersonal_d_CIInfPer'], 'exist', 'skipOnError' => true, 'targetClass' => InformacionpersonalD::class, 'targetAttribute' => ['informacionpersonal_d_CIInfPer' => 'CIInfPer']],
+            [['informacionpersonal_CIInfPer'], 'exist', 'skipOnError' => true,
+            'targetClass' => Informacionpersonal::class,
+            'targetAttribute' => ['informacionpersonal_CIInfPer' => 'CIInfPer'],
+                'when' => function ($model) {
+                    return !empty($model->informacionpersonal_CIInfPer);
+                },
+                'message' => 'NO EXISTE TAL ESTUDIANTE.'
+            ],
+            [
+                ['informacionpersonal_d_CIInfPer'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => InformacionpersonalD::class,
+                'targetAttribute' => ['informacionpersonal_d_CIInfPer' => 'CIInfPer'],
+                'when' => function ($model) {
+                    return !empty($model->informacionpersonal_d_CIInfPer);
+                },
+                'message' => 'NO EXISTE TAL PERSONAL UNIVERSITARIO.'
+            ],
             [['libro_id', 'libro_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_id' => 'id', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
-            [['personaldata_Ci'], 'exist', 'skipOnError' => true, 'targetClass' => Personaldata::class, 'targetAttribute' => ['personaldata_Ci' => 'Ci']],
+            [['pc_idpc', 'pc_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Pc::class, 'targetAttribute' => ['pc_idpc' => 'idpc', 'pc_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
+            [
+                ['personaldata_Ci'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Personaldata::class,
+                'targetAttribute' => ['personaldata_Ci' => 'Ci'],
+                'when' => function ($model) {
+                    return !empty($model->personaldata_Ci);
+                },
+                'message' => 'NO EXISTE TAL INDIVIDUO EN EL SISTEMA.'
+            ],
             [['tipoprestamo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoprestamo::class, 'targetAttribute' => ['tipoprestamo_id' => 'id']],
-            [['personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'], 'default', 'value' => null],
+            [
+                ['personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'],
+                'required',
+                'when' => function ($model) {
+                    return empty($model->personaldata_Ci)
+                        && empty($model->informacionpersonal_d_CIInfPer)
+                        && empty($model->informacionpersonal_CIInfPer);
+                },
+                'whenClient' => "function (attribute, value) {
+                return $('#personaldata_Ci').val() == '' && $('#informacionpersonal_d_CIInfPer').val() == '' && $('#informacionpersonal_CIInfPer').val() == '';
+            }",
+                'message' => 'INGRESE AL MENOS UNO.'
+            ],
         ];
     }
 
@@ -115,16 +158,6 @@ class Prestamo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[InformacionpersonaDCIInfPer]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getInformacionpersonaDCIInfPer()
-    {
-        return $this->hasOne(InformacionpersonalD::class, ['CIInfPer' => 'informacionpersonal_d_CIInfPer']);
-    }
-
-    /**
      * Gets query for [[InformacionpersonalCIInfPer]].
      *
      * @return \yii\db\ActiveQuery
@@ -133,6 +166,17 @@ class Prestamo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Informacionpersonal::class, ['CIInfPer' => 'informacionpersonal_CIInfPer']);
     }
+
+    /**
+     * Gets query for [[InformacionpersonalDCIInfPer]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInformacionpersonalDCIInfPer()
+    {
+        return $this->hasOne(InformacionpersonalD::class, ['CIInfPer' => 'informacionpersonal_d_CIInfPer']);
+    }
+
 
     /**
      * Gets query for [[PersonaldataCi]].
