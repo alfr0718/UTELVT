@@ -14,11 +14,11 @@ use yii\helpers\Html;
             <a href="<?= \yii\helpers\Url::home() ?>" class="nav-link">Inicio</a>
         </li>
         <li class="nav-item dropdown">
-            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Horarios de Atención</a>
+            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"> <i class="fas fa-clock"></i>&nbsp;&nbsp; Horarios de Atención</a>
             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=3']) ?>" class="dropdown-item">Mutiles</a></li>
-                <li class="dropdown-divider"></li>
                 <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=1']) ?>" class="dropdown-item">Esmeraldas</a></li>
+                <li class="dropdown-divider"></li>
+                <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=3']) ?>" class="dropdown-item">Mutiles</a></li>
                 <li class="dropdown-divider"></li>
                 <li><a href="<?= \yii\helpers\Url::to(['/biblioteca/view?idbiblioteca=2']) ?>" class="dropdown-item">La Concordia</a></li>
             </ul>

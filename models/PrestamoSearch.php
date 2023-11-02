@@ -45,7 +45,7 @@ class PrestamoSearch extends Prestamo
     public function search($params)
     {
         $query = Prestamo::find();
-        $query->joinWith('pcIdpc'); // Realizar un join con la tabla datospersonalesed
+        $query->joinWith('pcIdpc'); // Realizar un join con la tabla pc
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -83,8 +83,7 @@ class PrestamoSearch extends Prestamo
             'id' => $this->id,
             //'fecha_solicitud' => $this->fecha_solicitud,
             'fechaentrega' => $this->fechaentrega,
-            'biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
-
+            'prestamo.biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
             'pc_biblioteca_idbiblioteca' => $this->pc_biblioteca_idbiblioteca,
             'libro_id' => $this->libro_id,
             'libro_biblioteca_idbiblioteca' => $this->libro_biblioteca_idbiblioteca,

@@ -12,6 +12,8 @@ use app\models\Tipoprestamo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\JsExpression;
+
 
 
 /**
@@ -46,12 +48,7 @@ class PrestamoController extends Controller
     {
         $searchModel = new PrestamoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-        if (Yii::$app->request->get('reset-button') !== null) {
-            // Se presionó el botón de restablecimiento, así que eliminamos los filtros de búsqueda
-            $searchModel = new PrestamoSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        }
+        $dataProvider->query->orderBy(['fecha_solicitud' => SORT_DESC]); // Ordenar por fecha de solicitud, los más recientes primero
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -83,7 +80,7 @@ class PrestamoController extends Controller
         $model = new Prestamo();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post())){
+            if ($model->load($this->request->post())) {
 
                 list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
 
@@ -93,14 +90,14 @@ class PrestamoController extends Controller
                 $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
                 if ($model->tipoprestamo_id === 'COMP') {
                     $model->pc_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
-                } elseif($model->tipoprestamo_id === 'LIB'){
+                } elseif ($model->tipoprestamo_id === 'LIB') {
                     $model->libro_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
                 }
-                
-            if($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
+                }
             }
-        }
         } else {
             $model->loadDefaultValues();
         }
@@ -177,7 +174,7 @@ class PrestamoController extends Controller
 
     public function actionPrestarlibro($id)
     {
-        
+
         // Cargar el modelo de libro basado en el $id recibido        
         $libro = Libro::findOne(['id' => $id]);
 
@@ -315,7 +312,7 @@ class PrestamoController extends Controller
         if ($model->load(\Yii::$app->request->post())) {
             // Asignar valores y calcular la fecha de entrega
             list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
-            
+
             $fechaSolicitud = new \DateTime($model->fecha_solicitud);
             $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
             $fechaEntrega = $fechaSolicitud->add($intervalo);
@@ -445,9 +442,54 @@ class PrestamoController extends Controller
     }
 
 
+    public function actionEstadisticalibro()
+    {
 
+        $mesSeleccionado = Yii::$app->request->get('mes', date('m'));
+        $anioSeleccionado = Yii::$app->request->get('anio', date('Y'));
+        $bibliotecaSeleccionada = Yii::$app->request->get('bibliotecaId', null);
+        $asignaturaSeleccionada =  Yii::$app->request->get('asignaturaId', null);
 
+        $query = new \yii\db\Query();
+        
+        $query->select(['libro.titulo', 'COUNT(*) as total'])
+            ->from('prestamo')
+            ->where(['MONTH(fecha_solicitud)' => $mesSeleccionado, 'YEAR(fecha_solicitud)' => $anioSeleccionado])
+            ->join('INNER JOIN', 'libro', 'libro.id = prestamo.libro_id AND libro.biblioteca_idbiblioteca = prestamo.libro_biblioteca_idbiblioteca')
+            ->groupBy('libro.titulo')
+            ->orderBy('total DESC')
+            ->limit(10);
 
+        if ($asignaturaSeleccionada !== null) {
+            $query->andWhere(['libro.asignatura_id' => $asignaturaSeleccionada]);
+        }
 
+        if ($bibliotecaSeleccionada !== null) {
+            $query->andWhere(['prestamo.biblioteca_idbiblioteca' => $bibliotecaSeleccionada]); // Cambio aquí
+        }
 
+        $librosMasSolicitados = $query->all();
+
+        $labels = [];
+        $data = [];
+        foreach ($librosMasSolicitados as $libro) {
+            $labels[] = $libro['titulo'];
+            $data[] = $libro['total'];
+        }
+
+        // Datos para el gráfico
+        $chartData = [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+
+        return $this->render('estadisticalibro', [
+            'librosMasSolicitados' =>$librosMasSolicitados,
+            'chartData' => $chartData, // Pasar los datos del gráfico a la vista
+            'mesSeleccionado' => $mesSeleccionado,
+            'anioSeleccionado' => $anioSeleccionado,
+            'bibliotecaSeleccionada' => $bibliotecaSeleccionada,
+            'asignaturaSeleccionada' => $asignaturaSeleccionada,
+        ]);
+    }
 }

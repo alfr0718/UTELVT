@@ -77,22 +77,22 @@ foreach ($computadoras as $item) {
                 <div class="form-group">
                     <label for="anio">Año:</label>
                     <?= Html::textInput('anio', $anioSeleccionado, ['class' => 'form-control', 'placeholder' => 'Ingrese el año']); ?>
-
-                    <!-- <input type="text" name="anio" id="anio" value="<?php // = $anioSeleccionado ?>"> -->
                 </div>
 
                 <div class="form-group">
-                    <label for="biblioteca">Biblioteca:</label>
-                    <select id="biblioteca_idbiblioteca" name="biblioteca_idbiblioteca" class="form-control">
-                        <option value="" selected>Seleccione Biblioteca</option>
-                        <?php foreach ($bibliotecas as $biblioteca) : ?>
-                            <option value="<?= $biblioteca->idbiblioteca ?>"><?= $biblioteca->Campus ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <label for="biblioteca_idbiblioteca">Biblioteca:</label>
+                    <?= Html::dropDownList(
+                        'biblioteca_idbiblioteca',
+                        $bibliotecaSeleccionada,
+                        \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
+                        ['prompt' => 'Seleccione el Campus', 'class' => 'form-control']
+                    ) ?>
+
+                </div>
+                <div class="form-group">
+                    <?= Html::submitButton('<i class="fas fa-chart-bar"></i> Generar', ['class' => 'btn btn-primary']) ?>
                 </div>
 
-
-                <button type="submit" class="btn btn-primary">Filtrar</button>
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
@@ -146,6 +146,18 @@ foreach ($computadoras as $item) {
 // Código JavaScript para crear los gráficos con Chart.js
 $this->registerJs("
     var ctxLibros = document.getElementById('chartLibros').getContext('2d');
+    var coloresCalidos = [
+    'rgba(231, 76, 60, 0.5)',    // Granate
+    'rgba(217, 30, 24, 0.5)',    // Rojo oscuro
+    'rgba(192, 57, 43, 0.5)',    // Rojo intenso
+    'rgba(231, 111, 81, 0.5)',   // Rojo salmón
+    'rgba(203, 67, 53, 0.5)',    // Rojo pálido
+    'rgba(242, 120, 75, 0.5)',   // Naranja intenso
+    'rgba(245, 171, 53, 0.5)',   // Naranja vivo
+    'rgba(211, 84, 0, 0.5)',     // Naranja oscuro
+    'rgba(241, 196, 15, 0.5)',   // Amarillo oscuro
+    'rgba(244, 208, 63, 0.5)'    // Amarillo intenso
+    ];
     var chartLibros = new Chart(ctxLibros, {
         type: 'bar',
         data: {
@@ -153,8 +165,8 @@ $this->registerJs("
             datasets: [{
                 label: 'Libros Más Solicitados',
                 data: " . json_encode($dataLibros) . ",
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: coloresCalidos,
+                borderColor: coloresCalidos,
                 borderWidth: 1
             }]
         },
@@ -168,6 +180,18 @@ $this->registerJs("
     });
 
     var ctxComputadoras = document.getElementById('chartComputadoras').getContext('2d');
+    var coloresFrios = [
+    'rgba(52, 152, 219, 0.5)',   // Azul claro
+    'rgba(44, 130, 201, 0.5)',   // Azul medio
+    'rgba(38, 97, 156, 0.5)',    // Azul oscuro
+    'rgba(90, 200, 250, 0.5)',   // Azul agua
+    'rgba(142, 196, 221, 0.5)',  // Azul pálido
+    'rgba(115, 185, 190, 0.5)',  // Azul verdoso
+    'rgba(79, 193, 233, 0.5)',   // Azul celeste
+    'rgba(93, 173, 226, 0.5)',   // Azul pastel
+    'rgba(72, 126, 176, 0.5)',   // Azul acero
+    'rgba(68, 108, 179, 0.5)'    // Azul intenso
+    ];
     var chartComputadoras = new Chart(ctxComputadoras, {
         type: 'line',
         data: {
@@ -175,8 +199,8 @@ $this->registerJs("
             datasets: [{
                 label: 'Computadoras Más Solicitadas',
                 data: " . json_encode($dataComputadoras) . ",
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: coloresFrios,
+                borderColor: coloresFrios,
                 borderWidth: 1
             }]
         },

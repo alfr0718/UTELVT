@@ -49,7 +49,7 @@ class Informacionpersonal extends \yii\db\ActiveRecord
             'CIInfPer' => 'Cédula',
             'ApellInfPer' => 'Apellido Paterno',
             'ApellMatInfPer' => 'Apellido Materno',
-            'NombInfPer' => 'Nombres',
+            'NombInfPer' => 'Nombre',
             'codigo_dactilar' => 'Código Dactilar',
         ];
     }

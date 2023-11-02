@@ -18,24 +18,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php
-    $tipoUsuario = null; // Inicializamos la variable
+    <p>
+        <?php
+        $tipoUsuario = null; // Inicializamos la variable
 
-    if (!Yii::$app->user->isGuest) {
-        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
-        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+        if (!Yii::$app->user->isGuest) {
+            // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+            $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
 
-        if ($tipoUsuario === 8 || $tipoUsuario === 21) {
-            echo Html::a('Ingresar Libro', ['create'], ['class' => 'btn btn-success my-3']); // Agregar la clase my-2 para espacio vertical
+            if ($tipoUsuario === 8 || $tipoUsuario === 21) {
+                echo Html::a('Nuevo Libro <i class="fas fa-plus-circle"></i>', ['create'], ['class' => 'btn btn-success my-3']); // Agregar la clase my-2 para espacio vertical
+            }
         }
-    }
-    ?>
+        ?>
+    </p>
 
-    <?php $isDesktop = Yii::$app->request->userAgent && strpos(Yii::$app->request->userAgent, 'Mobile') === false; ?>
-    
-    <?php Pjax::begin(); ?>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-    <div class="table-responsive">        
+        <?php $isDesktop = Yii::$app->request->userAgent && strpos(Yii::$app->request->userAgent, 'Mobile') === false; ?>
+
+        <?php Pjax::begin(); ?>
+        <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             //'filterModel' => $searchModel,

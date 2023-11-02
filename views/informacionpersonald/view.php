@@ -17,8 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Actualizar', ['update', 'CIInfPer' => $model->CIInfPer], ['class' => 'btn btn-primary']) ?>
-    </p>
-
 
 
     <?php

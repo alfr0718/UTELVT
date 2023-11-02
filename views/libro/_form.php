@@ -15,7 +15,7 @@ use app\models\Biblioteca;
 
 <div class="libro-form">
     <?php $form = ActiveForm::begin(['options' => ['class' => 'custom-form']]); ?>
-    <h2 class="form-title">Ficha del Libro</h2>
+    <h2 class="form-title">Detalles del Libro</h2>
 
     <div class="row">
         <div class="col-md-6">

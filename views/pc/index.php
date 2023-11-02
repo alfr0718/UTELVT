@@ -19,19 +19,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php
-    $tipoUsuario = null; // Inicializamos la variable
+    <p>
+        <?php
+        $tipoUsuario = null; // Inicializamos la variable
 
-    if (!Yii::$app->user->isGuest) {
-        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
-        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+        if (!Yii::$app->user->isGuest) {
+            // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+            $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
 
-        if ($tipoUsuario === 8 || $tipoUsuario === 21) {
-            echo Html::a('Agregar PC', ['create'], ['class' => 'btn btn-success']);
+            if ($tipoUsuario === 8 || $tipoUsuario === 21) {
+                echo Html::a('Agregar PC <i class="fas fa-plus-circle"></i>', ['create'], ['class' => 'btn btn-success my-3']);
+            }
         }
-    }
-    ?>
-         <div class="table-responsive">
+        ?>
+
+    </p>
+
+    <div class="table-responsive">
 
         <?php Pjax::begin(); ?>
 

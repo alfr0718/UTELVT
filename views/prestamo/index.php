@@ -11,27 +11,31 @@ use yii\widgets\Pjax;
 /** @var app\models\PrestamoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Préstamos';
+$this->title = 'Registros de Préstamo';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="prestamo-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <p>
+        <?php
+        $tipoUsuario = null; // Inicializamos la variable
 
-    <?php
-    $tipoUsuario = null; // Inicializamos la variable
+        if (!Yii::$app->user->isGuest) {
+            // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
+            $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
 
-    if (!Yii::$app->user->isGuest) {
-        // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
-        $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
-
-        if ($tipoUsuario === 8 || $tipoUsuario === 21) {
-            echo Html::a('Ingresar Préstamo', ['create'], ['class' => 'btn btn-success']);
+            if ($tipoUsuario === 8 || $tipoUsuario === 21) {
+                echo Html::a('Nuevo Préstamo <i class="fas fa-plus-circle"></i>', ['create'], ['class' => 'btn btn-success my-3']);
+            }
         }
-    }
-    ?>
+        ?>
+    </p>
+
 
     <?php Pjax::begin(); ?>
+
+
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <div class="table-responsive">
@@ -118,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 //'libro_biblioteca_idbiblioteca',
-                
+
                 [
                     'class' => ActionColumn::className(),
                     'urlCreator' => function ($action, Prestamo $model, $key, $index, $column) {

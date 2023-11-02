@@ -73,11 +73,11 @@
             ['label' => 'Usuarios', 'url' => ['/user/index'], 'icon' => 'fas fa-user'],
             [
                 'label' => 'Registro de Personas',
-                'icon' => 'fas fa-address-card',
+                'icon' => 'fas fa-address-book',
                 'items' => [
-                    ['label' => 'Estudiantes', 'icon' => 'fas fa-graduation-cap', 'url' => ['/informacionpersonal/index'],],
-                    ['label' => 'Personal Universitario', 'icon' => 'fas fa-apple-alt', 'url' => ['/informacionpersonald/index'],],
-                    ['label' => 'Personas Externas', 'icon' => 'fas fa-user-circle', 'url' => ['/personaldata/index'],],
+                    ['label' => 'Estudiantes', 'icon' => 'fas fa-user-graduate', 'url' => ['/informacionpersonal/index'],],
+                    ['label' => 'Personal Universitario', 'icon' => 'far fa-user-tie', 'url' => ['/informacionpersonald/index'],],
+                    ['label' => 'Personas Externas', 'icon' => 'far fa-id-card', 'url' => ['/personaldata/index'],],
 
                 ]
             ],
@@ -100,26 +100,26 @@
                 'label' => 'Préstamo',
                 'icon' => 'fas fa-clipboard',
                 'items' => [
-                    ['label' => 'Registro de Solicitudes', 'icon' => 'fas fa-file', 'url' => ['/prestamo/index']],
-                    ['label' => 'Ingresar', 'icon' => 'fas fa-edit', 'url' => ['/prestamo/create']],
+                    ['label' => 'Registros de Préstamo', 'icon' => 'fas fa-folder-open', 'url' => ['/prestamo/index']],
+                    ['label' => 'Ingresar Solicitud', 'icon' => 'fas fa-file-upload', 'url' => ['/prestamo/create']],
                 ]
             ],
             [
                 'label' => 'Libros',
                 'icon' => 'fas fa-book',
                 'items' => [
-                    ['label' => 'Indíce', 'icon' => 'fas fa-book-reader', 'url' => ['/libro/index']],
-                    ['label' => 'Ingresar', 'icon' => 'fas fa-book-open', 'url' => ['/libro/create']],
+                    ['label' => 'Catálogo de Libros', 'icon' => 'fas fa-book-open', 'url' => ['/libro/index']],
+                    ['label' => 'Añadir Libro', 'icon' => 'far fa-edit', 'url' => ['/libro/create']],
                 ]
             ],
             ['label' => 'PC', 'url' => ['/pc/index'], 'icon' => 'fas fa-desktop'],
 
             [
                 'label' => 'Estadísticas',
-                'icon' => 'fas fa-chart-pie',
+                'icon' => 'fas fa-chart-area',
                 'items' => [
-                    ['label' => 'General', 'icon' => 'fas fa-chart-area', 'url' => ['/prestamo/info']],
-                    //['label' => 'Libros por Asignatura', 'icon' => 'fas fa-chart-bar', 'url' => ['/libro/estadistica']],
+                    ['label' => 'General', 'icon' => 'fas fa-chart-bar', 'url' => ['/prestamo/info']],
+                    ['label' => 'Libros por Asignatura', 'icon' => 'fas fa-chart-pie', 'url' => ['/prestamo/estadisticalibro']],
                 ]
             ],
         ];

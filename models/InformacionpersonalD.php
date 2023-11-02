@@ -45,9 +45,9 @@ class InformacionpersonalD extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'CIInfPer' => 'Cedula',
-            'ApellInfPer' => 'Apellidos Paterno',
-            'ApellMatInfPer' => 'Apellidos Materno',
+            'CIInfPer' => 'Cédula',
+            'ApellInfPer' => 'Apellido Paterno',
+            'ApellMatInfPer' => 'Apellido Materno',
             'NombInfPer' => 'Nombre',
         ];
     }

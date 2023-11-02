@@ -45,11 +45,6 @@ class LibroController extends Controller
     {
         $searchModel = new LibroSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        if (Yii::$app->request->get('reset-button') !== null) {
-            // Se presionó el botón de restablecimiento, así que eliminamos los filtros de búsqueda
-            $searchModel = new LibroSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
