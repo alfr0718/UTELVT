@@ -18,7 +18,7 @@ class LibroSearch extends Libro
     {
         return [
             [['id', 'n_ejemplares', 'biblioteca_idbiblioteca'], 'integer'],
-            [['codigo_barras', 'titulo', 'autor', 'isbn', 'cute', 'editorial', 'anio_publicacion', 'estado', 'ubicacion', 'categoria_id', 'asignatura_id', 'pais_codigopais'], 'safe'],
+            [['codigo_barras', 'titulo', 'autor', 'isbn', 'cute', 'editorial', 'anio_publicacion', 'estado', 'ubicacion', 'categoria_id', 'asignatura_IdAsig', 'pais_cod_pais'], 'safe'],
         ];
     }
 
@@ -73,8 +73,8 @@ class LibroSearch extends Libro
             ->andFilterWhere(['like', 'estado', $this->estado])
             ->andFilterWhere(['like', 'ubicacion', $this->ubicacion])
             ->andFilterWhere(['like', 'categoria_id', $this->categoria_id])
-            ->andFilterWhere(['like', 'asignatura_id', $this->asignatura_id])
-            ->andFilterWhere(['like', 'pais_codigopais', $this->pais_codigopais]);
+            ->andFilterWhere(['like', 'asignatura_IdAsig', $this->asignatura_IdAsig])
+            ->andFilterWhere(['like', 'pais_cod_pais', $this->pais_cod_pais]);
 
         return $dataProvider;
     }

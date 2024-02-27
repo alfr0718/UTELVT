@@ -76,14 +76,14 @@ use app\models\Biblioteca;
                     ->dropDownList(ArrayHelper::map(Categoria::find()->all(), 'id', 'Categoría'), ['prompt' => 'Seleccione la categoría', 'class' => 'form-control']) ?>
             </div>
             <div class="form-group">
-                <?= $form->field($model, 'asignatura_id')
+                <?= $form->field($model, 'asignatura_IdAsig')
                     ->label('Asignatura')
-                    ->dropDownList(ArrayHelper::map(Asignatura::find()->all(), 'id', 'Nombre'), ['prompt' => 'Seleccione la asignatura', 'class' => 'form-control']) ?>
+                    ->dropDownList(ArrayHelper::map(Asignatura::find()->all(), 'IdAsig', 'NombAsig'), ['prompt' => 'Seleccione la asignatura', 'class' => 'form-control']) ?>
             </div>
             <div class="form-group">
-                <?= $form->field($model, 'pais_codigopais')
+                <?= $form->field($model, 'pais_cod_pais')
                     ->label('País')
-                    ->dropDownList(ArrayHelper::map(Pais::find()->orderBy(['Nombrepais' => SORT_ASC])->all(), 'codigopais', 'Nombrepais'), ['prompt' => 'Seleccione el país', 'class' => 'form-control']) ?>
+                    ->dropDownList(ArrayHelper::map(Pais::find()->orderBy(['nomb_pais' => SORT_ASC])->all(), 'cod_pais', 'nomb_pais'), ['prompt' => 'Seleccione el país', 'class' => 'form-control']) ?>
             </div>
             <div class="form-group">
                 <?= $form->field($model, 'biblioteca_idbiblioteca')

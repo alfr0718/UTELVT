@@ -83,17 +83,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 ],
                 [
-                    'attribute' => 'asignatura_id', // Esto muestra el código de la asignatura
+                    'attribute' => 'asignatura_IdAsig', // Esto muestra el código de la asignatura
                     'visible' => $isDesktop,
                     'value' => function ($model) {
-                        return $model->asignatura->Nombre; // Accede al nombre de la asignatura relacionada
+                        return $model->asignatura->NombAsig; // Accede al nombre de la asignatura relacionada
                     },
                 ],
                 [
-                    'attribute' => 'pais_codigopais', // Esto muestra el código del país
+                    'attribute' => 'pais_cod_pais', // Esto muestra el código del país
                     'visible' => $isDesktop,
                     'value' => function ($model) {
-                        return $model->paisCodigopais->Nombrepais; // Accede al nombre del país relacionado
+                        return $model->pais_cod_pais; // Accede al nombre del país relacionado
                     },
 
                 ],

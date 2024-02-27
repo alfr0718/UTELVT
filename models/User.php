@@ -161,12 +161,14 @@ class User extends ActiveRecord implements IdentityInterface
     
     public function setPassword($password)
     {
-        $this->password = Yii::$app->security->generatePasswordHash($password);
+       // $this->password = Yii::$app->security->generatePasswordHash($password);
+$this->password =md5($password);
     }
 
     public function validatePassword($password)
     {
-        return Yii::$app->security->validatePassword($password, $this->password);
+       // return Yii::$app->security->validatePassword($password, $this->password);
+		return $this->password === md5($password);
     }
 
     public function validateCurrentPassword($attribute, $params)
@@ -176,5 +178,15 @@ class User extends ActiveRecord implements IdentityInterface
                 $this->addError($attribute, 'La contraseña actual es incorrecta.');
             }
         }
+    }
+
+	public function savePassword($password)
+    {
+		echo var_dump($this->ClaveUsu); exit;
+		$this->ClaveUsu = md5($password);
+        if (self::save())
+            	return true;
+
+		return false;
     }
 }

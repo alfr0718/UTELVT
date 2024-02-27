@@ -84,11 +84,15 @@ class PrestamoController extends Controller
 
                 list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
 
-                $fechaSolicitud = new \DateTime($model->fecha_solicitud);
-                $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
-                $fechaEntrega = $fechaSolicitud->add($intervalo);
-                $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
-                if ($model->tipoprestamo_id === 'COMP') {
+            
+                
+            $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+	    $model->fecha_solicitud = Yii::$app->formatter->asDatetime($fechaSolicitud , 'yyyy-MM-dd HH:mm:ss');
+            $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
+            $fechaEntrega = $fechaSolicitud->add($intervalo);
+            $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
+ 	     
+if ($model->tipoprestamo_id === 'COMP') {
                     $model->pc_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
                 } elseif ($model->tipoprestamo_id === 'LIB') {
                     $model->libro_biblioteca_idbiblioteca = $model->biblioteca_idbiblioteca;
@@ -212,11 +216,13 @@ class PrestamoController extends Controller
             // Asignar valores y calcular la fecha de entrega
             list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
 
+          
             $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+	    $model->fecha_solicitud = Yii::$app->formatter->asDatetime($fechaSolicitud , 'yyyy-MM-dd HH:mm:ss');
             $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
             $fechaEntrega = $fechaSolicitud->add($intervalo);
             $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
-
+ 	     
             // Verificar si el modelo se guarda con éxito
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
@@ -267,11 +273,13 @@ class PrestamoController extends Controller
             // Asignar valores y calcular la fecha de entrega
             list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
 
+            
             $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+	    $model->fecha_solicitud = Yii::$app->formatter->asDatetime($fechaSolicitud , 'yyyy-MM-dd HH:mm:ss');
             $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
             $fechaEntrega = $fechaSolicitud->add($intervalo);
             $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
-
+ 	     
             // Verificar si el modelo se guarda con éxito
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
@@ -314,9 +322,11 @@ class PrestamoController extends Controller
             list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
 
             $fechaSolicitud = new \DateTime($model->fecha_solicitud);
+	    $model->fecha_solicitud = Yii::$app->formatter->asDatetime($fechaSolicitud , 'yyyy-MM-dd HH:mm:ss');
             $intervalo = new \DateInterval('PT' . $horas . 'H' . $minutos . 'M'); // PT horas minutos
             $fechaEntrega = $fechaSolicitud->add($intervalo);
             $model->fechaentrega = Yii::$app->formatter->asDatetime($fechaEntrega, 'yyyy-MM-dd HH:mm:ss');
+ 	     
 
             // Verificar si el modelo se guarda con éxito
             if ($model->save()) {
@@ -461,7 +471,7 @@ class PrestamoController extends Controller
             ->limit(10);
 
         if ($asignaturaSeleccionada !== null) {
-            $query->andWhere(['libro.asignatura_id' => $asignaturaSeleccionada]);
+            $query->andWhere(['libro.asignatura_IdAsig' => $asignaturaSeleccionada]);
         }
 
         if ($bibliotecaSeleccionada !== null) {

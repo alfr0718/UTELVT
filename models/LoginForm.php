@@ -111,7 +111,8 @@ class LoginForm extends Model
                         $this->_user->username = $teacher->CIInfPer; // Utiliza la cédula como nombre de usuario
                         $now = \Yii::$app->formatter;
                         $this->_user->tipo_usuario = 18;
-                        $this->_user->setPassword('mipassword');
+                        //$this->_user->setPassword($teacher->ClaveUsu);
+ 			$this->_user->password=$teacher->ClaveUsu;
                         $this->_user->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
                         $this->_user->Auth_key = \Yii::$app->security->generateRandomString();
                         // Guarda el usuario
@@ -122,7 +123,8 @@ class LoginForm extends Model
                     $this->_user = new User();
                     $this->_user->username = $student->CIInfPer; // Utiliza la cédula como nombre de usuario
                     $now = \Yii::$app->formatter;
-                    $this->_user->setPassword('mipassword');
+                   // $this->_user->setPassword($student->codigo_dactilar);
+		    $this->_user->password=$student->codigo_dactilar;
                     $this->_user->tipo_usuario = 13;
                     $this->_user->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
                     $this->_user->Auth_key = \Yii::$app->security->generateRandomString();

@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Agregar Estudiante <i class="fas fa-user-plus"></i>', ['create'], ['class' => 'btn btn-success my-3']) ?>
+    <?php //     <?= Html::a('Agregar Estudiante <i class="fas fa-user-plus"></i>', ['create'], ['class' => 'btn btn-success my-3']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -50,12 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'ApellMatInfPer',
                 'NombInfPer',
                 //'codigo_dactilar',
-                [
-                    'class' => ActionColumn::className(),
-                    'urlCreator' => function ($action, Informacionpersonal $model, $key, $index, $column) {
-                        return Url::toRoute([$action, 'CIInfPer' => $model->CIInfPer]);
-                    }
-                ],
+             //   [
+               //     'class' => ActionColumn::className(),
+                //    'urlCreator' => function ($action, Informacionpersonal $model, $key, $index, $column) {
+                //        return Url::toRoute([$action, 'CIInfPer' => $model->CIInfPer]);
+               //     }
+               // ],
             ],
         ]); ?>
 

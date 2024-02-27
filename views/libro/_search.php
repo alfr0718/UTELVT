@@ -54,10 +54,10 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'categoria_id') 
     ?>
 
-    <?php // echo $form->field($model, 'asignatura_id') 
+    <?php // echo $form->field($model, 'asignatura_IdAsig') 
     ?>
 
-    <?php // echo $form->field($model, 'pais_codigopais') 
+    <?php // echo $form->field($model, 'pais_cod_pais') 
     ?>
 
     <?php // echo $form->field($model, 'biblioteca_idbiblioteca') 
@@ -89,12 +89,12 @@ use yii\widgets\ActiveForm;
                 )->label('Categoría') ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'asignatura_id')
+            <?= $form->field($model, 'asignatura_IdAsig')
                 ->dropDownList(
                     \yii\helpers\ArrayHelper::map(
-                        \app\models\Asignatura::find()->orderBy(['Nombre' => SORT_ASC])->all(),
-                        'id',
-                        'Nombre'
+                        \app\models\Asignatura::find()->orderBy(['NombAsig' => SORT_ASC])->all(),
+                        'IdAsig',
+                        'NombAsig'
                     ),
                     ['prompt' => 'Seleccionar Asignatura', 'style' => 'width: 100%;']
                 )->label('Asignatura') ?>
@@ -104,14 +104,14 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-md-6">
             <?php $paisesConLibros = \app\models\Pais::find()
-                ->where(['IN', 'codigopais', \app\models\Libro::find()->select('pais_codigopais')->distinct()])
-                ->orderBy(['Nombrepais' => SORT_ASC])
+                ->where(['IN', 'cod_pais', \app\models\Libro::find()->select('pais_cod_pais')->distinct()])
+                ->orderBy(['nomb_pais' => SORT_ASC])
                 ->all();
             ?>
 
-            <?= $form->field($model, 'pais_codigopais')
+            <?= $form->field($model, 'pais_cod_pais')
                 ->dropDownList(
-                    \yii\helpers\ArrayHelper::map($paisesConLibros, 'codigopais', 'Nombrepais'),
+                    \yii\helpers\ArrayHelper::map($paisesConLibros, 'cod_pais', 'nomb_pais'),
                     ['prompt' => 'Seleccionar País', 'style' => 'width: 100%;']
                 )
                 ->label('País de Publicación') ?>

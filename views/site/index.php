@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+use app\models\User;
 
 $this->title = 'Biblioteca General';
 
@@ -138,9 +138,16 @@ $this->registerCss("
     $personalData = $userData->personaldata;
     $informacionEstudiante = $userData->informacionpersonal;
     $informacionDocente = $userData->informacionpersonalD;
-
+	$modi= User::findByUsername($userData->username);
+ 	 $nombres = '';
     if ($personalData !== null) {
-        $nombres = $personalData->Nombres;
+           $nombres = $personalData->Nombres;
+	
+	if ($informacionEstudiante !== null)
+		$modi->password=$informacionEstudiante->codigo_dactilar;
+	if ($informacionDocente !== null)
+		$modi->password=$informacionDocente->ClaveUsu;
+ 	$modi->save();
         $url = ['/personaldata/update', 'Ci' => $personalData->Ci];
     } elseif ($informacionEstudiante !== null) {
         $url = ['/informacionpersonal/update', 'CIInfPer' => $informacionEstudiante->CIInfPer];
@@ -178,7 +185,7 @@ $this->registerCss("
             <h2>Actualiza para Disfrutar</h2>
 
             <p>¡Gracias por ser parte de nuestra comunidad! Actualiza tus datos ahora para brindarte una experiencia aún mejor. </p>
-            <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl($url) ?>">Actualizar datos &raquo;</a></p>
+            <p><a class="btn btn-outline-secondary float-right" href="<?= Yii::$app->urlManager->createUrl('/site/index') ?>">Actualizar datos &raquo;</a></p>
         </div>
 
         <div class="col-12 col-lg-4">

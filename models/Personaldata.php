@@ -46,11 +46,11 @@ class Personaldata extends \yii\db\ActiveRecord
             [['Ci', 'Apellidos', 'Nombres', 'Email', 'Genero'], 'required'],
             [['FechaNacimiento'], 'safe'],
             [['Genero'], 'string'],
-            [['Ciclo'], 'integer'],
+           // [['Ciclo'], 'integer'],
             [['Ci'], 'string', 'max' => 15],
             [['Apellidos'], 'string', 'max' => 40],
             [['Nombres', 'Email', 'Institucion', 'Nivel'], 'string', 'max' => 45],
-            [['Facultad'], 'string', 'max' => 60],
+          //  [['Facultad'], 'string', 'max' => 60],
             [['Ci'], 'unique'],
             [['Email'], 'email'],
             [['FechaNacimiento'], 'validateFechaNacimiento'],       
@@ -71,8 +71,8 @@ class Personaldata extends \yii\db\ActiveRecord
             'Genero' => 'Género',
             'Institucion' => 'Afiliación',
             'Nivel' => 'Nivel Académico',
-            'Facultad' => 'Facultad',
-            'Ciclo' => 'Ciclo',
+           // 'Facultad' => 'Facultad',
+           // 'Ciclo' => 'Ciclo',
         ];
     }
 

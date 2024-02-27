@@ -98,14 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->libro ? $model->libro->codigo_barras . ' - ' . $model->libro->titulo : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
                 },
             ],
-            [
-                'attribute' => 'libro_id', // Esto muestra el código
-                'label' => 'Asignatura',
-                'visible' => !empty($model->libro_id),
-                'value' => function ($model) {
-                    return $model->libro ? $model->libro->asignatura->Nombre : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
-                },
-            ],
+            
             //ESTUDIANTE
             //'informacionpersonal_CIInfPer',
             [

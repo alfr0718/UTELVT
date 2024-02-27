@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "asignatura".
  *
- * @property string $id
- * @property string $Nombre
+ * @property string $idAsig
+ * @property string $NombreAsig
  *
  * @property Libro[] $libros
  */
@@ -28,10 +28,10 @@ class Asignatura extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'Nombre'], 'required'],
-            [['id'], 'string', 'max' => 4],
-            [['Nombre'], 'string', 'max' => 60],
-            [['id'], 'unique'],
+            [['IdAsig', 'NombAsig'], 'required'],
+            [['IdAsig'], 'string', 'max' => 4],
+            [['NombAsig'], 'string', 'max' => 60],
+            [['IdAsig'], 'unique'],
         ];
     }
 
@@ -41,8 +41,8 @@ class Asignatura extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'Nombre' => 'Nombre',
+            'IdAsig' => 'ID',
+            'NombAsig' => 'Nombre',
         ];
     }
 
@@ -53,6 +53,6 @@ class Asignatura extends \yii\db\ActiveRecord
      */
     public function getLibros()
     {
-        return $this->hasMany(Libro::class, ['asignatura_id' => 'id']);
+        return $this->hasMany(Libro::class, ['asignatura_IdAsig' => 'IdAsig']);
     }
 }

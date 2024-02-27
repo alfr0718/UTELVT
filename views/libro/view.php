@@ -51,15 +51,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'attribute' => 'asignatura_id',
+                'attribute' => 'asignatura_IdAsig',
                 'value' => function ($model) {
-                    return $model->asignatura->Nombre;
+                    return $model->asignatura->NombAsig;
                 },
             ],
             [
-                'attribute' => 'pais_codigopais', // Esto muestra el código del país
+                'attribute' => 'pais_cod_pais', // Esto muestra el código del país
                 'value' => function ($model) {
-                    return $model->paisCodigopais->Nombrepais; // Accede al nombre del país relacionado
+                    return $model->paisCodigopais->nomb_pais; // Accede al nombre del país relacionado
                 },
             ],
             [

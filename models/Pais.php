@@ -28,10 +28,10 @@ class Pais extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['codigopais', 'Nombrepais'], 'required'],
-            [['codigopais'], 'string', 'max' => 4],
-            [['Nombrepais'], 'string', 'max' => 45],
-            [['codigopais'], 'unique'],
+            [['cod_pais', 'nomb_pais'], 'required'],
+            [['cod_pais'], 'string', 'max' => 4],
+            [['nomb_pais'], 'string', 'max' => 45],
+            [['cod_pais'], 'unique'],
         ];
     }
 
@@ -41,8 +41,8 @@ class Pais extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'codigopais' => 'Codigopais',
-            'Nombrepais' => 'Nombrepais',
+            'cod_pais' => 'Cod_pais',
+            'nomb_pais' => 'Nombrepais',
         ];
     }
 
@@ -53,6 +53,6 @@ class Pais extends \yii\db\ActiveRecord
      */
     public function getLibros()
     {
-        return $this->hasMany(Libro::class, ['pais_codigopais' => 'codigopais']);
+        return $this->hasMany(Libro::class, ['pais_cod_pais' => 'cod_pais']);
     }
 }
