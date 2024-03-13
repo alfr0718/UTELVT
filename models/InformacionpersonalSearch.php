@@ -59,8 +59,8 @@ class InformacionpersonalSearch extends Informacionpersonal
         $query->andFilterWhere(['like', 'CIInfPer', $this->CIInfPer])
             ->andFilterWhere(['like', 'ApellInfPer', $this->ApellInfPer])
             ->andFilterWhere(['like', 'ApellMatInfPer', $this->ApellMatInfPer])
-            ->andFilterWhere(['like', 'NombInfPer', $this->NombInfPer])
-            ->andFilterWhere(['like', 'codigo_dactilar', $this->codigo_dactilar]);
+            ->andFilterWhere(['like', 'NombInfPer', $this->NombInfPer]);
+            //->andFilterWhere(['like', 'ClaveUsu', $this->ClaveUsu]);
 
         return $dataProvider;
     }

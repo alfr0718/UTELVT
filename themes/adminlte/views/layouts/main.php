@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use app\models\User;
 use yii\helpers\Html;
 
 
@@ -14,59 +15,77 @@ $this->registerCssFile('https://fonts.googleapis.com/css?family=Source+Sans+Pro:
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 
 $publishedRes = Yii::$app->assetManager->publish('@vendor/hail812/yii2-adminlte3/src/web/js');
-$this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\hail812\adminlte3\assets\AdminLteAsset']);
+$this->registerJsFile($publishedRes[1] . '/control_sidebar.js', ['depends' => '\hail812\adminlte3\assets\AdminLteAsset']);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
+
 <head>
-<meta charset="<?= Yii::$app->charset ?>">
+    <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-
-    <style>
-        .user-initials {
-        width: 40px; /* Ajusta el ancho para que coincida con el tamaño deseado */
-        height: 40px; /* Ajusta la altura para que coincida con el tamaño deseado */
-        background-color: #ff8800;
-        color: #ffffff;
-        text-align: center;
-        line-height: 40px; /* Centra verticalmente de manera similar a elevation-2 */
-        border-radius: 50%; /* Forma de círculo */
-        font-size: 20px; /* Ajusta el tamaño de fuente para que coincida con el estilo */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra similar a elevation-2 */
-    }
-    </style>
-    
 </head>
-<body class="hold-transition layout-fixed sidebar-collapse sidebar-mini layout-navbar-fixed">
-<?php $this->beginBody() ?>
 
-<div class="wrapper">
+<?php
+$bodyClass="layout-top-nav";
+$sidebarClass="main-sidebar sidebar-light-teal elevation-4";
+$navbarClass = "main-header navbar navbar-expand navbar-white navbar-light";
 
+if (!Yii::$app->user->isGuest) {
+    $cacheKey = 'user_' . Yii::$app->user->id;
+    $userData = Yii::$app->cache->get($cacheKey);
 
-    <?php
-    // Mostrar el menú solo si el usuario ha iniciado sesión
-    if (!Yii::$app->user->isGuest) {
-        echo $this->render('navbar', ['assetDir' => $assetDir]);
-        echo $this->render('sidebar', ['assetDir' => $assetDir]);
+    if ($userData === false) {
+        // Los datos del usuario no están en caché, obtén los datos de la base de datos o de donde corresponda
+        $userData = Yii::$app->user->identity;
+        // Almacena los datos del usuario en la caché por un período de tiempo específico (por ejemplo, 3600 segundos o 1 hora)
+        Yii::$app->cache->set($cacheKey, $userData, 3600);
     }
-    ?>
 
-    <!-- Content Wrapper. Contains page content -->
-    <?= $this->render('content', ['content' => $content, 'assetDir' => $assetDir]) ?>
-    <!-- /.content-wrapper -->
+    if ($userData->tipo_usuario === User::TYPE_ADMIN || $userData->tipo_usuario === User::TYPE_GERENTE || $userData->tipo_usuario === User::TYPE_PERSONALB){
+        $bodyClass = "sidebar-mini sidebar-collapse layout-fixed dark-mode";
+        $sidebarClass="main-sidebar sidebar-dark-teal elevation-4";
+        $navbarClass = "main-header navbar navbar-expand navbar-gray navbar-dark";
 
-    <!-- Control Sidebar -->
-    <?php // $this->render('control-sidebar') ?>
-    <!-- /.control-sidebar -->
+    }
+}
 
-</div>
 
-<?php $this->endBody() ?>
+?>
+<body class="<?= $bodyClass ?>">
+    <?php $this->beginBody() ?>
+
+    <div class="wrapper">
+
+        <?php if (!Yii::$app->user->isGuest) : ?>
+
+            <?= $this->render('navbar', ['assetDir' => $assetDir, 'userData' => $userData, 'navbarClass' => $navbarClass]) ?>
+            <?php if ($userData->tipo_usuario === User::TYPE_ADMIN || $userData->tipo_usuario === User::TYPE_GERENTE || $userData->tipo_usuario === User::TYPE_PERSONALB) : ?>
+                <?= $this->render('sidebar', ['assetDir' => $assetDir, 'userData' => $userData, 'sidebarClass'=>$sidebarClass]) ?>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <!-- Content Wrapper. Contains page content -->
+        <?= $this->render('content', ['content' => $content, 'assetDir' => $assetDir]) ?>
+        <!-- /.content-wrapper -->
+
+        <!-- Control Sidebar -->
+        <?php if (!Yii::$app->user->isGuest) : ?>
+            <?php if ($userData->tipo_usuario === User::TYPE_ADMIN) : ?>
+                <?= $this->render('control-sidebar') ?>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <!-- /.control-sidebar -->
+
+    </div>
+
+    <?php $this->endBody() ?>
 </body>
+
 </html>
 <?php $this->endPage() ?>

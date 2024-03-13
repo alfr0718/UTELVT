@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'Institucion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Nivel')->dropDownList($nivel, ['prompt' => 'Seleccione su nivel académico']) ?>
+    <?= $form->field($model, 'Nivel')->dropDownList($model->niveles, ['prompt' => 'Seleccione su nivel académico']) ?>
 
     <?php // $form->field($model, 'Facultad')->dropDownList($facultades, ['prompt' => 'Seleccione su facultad']) ?>
 

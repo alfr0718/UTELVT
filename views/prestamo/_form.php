@@ -45,23 +45,8 @@ use yii\widgets\ActiveForm;
                     ['prompt' => 'Servicio Solicitado', 'id' => 'tipoprestamo-id']
                 ) ?>
 
-            <div class="dynamic-fields" id="libro-fields" style="display: none">
-                <?= $form->field($model, 'libro_id')
-                    ->dropDownList(
-                        \yii\helpers\ArrayHelper::map(\app\models\Libro::find()->all(), 'id', function ($model) {
-                            return $model->codigo_barras . ' - ' . $model->titulo;
-                        }),
-                        ['prompt' => 'Seleccione Libro']
-                    ) ?>
-            </div>
-
-            <div class="dynamic-fields" id="pc-fields" style="display: none">
-                <?= $form->field($model, 'pc_idpc')
-                    ->dropDownList(
-                        \yii\helpers\ArrayHelper::map(\app\models\Pc::find()->all(), 'idpc', 'nombre'),
-                        ['prompt' => 'Seleccione Dispositivo']
-                    ) ?>
-            </div>
+            <?= $form->field($model, 'object_id')
+                ->textInput() ?>
 
         </div>
         <div class="col-md-6">

@@ -1,128 +1,96 @@
 <?php
 
+use hail812\adminlte3\assets\PluginAsset;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
+\hail812\adminlte3\assets\AdminLteAsset::register($this);
 
 $this->title = 'Iniciar Sesión | Biblioteca';
-$this->registerCss("
 
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
-body::before {
-    content: '';
-    background-color: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-}
-body {
-    background-image: url('/img/5.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    margin: 0;
-}
+PluginAsset::register($this)->add('icheck-bootstrap');
 
-.registro-title {
-    font-family: 'Raleway', sans-serif;
-    font-size: 2em;
-    font-weight: 700;
-    color: #191970;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin: 20px 0;
-}
-
-.registro-form {
-    text-align: center;
-}
-.registro-remember {
-    text-align: left;
-}
-
-.registro-link {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.registro-link a {
-    color: #5EB400;
-}
-
-.registro-link a:hover {
-    text-decoration: underline;
-}
-");
-
+$this->registerCssFile('@web/css/login.css', ['depends' => [yii\bootstrap4\BootstrapAsset::class]]);
 
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<div class="container container-md">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card mx-auto">
-                <div class="card-body">
-                    <div class="registro-form">
-                        <h1 class="registro-title">Iniciar Sesión</h1>
-                        <p class="text-blue">Ingresa tus credenciales</p>
-                        <?php $form = ActiveForm::begin([
-                            'id' => 'login-form',
-                        ]); ?>
+<div class="site-login">
 
-                        <div class="form-group">
-                            <?= $form->field($model, 'username')->textInput([
-                                'autofocus' => true,
-                                'class' => 'form-control',
-                                'placeholder' => 'Usuario',
-                            ])->label(false) ?>
-                        </div>
+    <div class="row justify-content-center align-items-center vh-100">
 
-                        <div class="form-group">
-                            <?= $form->field($model, 'password')->passwordInput([
-                                'class' => 'form-control',
-                                'placeholder' => 'Contraseña',
-                            ])->label(false) ?>
-                        </div>
+        <div class="col-md-4 col-lg-5 col-sm-3">
 
-                        <div class="registro-remember">
-                            <?= $form->field($model, 'rememberMe')->checkbox([
-                                'template' => "<div class=\"custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-                            ])->label('Recuérdame') ?>
-                        </div>
+            <div class="card">
 
-                        <div class="form-group text-center">
-                            <?= Html::submitButton('Iniciar Sesión', [
-                                'class' => 'btn btn-primary btn-block btn-lg',
-                            ]) ?>
-                        </div>
-
-                        <div class="form-group text-center">
-                            <?= Html::a('¿Quieres formar parte de esta comunidad? ¡Únete!', ['site/signup'], [
-                                'class' => 'btn-link', // Clase para dar estilo de enlace
-                            ]) ?>
-                        </div>
-                        <?php ActiveForm::end(); ?>
-                    </div>
+                <div class="login-logo">
+                    <a href="https://www.utelvt.edu.ec/site/">
+                        <img src="<?= Yii::$app->urlManager->baseUrl ?>/img/utlvt-header.png" alt="UTLVT HEADER" class="img-fluid">
+                    </a>
                 </div>
             </div>
 
-            <?php if (Yii::$app->session->hasFlash('success')) : ?>
-                <?= \hail812\adminlte\widgets\Alert::widget([
-                    'type' => 'success',
-                    'icon' => 'fas fa-check', // Cambia el icono a un ícono de check (opcional)
-                    'closeButton' => false, // Oculta el botón de cierre (opcional)
-                    'options' => [
-                        'class' => 'alert alert-success', // Agrega una clase CSS personalizada (opcional)
-                    ],
-                    'title' => '¡Éxito!',
-                    'body' => Yii::$app->session->getFlash('success'), // Mostrar mensaje de éxito
-                ]) ?>
-            <?php endif; ?>
 
+
+            <div class="card">
+
+                <div class="card-body">
+
+
+                    <p class="text-center registro-title">Biblioteca</p>
+
+                    <?php $form = ActiveForm::begin(['id' => 'login-form']) ?>
+                    <div class="login-card-body">
+
+                        <?= $form->field($model, 'username', [
+                            'options' => ['class' => 'form-group has-feedback'],
+                            'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text rounded-right"><span class="fas fa-user"></span></div></div>',
+                            'template' => '{beginWrapper}{input}{error}{endWrapper}',
+                            'wrapperOptions' => ['class' => 'input-group mb-3']
+                        ])
+                            ->label(false)
+                            ->textInput(['placeholder' => $model->getAttributeLabel('username'), 'class' => 'form-control']) ?>
+
+                        <?= $form->field($model, 'password', [
+                            'options' => ['class' => 'form-group has-feedback'],
+                            'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text rounded-right"><span class="fas fa-key"></span></div></div>',
+                            'template' => '{beginWrapper}{input}{error}{endWrapper}',
+                            'wrapperOptions' => ['class' => 'input-group mb-3']
+                        ])
+                            ->label(false)
+                            ->passwordInput(['class' => 'form-control', 'placeholder' => $model->getAttributeLabel('password')]) ?>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <?= $form->field($model, 'rememberMe')->checkbox([
+                                    'template' => '<div class="icheck-primary">{input}{label}</div>',
+                                    'labelOptions' => [
+                                        'class' => ''
+                                    ],
+                                    'uncheck' => null
+                                ]) ?>
+                            </div>
+
+                        </div>
+
+                        <?= Html::submitButton('<b>Iniciar Sesión</b>', ['class' => 'btn btn-primary btn-block']) ?>
+
+                    </div>
+
+
+
+                    <p class="text-center">
+                        <a href="<?= Url::to(['site/signup']) ?>">¿Aún no formas parte de esta comunidad? ¡Únete!</a>
+                    </p>
+
+                    <?php ActiveForm::end(); ?>
+
+                </div>
+
+                <!-- /.login-card-body -->
+            </div>
         </div>
     </div>
+</div>
 </div>

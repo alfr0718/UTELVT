@@ -1,5 +1,7 @@
 <?php
 
+use app\models\User;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -8,6 +10,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'es',
+    'timeZone' => 'America/Guayaquil',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -18,14 +21,12 @@ $config = [
         ],
 
     ],
-
-    
     'components' => [
-       'authManager' => [
+        'authManager' => [
             'class' => 'yii\rbac\DbManager', // Otra opción es 'yii\rbac\PhpManager
             //'defaultRoles' => ['guest', 'user'],
-         ],
-         
+        ],
+
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'c_72IRt49CqoKS2nvjxAnUzSAs5fQvgj',
@@ -40,25 +41,34 @@ $config = [
                 $user = $event->identity;
                 $auth = Yii::$app->authManager;
 
-                if ($user->tipo_usuario == 8) {
-                    $role = $auth->getRole('admin'); // Nombre del rol de administrador
-                } elseif ($user->tipo_usuario ==18) {
-                    $role = $auth->getRole('docente'); // Nombre del rol de docente
-                } elseif ($user->tipo_usuario == 13) {
-                    $role = $auth->getRole('estudiante'); // Nombre del rol de estudiante
-                } elseif ($user->tipo_usuario == 7 || $user->tipo_usuario == 21) {
-                    $role = $auth->getRole('personal'); // Nombre del rol de personal
+                if ($user) { // Verificar si el usuario está autenticado correctamente
+                    if ($user->tipo_usuario == User::TYPE_ADMIN) {
+                        $role = $auth->getRole('admin');
+                    } elseif ($user->tipo_usuario ==User::TYPE_DOCENTE) {
+                        $role = $auth->getRole('docente');
+                    } elseif ($user->tipo_usuario == User::TYPE_ESTUDIANTE) {
+                        $role = $auth->getRole('estudiante');
+                    } elseif ($user->tipo_usuario == User::TYPE_PERSONALB || $user->tipo_usuario == User::TYPE_GERENTE) {
+                        $role = $auth->getRole('personal');
+                    } else {
+                        $role = $auth->getRole('usuario');
+                    }
+
+                    if ($role) { // Verificar si se obtuvo el rol correctamente
+                        // Verificar si el usuario ya tiene el rol asignado
+                        if (!$auth->checkAccess($user->id, $role->name)) {
+                            // Quitar cualquier rol anterior y asignar el nuevo rol
+                            $auth->revokeAll($user->id);
+                            $auth->assign($role, $user->id);
+                        }
+                    } else {
+                        Yii::warning("Rol no encontrado para el tipo de usuario: {$user->tipo_usuario}");
+                    }
                 } else {
-                    $role = $auth->getRole('usuario'); // Nombre del rol de usuario
-                }
-                // Verificar si el usuario ya tiene el rol asignado
-                if (!$auth->checkAccess($user->getId(), $role->name)) {
-                    // Quitar cualquier rol anterior y asignar el nuevo rol
-                    $auth->revokeAll($user->getId());
-                    $auth->assign($role, $user->getId());
+                    Yii::warning("No se pudo obtener el usuario después de iniciar sesión.");
                 }
             },
-            
+
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -84,10 +94,10 @@ $config = [
         ],
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
-            'dateFormat' => 'php:d/m/Y', // Formato de fecha (día/mes/año)
-            'timeFormat' => 'php:H:i:s', // Formato de hora (hora:minuto:segundo)
-            'datetimeFormat' => 'php:d/m/Y H:i:s', // Formato de fecha y hora
-            'timeZone' => 'America/Guayaquil', // Zona horaria de Ecuador
+            'dateFormat' => 'php:d/m/Y',
+            'timeFormat' => 'php:H:i:s',
+            'datetimeFormat' => 'php:d/m/Y H:i:s',
+            'timeZone' => 'America/Guayaquil',
             'defaultTimeZone' => 'America/Guayaquil',
         ],
         'db' => $db,
@@ -96,11 +106,8 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 //'registro' => 'site/registro',
-                'prestamo/prestarlibro/<id:\d+>' => 'prestamo/prestarlibro',
-                'prestamo/prestarpc/<id:\d+>' => 'prestamo/pretarpc',
                 'user/change-password' => 'user/change-password',
-                'prestamo/prestarespacio' => 'prestamo/prestarespacio',
-                        ],
+            ],
         ],
         'i18n' => [
             'translations' => [
@@ -110,25 +117,25 @@ $config = [
                 ],
             ],
         ],
-       'view' => [
+        'view' => [
             'theme' => [
                 'pathMap' => [
-                   '@app/views' => '@app/themes/adminlte/views'
+                    '@app/views' => '@app/themes/adminlte/views'
                 ],
             ],
-       ],
-       'assetManager' => [
-        'bundles' => [
-            'yii\bootstrap4\BootstrapAsset' => [
-                'sourcePath' => null,
-                'css' => [],
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap4\BootstrapAsset' => [
+                    'sourcePath' => null,
+                    'css' => [],
+                ],
             ],
         ],
-    ],
-   
+
     ],
 
-  'as access' => [
+    'as access' => [
         'class' => yii2mod\rbac\filters\AccessControl::class,
         'allowActions' => [
             'site/login',
@@ -140,7 +147,7 @@ $config = [
             // add a lot of actions here until you finally completed setting up rbac,
             // otherwise you may not even take a first step.
         ]
-     ],
+    ],
 
     'params' => $params,
 ];
@@ -148,9 +155,8 @@ $config = [
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
-
     $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',        
+        'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];

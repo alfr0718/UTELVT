@@ -61,10 +61,45 @@ class UserSearch extends User
             'id' => $this->id,
             'Status' => $this->Status,
             'tipo_usuario' => $this->tipo_usuario,
-            'Created_at' => $this->Created_at,
-            'Updated_at' => $this->Updated_at,
+           // 'Created_at' => $this->Created_at,
+           // 'Updated_at' => $this->Updated_at,
            
         ]);
+
+        if (!empty($this->Created_at)) {
+            // Cambiamos el formato de la fecha para hacerlo compatible con la base de datos
+            $fechaSolicitud = \Yii::$app->formatter->asDatetime($this->Created_at, 'php:Y-m-d H:i:s');
+
+            // Separar la fecha en formato Y-m-d H:i:s en fecha y hora
+            list($fecha, $hora) = explode(' ', $fechaSolicitud);
+
+            // Convertir la fecha en formato Y-m-d a un rango de tiempo en ese día
+            $fechaInicio = $fecha . ' 00:00:00';
+            $fechaFin = $fecha . ' 23:59:59';
+
+            // Aplicar el filtro
+            $query->andFilterWhere([
+                'between', 'Created_at', $fechaInicio, $fechaFin
+            ]);
+        }
+
+        if (!empty($this->Updated_at)) {
+            // Cambiamos el formato de la fecha para hacerlo compatible con la base de datos
+            $fechaSolicitud = \Yii::$app->formatter->asDatetime($this->Updated_at, 'php:Y-m-d H:i:s');
+
+            // Separar la fecha en formato Y-m-d H:i:s en fecha y hora
+            list($fecha, $hora) = explode(' ', $fechaSolicitud);
+
+            // Convertir la fecha en formato Y-m-d a un rango de tiempo en ese día
+            $fechaInicio = $fecha . ' 00:00:00';
+            $fechaFin = $fecha . ' 23:59:59';
+
+            // Aplicar el filtro
+            $query->andFilterWhere([
+                'between', 'Updated_at', $fechaInicio, $fechaFin
+            ]);
+        }
+
 
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'password', $this->password])

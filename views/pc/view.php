@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             //'idpc',
             'nombre',
-            'estado',
+            'Status',
             //  'biblioteca_idbiblioteca',
             [
                 'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país

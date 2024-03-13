@@ -27,13 +27,23 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
 
+    public $typeUsuarioArray =
+    [
+        self::TYPE_EXTERNO => 'Externo',
+        self::TYPE_ESTUDIANTE => 'Estudiante',
+        self::TYPE_DOCENTE => 'Docente',
+        self::TYPE_PERSONALB => 'Personal Biblioteca',
+        self::TYPE_GERENTE => 'Gerente',
+        self::TYPE_ADMIN => 'Admin',
+    ];
+
     const TYPE_EXTERNO = 1;
     const TYPE_ESTUDIANTE = 13;
     const TYPE_DOCENTE = 18;
     const TYPE_PERSONALB = 21;
     const TYPE_GERENTE = 7;
     const TYPE_ADMIN = 8;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -79,7 +89,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
     }
@@ -133,9 +143,9 @@ class User extends ActiveRecord implements IdentityInterface
         return null;
     }
 
-    public static function findByUsername($username)
+    public static function findByUsername($user_name)
     {
-        return static::findOne(['username' => $username, 'Status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $user_name, 'Status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -154,21 +164,21 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->Auth_key;
     }
 
-    public function validateAuthKey($authKey)
+    public function validateAuthKey($validate_authKey)
     {
-        return $this->Auth_key === $authKey;
-    }
-    
-    public function setPassword($password)
-    {
-       // $this->password = Yii::$app->security->generatePasswordHash($password);
-$this->password =md5($password);
+        return $this->Auth_key === $validate_authKey;
     }
 
-    public function validatePassword($password)
+    public function setPassword($newPassword)
     {
-       // return Yii::$app->security->validatePassword($password, $this->password);
-		return $this->password === md5($password);
+        // $this->password = Yii::$app->security->generatePasswordHash($password);
+        $this->password = md5($newPassword);
+    }
+
+    public function validatePassword($confirmPassword)
+    {
+        // return Yii::$app->security->validatePassword($password, $this->password);
+        return $this->password === md5($confirmPassword);
     }
 
     public function validateCurrentPassword($attribute, $params)
@@ -180,13 +190,14 @@ $this->password =md5($password);
         }
     }
 
-	public function savePassword($password)
+    public function savePassword($password)
     {
-		echo var_dump($this->ClaveUsu); exit;
-		$this->ClaveUsu = md5($password);
+        echo var_dump($this->ClaveUsu);
+        exit;
+        $this->ClaveUsu = md5($password);
         if (self::save())
-            	return true;
+            return true;
 
-		return false;
+        return false;
     }
 }

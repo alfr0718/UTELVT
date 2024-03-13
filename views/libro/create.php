@@ -10,11 +10,20 @@ $this->params['breadcrumbs'][] = ['label' => 'Libros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="libro-create">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-11">
+            <div class="card">
+                <div class="card-header bg-olive">
+                    <h1><?= Html::encode($this->title) ?></h1>
+                </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+                <div class="card-body">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+                    <?= $this->render('_form', [
+                        'model' => $model,
+                    ]) ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

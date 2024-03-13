@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Personaldata;
+use app\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -16,13 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        $tipoUsuario = null; // Inicializamos la variable
+        $userType = null;
 
         if (!Yii::$app->user->isGuest) {
             // El usuario ha iniciado sesión, podemos acceder a 'tipo_usuario'
-            $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
+            $userType = Yii::$app->user->identity->tipo_usuario;
 
-            if ($tipoUsuario === 8) {
+            if ($userType === User::TYPE_ADMIN) {
                 echo Html::a('Agregar Persona Externa <i class="fas fa-user-plus"></i>', ['create'], ['class' => 'btn btn-success my-3']);
             }
         }
@@ -62,11 +63,35 @@ $this->params['breadcrumbs'][] = $this->title;
                 'Nivel',
 
                 [
-                    'class' => ActionColumn::className(),
-                    'urlCreator' => function ($action, Personaldata $model, $key, $index, $column) {
-                        return Url::toRoute([$action, 'Ci' => $model->Ci]);
-                    },
-                    'visible' => $tipoUsuario === 8, // Esto oculta la columna de acciones si el tipo de usuario es diferente de 8
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {update} {delete}', // Incluye los botones predeterminados además del nuevo botón
+                    'visible' => $userType === User::TYPE_ADMIN,
+                    'buttons' => [
+                        'update' => function ($url, $model, $key) {
+                            return Html::a('<i class="fas fa-edit"></i>', $url, [
+                                'title' => Yii::t('app', 'Actualizar'),
+                                'class' => 'btn btn-info btn-sm', // Clase CSS para el botón de actualización
+                            ]);
+                        },
+                        'view' => function ($url, $model, $key) {
+                            return Html::a('<i class="fas fa-eye"></i>', $url, [
+                                'title' => Yii::t('app', 'Ver'),
+                                'class' => 'btn btn-primary btn-sm', // Clase CSS para el botón de vista
+                            ]);
+                        },
+                        'delete' => function ($url, $model, $key) {
+                            return Html::a('<i class="fas fa-trash"></i>', $url, [
+                                'title' => Yii::t('app', 'Eliminar'),
+                                'class' => 'btn bg-danger btn-sm', // Clase CSS para el botón de eliminación
+                                'data' => [
+                                    'confirm' => Yii::t('app', '¿Estás seguro de que quieres eliminar este elemento?'),
+                                    'method' => 'post',
+                                ],
+                            ]);
+                        },
+
+
+                    ],
                 ],
             ],
         ]); ?>

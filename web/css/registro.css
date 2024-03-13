@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+body {
+    background-image: url('/img/background/3.jpeg');
+    /* Reemplaza con la ruta real de tu imagen de fondo */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Estilo adicional para el título */
+.registro-title {
+    font-size: 2em;
+    margin: 20px 0;
+    color: #191970;
+    /* Color del texto para el título */
+    font-family: 'Raleway', sans-serif;
+    font-size: 2em;
+    font-weight: 700;
+    letter-spacing: 2px;
+    /* Ajusta el espaciado entre letras */
+    text-transform: uppercase;
+    /* Convierte el texto a mayúsculas, si es necesario */
+
+}

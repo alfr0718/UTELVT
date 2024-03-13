@@ -23,14 +23,7 @@ use yii\widgets\ActiveForm;
                         '1' => 'Activo',
                     ], ['prompt' => 'Seleccione el estado', 'class' => 'form-control']) ?>
 
-    <?= $form->field($model, 'tipo_usuario')->dropDownList([
-                        '1' => 'Externo',
-                        '13' => 'Estudiante',
-                        '18' => 'Docente',
-                        '21' => 'Personal',
-                        '7' => 'Gerente',
-                        '8' => 'Admin'
-                    ], ['prompt' => 'Seleccione el tipo de usuario', 'class' => 'form-control']) ?>
+    <?= $form->field($model, 'tipo_usuario')->dropDownList($model->typeUsuarioArray, ['prompt' => 'Seleccione el tipo de usuario', 'class' => 'form-control']) ?>
 
     <?php // $form->field($model, 'Created_at')->textInput() ?>
 

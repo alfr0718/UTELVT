@@ -49,15 +49,16 @@ class Prestamo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cedula_solicitante', 'intervalo_solicitado','fecha_solicitud', 'fechaentrega'], 'safe'],
+            [['cedula_solicitante', 'intervalo_solicitado', 'fecha_solicitud', 'fechaentrega'], 'safe'],
             [['tipoprestamo_id', 'biblioteca_idbiblioteca'], 'required'],
-            [['biblioteca_idbiblioteca', 'pc_idpc', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
+            [['biblioteca_idbiblioteca', /*'pc_idpc', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'*/], 'integer'],
             [['tipoprestamo_id'], 'string', 'max' => 5],
             [['personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'], 'string', 'max' => 15],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
-            [['informacionpersonal_CIInfPer'], 'exist', 'skipOnError' => true,
-            'targetClass' => Informacionpersonal::class,
-            'targetAttribute' => ['informacionpersonal_CIInfPer' => 'CIInfPer'],
+            [
+                ['informacionpersonal_CIInfPer'], 'exist', 'skipOnError' => true,
+                'targetClass' => Informacionpersonal::class,
+                'targetAttribute' => ['informacionpersonal_CIInfPer' => 'CIInfPer'],
                 'when' => function ($model) {
                     return !empty($model->informacionpersonal_CIInfPer);
                 },
@@ -74,8 +75,8 @@ class Prestamo extends \yii\db\ActiveRecord
                 },
                 'message' => 'NO EXISTE TAL PERSONAL UNIVERSITARIO.'
             ],
-            [['libro_id', 'libro_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_id' => 'id', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
-            [['pc_idpc', 'pc_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Pc::class, 'targetAttribute' => ['pc_idpc' => 'idpc', 'pc_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
+            // [['libro_id', 'libro_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_id' => 'id', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
+            // [['pc_idpc', 'pc_biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Pc::class, 'targetAttribute' => ['pc_idpc' => 'idpc', 'pc_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']],
             [
                 ['personaldata_Ci'],
                 'exist',
@@ -89,15 +90,16 @@ class Prestamo extends \yii\db\ActiveRecord
             ],
             [['tipoprestamo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoprestamo::class, 'targetAttribute' => ['tipoprestamo_id' => 'id']],
             [
-                ['personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'],
+                ['cedula_solicitante', 'personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'],
                 'required',
                 'when' => function ($model) {
-                    return empty($model->personaldata_Ci)
+                    return empty($model->cedula_solicitante)
+                        && empty($model->personaldata_Ci)
                         && empty($model->informacionpersonal_d_CIInfPer)
                         && empty($model->informacionpersonal_CIInfPer);
                 },
                 'whenClient' => "function (attribute, value) {
-                return $('#personaldata_Ci').val() == '' && $('#informacionpersonal_d_CIInfPer').val() == '' && $('#informacionpersonal_CIInfPer').val() == '';
+                return $('#cedula_solicitante').val() == '' && $('#personaldata_Ci').val() == '' && $('#informacionpersonal_d_CIInfPer').val() == '' && $('#informacionpersonal_CIInfPer').val() == '';
             }",
                 'message' => 'INGRESE AL MENOS UNO.'
             ],
@@ -117,13 +119,13 @@ class Prestamo extends \yii\db\ActiveRecord
             'intervalo_solicitado' => 'Tiempo Solicitado',
             'biblioteca_idbiblioteca' => 'Campus',
             'cedula_solicitante' => '¡Tus Datos!',
-            'personaldata_Ci' => 'Cédula Solicitante Externo',
+            /*'personaldata_Ci' => 'Cédula Solicitante Externo',
             'informacionpersonal_d_CIInfPer' => 'Cédula Docente',
-            'informacionpersonal_CIInfPer' => 'Cédula Estudiante',
-            'pc_idpc' => 'Computador',
-            'pc_biblioteca_idbiblioteca' => 'Ubicación del Computador',
+            'informacionpersonal_CIInfPer' => 'Cédula Estudiante',*/
+            'pc_idpc' => 'Equipo',
+            //'pc_biblioteca_idbiblioteca' => 'Ubicación del Equipo',
             'libro_id' => 'Libro',
-            'libro_biblioteca_idbiblioteca' => 'Ubicación del Libro',
+            //'libro_biblioteca_idbiblioteca' => 'Ubicación del Libro',
         ];
     }
 
@@ -138,13 +140,13 @@ class Prestamo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Libro]].
+     * Gets query for [[Ejemplar]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getLibro()
+    public function getEjemplar()
     {
-        return $this->hasOne(Libro::class, ['id' => 'libro_id', 'biblioteca_idbiblioteca' => 'libro_biblioteca_idbiblioteca']);
+        return $this->hasOne(Libro::class, ['id' => 'object_id']);
     }
 
     /**
@@ -154,8 +156,9 @@ class Prestamo extends \yii\db\ActiveRecord
      */
     public function getPcIdpc()
     {
-        return $this->hasOne(Pc::class, ['idpc' => 'pc_idpc', 'biblioteca_idbiblioteca' => 'pc_biblioteca_idbiblioteca']);
+        return $this->hasOne(Pc::class, ['idpc' => 'object_id']);
     }
+
 
     /**
      * Gets query for [[InformacionpersonalCIInfPer]].
@@ -197,5 +200,4 @@ class Prestamo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Tipoprestamo::class, ['id' => 'tipoprestamo_id']);
     }
-
 }

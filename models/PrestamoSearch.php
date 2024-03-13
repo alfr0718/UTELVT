@@ -13,6 +13,8 @@ class PrestamoSearch extends Prestamo
 {
 
     public $cedula_solicitante;
+    public $nombre_pc;
+    public $codigo_barras;
 
     /**
      * {@inheritdoc}
@@ -20,8 +22,8 @@ class PrestamoSearch extends Prestamo
     public function rules()
     {
         return [
-            [['pc_idpc'], 'string'],
-            [['id', 'biblioteca_idbiblioteca', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'], 'integer'],
+            [['nombre_pc', 'codigo_barras'], 'string'],
+            [['id', 'biblioteca_idbiblioteca', 'object_id'], 'integer'],
             [['cedula_solicitante', 'fecha_solicitud', 'fechaentrega', 'tipoprestamo_id', 'personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'], 'safe'],
         ];
     }
@@ -45,8 +47,16 @@ class PrestamoSearch extends Prestamo
     public function search($params)
     {
         $query = Prestamo::find();
-        $query->joinWith('pcIdpc'); // Realizar un join con la tabla pc
-        // add conditions that should always apply here
+        $query->joinWith('pcIdpc')
+            ->joinWith('ejemplar')
+            ->andFilterWhere([
+                'or',
+                ['and', ['prestamo.tipoprestamo_id' => 'LIB'], ['ejemplar.id' => $this->object_id]],
+                ['and', ['prestamo.tipoprestamo_id' => 'COMP'], ['pc.id' => $this->object_id]],
+                ['and', ['prestamo.tipoprestamo_id' => 'ESP']],
+
+            ]);
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -84,21 +94,24 @@ class PrestamoSearch extends Prestamo
             //'fecha_solicitud' => $this->fecha_solicitud,
             'fechaentrega' => $this->fechaentrega,
             'prestamo.biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
-            'pc_biblioteca_idbiblioteca' => $this->pc_biblioteca_idbiblioteca,
-            'libro_id' => $this->libro_id,
-            'libro_biblioteca_idbiblioteca' => $this->libro_biblioteca_idbiblioteca,
+            //'pc_biblioteca_idbiblioteca' => $this->pc_biblioteca_idbiblioteca,
+            //'libro_id' => $this->libro_id,
+            //'libro_biblioteca_idbiblioteca' => $this->libro_biblioteca_idbiblioteca,
+            'prestamo.object_id' => $this->object_id,
+
         ]);
 
         $query->andFilterWhere(['like', 'tipoprestamo_id', $this->tipoprestamo_id])
-        ->andFilterWhere(['like', 'pc.nombre', $this->pc_idpc])
-            /*->andFilterWhere(['like', 'personaldata_Ci', $this->personaldata_Ci])
-            ->andFilterWhere(['like', 'informacionpersonal_d_CIInfPer', $this->informacionpersonal_d_CIInfPer])
-            ->andFilterWhere(['like', 'informacionpersonal_CIInfPer', $this->informacionpersonal_CIInfPer]);*/
-
-
+            //PARA CEDULA_SOLICITANTE
             ->andFilterWhere(['like', 'personaldata_Ci', $this->cedula_solicitante])
             ->orFilterWhere(['like', 'informacionpersonal_d_CIInfPer', $this->cedula_solicitante])
-            ->orFilterWhere(['like', 'informacionpersonal_CIInfPer', $this->cedula_solicitante]);
+            ->orFilterWhere(['like', 'informacionpersonal_CIInfPer', $this->cedula_solicitante])
+            //PARA OBJETO
+            ->andFilterWhere([
+                'or',
+                ['like', 'pc.nombre', $this->nombre_pc],
+                ['like', 'ejemplar.codigo_barras', $this->codigo_barras],
+            ]);
 
         return $dataProvider;
     }

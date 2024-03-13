@@ -1,0 +1,17 @@
+.user-initials {
+    width: 40px;
+    /* Ajusta el ancho para que coincida con el tamaño deseado */
+    height: 40px;
+    /* Ajusta la altura para que coincida con el tamaño deseado */
+    background-color: #ff8800;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    /* Centra verticalmente de manera similar a elevation-2 */
+    border-radius: 50%;
+    /* Forma de círculo */
+    font-size: 20px;
+    /* Ajusta el tamaño de fuente para que coincida con el estilo */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Sombra similar a elevation-2 */
+}

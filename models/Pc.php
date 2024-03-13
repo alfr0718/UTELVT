@@ -9,7 +9,8 @@ use Yii;
  *
  * @property int $idpc
  * @property string $nombre
- * @property string $estado
+ * @property int $Status
+ * @property int $type
  * @property int $biblioteca_idbiblioteca
  *
  * @property Biblioteca $bibliotecaIdbiblioteca
@@ -17,6 +18,20 @@ use Yii;
  */
 class Pc extends \yii\db\ActiveRecord
 {
+    public $typeArray = [
+        1 => 'Computador de Escritorio',
+        2 => 'Ordenador Portátil',
+        3 => 'Proyector'
+    ];
+
+    public $statusArray =[
+            '1' => 'Disponible',
+            '0' => 'No Disponible',
+            '2' => 'Fuera de servicio',
+            '3' => 'En Mantenimiento',
+            '4' => 'Retirada'
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -31,11 +46,10 @@ class Pc extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'estado', 'biblioteca_idbiblioteca'], 'required'],
-            [['biblioteca_idbiblioteca'], 'integer'],
-            [['nombre'], 'string', 'max' => 15],
-            [['estado'], 'string', 'max' => 10],
-            [['idpc', 'biblioteca_idbiblioteca'], 'unique', 'targetAttribute' => ['idpc', 'biblioteca_idbiblioteca']],
+            [['nombre', 'biblioteca_idbiblioteca'], 'required'],
+            [['Status', 'type', 'biblioteca_idbiblioteca'], 'integer'],
+            [['nombre'], 'string', 'max' => 45],
+           // [['idpc', 'biblioteca_idbiblioteca'], 'unique', 'targetAttribute' => ['idpc', 'biblioteca_idbiblioteca']],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
         ];
     }
@@ -46,10 +60,11 @@ class Pc extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idpc' => 'Código de PC',
+            'idpc' => 'Código',
             'nombre' => 'Nombre',
-            'estado' => 'Estado',
-            'biblioteca_idbiblioteca' => 'Campus',
+            'type' => 'Tipo de Equipo',
+            'Status' => 'Estado',
+            'biblioteca_idbiblioteca' => 'Ubicación',
         ];
     }
 

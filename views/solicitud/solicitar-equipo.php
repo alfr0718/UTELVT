@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\Prestamo $model */
@@ -10,26 +10,28 @@ use yii\widgets\ActiveForm;
 
 <div class="prestamo-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'equipoForm', // Asignando el ID al formulario
+    ]); ?>
 
-    <?php // $form->field($model, 'fecha_solicitud')->textInput() 
-    ?>
+    <!-- 
+   <?= $form->field($model, 'fecha_solicitud')->textInput() ?>
+
+
+    <?= $form->field($model, 'informacionpersonal_d_CIInfPer')
+        ->textInput(['maxlength' => true, 'readonly' => true]) ?>
+    <?= $form->field($model, 'informacionpersonal_CIInfPer')
+        ->textInput(['maxlength' => true, 'readonly' => true]) ?>
+    <?= $form->field($model, 'personaldata_Ci')
+        ->textInput(['maxlength' => true, 'readonly' => true]) ?> -->
 
 
     <?= $form->field($model, 'cedula_solicitante')
-        ->textInput(['maxlength' => true, 'readonly' => true]) ?>
-
-    <?php $form->field($model, 'informacionpersonal_d_CIInfPer')
-        ->textInput(['maxlength' => true, 'readonly' => true]) ?>
-    <?php $form->field($model, 'informacionpersonal_CIInfPer')
-        ->textInput(['maxlength' => true, 'readonly' => true]) ?>
-    <?php $form->field($model, 'personaldata_Ci')
-        ->textInput(['maxlength' => true, 'readonly' => true]) ?>
-
+        ->textInput(['maxlength' => true, 'readonly' => $isEnabled]) ?>
 
     <?= $form->field($model, 'intervalo_solicitado')
-        ->label('Horas de Estudio')
-        ->textInput(['type' => 'time', 'value' => '01:00:00', 'max' => '08:00:00']) ?>
+        ->label('Tiempo de Investigación')
+        ->textInput(['type' => 'time', 'value' => '01:00:00', 'max' => '02:00:00']) ?>
 
     <?= $form->field($model, 'tipoprestamo_id')
         ->label('¿Qué buscas?')
@@ -39,23 +41,21 @@ use yii\widgets\ActiveForm;
         ) ?>
 
     <?= $form->field($model, 'biblioteca_idbiblioteca')
-        ->label('Tu Rincón de Lectura')
+        ->label('Nuestro Espacio')
         ->dropDownList(
             \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
             ['prompt' => 'Seleccione el campus', 'disabled' => true]
         ) ?>
 
-    <?= $form->field($model, 'libro_id')
+    <?= $form->field($model, 'object_id')
         ->dropDownList(
-            \yii\helpers\ArrayHelper::map(\app\models\Libro::find()->all(), 'id', function ($model) {
-                return $model->codigo_barras . ' - ' . $model->titulo;
-            }),
-            ['prompt' => 'Seleccione el libro', 'disabled' => true]
+            \yii\helpers\ArrayHelper::map(\app\models\Pc::find()->all(), 'idpc', 'nombre',),
+            ['prompt' => 'Seleccione el dispositivo', 'disabled' => true]
         ) ?>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
         <?= Html::submitButton('Enviar', ['class' => 'btn btn-success']) ?>
-    </div>
+    </div> -->
 
     <?php ActiveForm::end(); ?>
 

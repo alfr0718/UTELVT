@@ -10,11 +10,18 @@ $this->params['breadcrumbs'][] = ['label' => 'Pcs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="pc-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-olive">
+                    <h1><?= Html::encode($this->title) ?></h1>
+                </div>
+                <div class="card-body">
+                    <?= $this->render('_form', [
+                        'model' => $model,
+                    ]) ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

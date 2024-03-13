@@ -34,7 +34,7 @@ class InformacionpersonalD extends \yii\db\ActiveRecord
         return [
             [['CIInfPer', 'ApellInfPer', 'ApellMatInfPer', 'NombInfPer'], 'required'],
             [['CIInfPer'], 'string', 'max' => 15],
-            [['ApellInfPer', 'ApellMatInfPer', 'NombInfPer','ClaveUsu'], 'string', 'max' => 45],
+            [['ApellInfPer', 'ApellMatInfPer', 'NombInfPer', 'ClaveUsu'], 'string', 'max' => 45],
             [['CIInfPer'], 'unique'],
         ];
     }
@@ -49,7 +49,7 @@ class InformacionpersonalD extends \yii\db\ActiveRecord
             'ApellInfPer' => 'Apellido Paterno',
             'ApellMatInfPer' => 'Apellido Materno',
             'NombInfPer' => 'Nombre',
-	    'ClaveUsu'=> 'Clave',
+            'ClaveUsu' => 'Clave',
         ];
     }
 

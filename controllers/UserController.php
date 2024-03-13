@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Yii;
+
 /**
  * UserController implements the CRUD actions for User model.
  */
@@ -77,19 +78,19 @@ class UserController extends Controller
             if ($model->load($this->request->post())) {
                 // Configura la contraseña del usuario después de cargar los datos del formulario
                 $model->setPassword($model->password);
-            
-            // Guarda el modelo si pasa las validaciones
+
+                // Guarda el modelo si pasa las validaciones
                 if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             }
-         } else {
-             $model->loadDefaultValues();
-         }
+        } else {
+            $model->loadDefaultValues();
+        }
 
-    return $this->render('create', [
-        'model' => $model,
-    ]);
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -101,7 +102,7 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        
+
         $model = $this->findModel($id);
         $now = \Yii::$app->formatter;
         $model->Updated_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
@@ -110,19 +111,19 @@ class UserController extends Controller
             if ($model->load($this->request->post())) {
                 // Configura la contraseña del usuario después de cargar los datos del formulario
                 $model->setPassword($model->password);
-            
-            // Guarda el modelo si pasa las validaciones
+
+                // Guarda el modelo si pasa las validaciones
                 if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             }
-         } else {
-             $model->loadDefaultValues();
-         }
+        } else {
+            $model->loadDefaultValues();
+        }
 
-    return $this->render('update', [
-        'model' => $model,
-    ]);
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -154,28 +155,64 @@ class UserController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-    
+
     public function actionChangePassword()
     {
         $model = new ChangePasswordForm();
-    
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // Validar la contraseña actual
-            if (Yii::$app->user->identity->validatePassword($model->currentPassword)) {
-                // Cambiar la contraseña del usuario
-                $user = Yii::$app->user->identity;
-                $user->setPassword($model->newPassword);
-                $user->save();
-                
-                Yii::$app->session->setFlash('success', 'Contraseña cambiada con éxito.');
-                //return $this->redirect(['view', 'id' => $user->id]);
-                return $this->redirect(['change-password']);
-            } else {
-                Yii::$app->session->setFlash('error', 'La contraseña actual es incorrecta.');
+
+        if ($this->request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                // Validar la contraseña actual
+                if (Yii::$app->user->identity->validatePassword($model->currentPassword)) {
+                    // Cambiar la contraseña del usuario
+                    $user = Yii::$app->user->identity;
+                    $user->setPassword($model->newPassword);
+                    $user->save();
+
+                    Yii::$app->session->setFlash('success', 'Contraseña cambiada con éxito.');
+                    return $this->redirect(['/site/index']);
+                } else {
+                    Yii::$app->session->setFlash('error', 'La contraseña actual es incorrecta.');
+                }
             }
+        } else {
+            $model->loadDefaultValues();
         }
-    
-        return $this->render('change-password', [
+
+        return $this->render('optionsByUser/change-password', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionResetPassword()
+    {
+        $model = new User();
+
+        if ($this->request->isPost) {
+            if ($model->load(Yii::$app->request->post())) {
+                // Verificar si el usuario actual es administrador
+                if (Yii::$app->user->can('admin')) {
+                    // Encuentra el usuario
+                    $user = User::findOne(['username' => $model->username]);
+                    if ($user !== null) {
+                        // Cambiar la contraseña del usuario
+                        $user->setPassword($user->username);
+                        $user->save();
+
+                        Yii::$app->session->setFlash('success', 'Contraseña restablecida con éxito para el usuario: ' . $model->username);
+                        return $this->redirect(['/user/index']);
+                    } else {
+                        Yii::$app->session->setFlash('error', 'El usuario no existe.');
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'No tienes permiso para restablecer la contraseña.');
+                }
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('optionsByUser/reset-password', [
             'model' => $model,
         ]);
     }

@@ -19,50 +19,50 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
 
-    <div class="row ">
-        <div class="col-md-6">
-            <?= $form->field($model, 'id')->textInput(['style' => 'width: 100%;', 'placeholder' => 'N° Inicial del Formulario'])->label('Código de Préstamo') ?>
-        </div>
-        <div class="col-md-6">
-            <?= $form->field($model, 'cedula_solicitante')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Ingrese N° de Cédula'])->label('Cédula Solicitante') ?>
-        </div>
-    </div>
-
+    <?php // echo $form->field($model, 'id')->textInput(['style' => 'width: 100%;', 'placeholder' => 'N° Inicial del Formulario'])->label('Código de Préstamo') 
+    ?>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col md-6">
+            <?= $form->field($model, 'cedula_solicitante')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Ingrese N° de Cédula'])->label('Cédula Solicitante') ?>
+
+
+
             <?= $form->field($model, 'fecha_solicitud')->input('date') ?>
 
-        </div>
 
-        <div class="col-md-6">
+            <?= $form->field($model, 'biblioteca_idbiblioteca')->dropDownList(
+                \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
+                ['prompt' => 'Seleccione Campus']
+            ) ?>
+
+            <div class="form-group float-right">
+                <?= Html::submitButton(
+                    '<i class="fas fa-search"></i> Buscar',
+                    ['class' => 'btn btn-primary']
+                ) ?>
+
+                <?= Html::resetButton('Restablecer', [
+                    'class' => 'btn btn-outline-secondary',
+                    'onclick' => 'window.location.href = "' . Yii::$app->urlManager->createUrl(["prestamo/index"]) . '";'
+                ]) ?>
+            </div>
+
+        </div>
+        <div class="col md-6">
+
             <?= $form->field($model, 'tipoprestamo_id')->dropDownList(
                 \yii\helpers\ArrayHelper::map(\app\models\Tipoprestamo::find()->all(), 'id', 'nombre_tipo'),
                 ['prompt' => 'Seleccione Tipo de Solicitud']
-            ) ?> </div>
-
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <?= $form->field($model, 'biblioteca_idbiblioteca')->dropDownList(
-                \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
-                ['prompt' => 'Seleccione un Campus']
             ) ?>
-        </div>
 
-        <div class="col-md-6">
-            <?= $form->field($model, 'libro_id')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Código de Barras'])->label('Título Solicitado') ?>
+            <div class="card">
+                <div class="card-body">
+                    <?= $form->field($model, 'codigo_barras')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Código de Barras'])->label('Libro Solicitado') ?>
 
-        </div>
-    </div>
-    <div class="row">
+                    <?= $form->field($model, 'nombre_pc')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Nombre del Equipo'])->label('Equipo Solicitado') ?>
+                </div>
+            </div>
 
-        <div class="col-md-6">
-
-        </div>
-        <div class="col-md-6">
-            <?= $form->field($model, 'pc_idpc')->textInput(['style' => 'width: 100%;', 'placeholder' => 'Nombre del Computador'])->label('Computador Solicitado') ?>
         </div>
     </div>
 
@@ -70,32 +70,11 @@ use yii\widgets\ActiveForm;
     <?php // $form->field($model, 'fechaentrega') 
     ?>
 
-    <?php // echo $form->field($model, 'pc_biblioteca_idbiblioteca') 
+    <?php // echo $form->field($model, 'pc_biblioteca_idbiblioteca')  
     ?>
-    <?php // echo $form->field($model, 'libro_biblioteca_idbiblioteca') 
+    <?php // echo $form->field($model, 'libro_biblioteca_idbiblioteca')  
     ?>
-
-
-    <div class="form-group">
-        <?= Html::submitButton('<i class="fas fa-search"></i> Buscar', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Restablecer', ['class' => 'btn btn-outline-secondary', 'id' => 'reset-button']) ?>
-    </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
-
-<?php
-$js = <<< JS
-document.getElementById('reset-button').addEventListener('click', function() {
-    var inputs = document.querySelectorAll('input[type="text"], input[type="date"], select'); // Obtener todos los campos de filtro
-    inputs.forEach(function(input) {
-        input.value = ''; // Limpiar los valores
-    });
-
-    // Enviar el formulario después de restablecer los campos
-    document.querySelector('form').submit();
-});
-JS;
-$this->registerJs($js);
-?>

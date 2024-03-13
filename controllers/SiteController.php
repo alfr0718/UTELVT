@@ -75,13 +75,14 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+        // if (!Yii::$app->user->isGuest) {
+        //     return $this->goHome();
+        // }
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->goHome();
         }
 
         $model->password = '';
@@ -97,6 +98,9 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+        $cacheKey = 'user_' . Yii::$app->user->id;
+        Yii::$app->cache->delete($cacheKey);
+
         Yii::$app->user->logout();
 
         return $this->goHome();
@@ -133,39 +137,42 @@ class SiteController extends Controller
 
     public function actionSignup()
     {
-        $PersonalD = new Personaldata(); // Ajusta el modelo de Datos Personales según tu aplicación.
-        $User = new User(); // Ajusta el modelo de Usuario según tu aplicación.
+        $model = new Personaldata(); // Ajusta el modelo de Datos Personales según tu aplicación.
 
-        if ($PersonalD->load(Yii::$app->request->post()) && $PersonalD->save()) {
-            // Los datos personales se guardaron con éxito, ahora puedes crear un usuario.
-            // Puedes utilizar los datos personales para llenar el modelo de Usuario si es necesario.
-            $now = \Yii::$app->formatter;
-            $User->username = $PersonalD->Ci;
-            $User->setPassword($PersonalD->Ci);
-            $User->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
-            $User->Auth_key = \Yii::$app->security->generateRandomString();
-            
-            // Aquí puedes configurar otros campos del modelo Usuario según tus necesidades.
+        if ($this->request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                // Los datos personales se guardaron con éxito, ahora puedes crear un usuario.
+                // Puedes utilizar los datos personales para llenar el modelo de Usuario si es necesario.
+                $User = new User(); // Ajusta el modelo de Usuario según tu aplicación.
+                $now = \Yii::$app->formatter;
+                $User->username = $model->Ci;
+                $User->setPassword($model->Ci);
+                $User->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
+                $User->Auth_key = \Yii::$app->security->generateRandomString();
 
-            if ($User->save()) {
-                // El usuario se creó con éxito. Datos personales también
-                \Yii::$app->session->setFlash('success', 'Usuario creado con éxito.');
-                return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta de tu página de inicio de sesión
+                // Aquí puedes configurar otros campos del modelo Usuario según tus necesidades.
 
-                // Redirige al usuario a la página de inicio de sesión (ajusta la URL según tu configuración).
-                // return $this->redirect(['site/login']); // Cambia 'site/login' a la URL real de tu página de inicio de sesión.
+                if ($User->save()) {
+                    // El usuario se creó con éxito. Datos personales también
+                    \Yii::$app->session->setFlash('success', 'Usuario creado con éxito. Usuario: CI, Contraseña: CI.');
+                    return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta de tu página de inicio de sesión
+
+                    // Redirige al usuario a la página de inicio de sesión (ajusta la URL según tu configuración).
+                    // return $this->redirect(['site/login']); // Cambia 'site/login' a la URL real de tu página de inicio de sesión.
+                } else {
+                    \Yii::$app->session->setFlash('error', 'Error al crear el usuario.');
+                }
             } else {
-                \Yii::$app->session->setFlash('error', 'Error al crear el usuario.');
+                // Si se envió el formulario pero no se cargaron ni guardaron datos, muestra un mensaje de error.
+                \Yii::$app->session->setFlash('error', 'Error al guardar los datos personales.');
             }
-        } elseif (Yii::$app->request->isPost) {
-            // Si se envió el formulario pero no se cargaron ni guardaron datos, muestra un mensaje de error.
-            \Yii::$app->session->setFlash('error', 'Error al guardar los datos personales.');
+        }else{
+            $model->loadDefaultValues();
         }
 
         // Renderiza la vista de registro.
         return $this->render('signup', [
-            'model' => $PersonalD, 
-            'niveles' => $PersonalD->niveles,   // Pasa el modelo de usuario si deseas mostrarlo en la vista.
+            'model' => $model,
         ]);
     }
 }

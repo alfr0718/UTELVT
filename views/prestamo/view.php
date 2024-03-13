@@ -78,26 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del Campus relacionado
                 },
             ],
-            [
-                'attribute' => 'pc_idpc', // Esto muestra el código
-                'label' => 'Dispositivo Solicitado',
-                'visible' => !empty($model->pc_idpc),
-                'value' => function ($model) {
-                    return $model->pc_idpc ? $model->pcIdpc->nombre : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
-                },
-            ],
-            //'pc_biblioteca_idbiblioteca',
-            //'libro_codigo_barras',
-            //'libro_biblioteca_idbiblioteca',
-            //MAS DATOS DEL LIBRO
-            [
-                'attribute' => 'libro_id', // Esto muestra el código
-                'label' => 'Titulo Solicitado',
-                'visible' => !empty($model->libro_id),
-                'value' => function ($model) {
-                    return $model->libro ? $model->libro->codigo_barras . ' - ' . $model->libro->titulo : ''; // Accede al dato relacionado si no es nulo, de lo contrario, muestra Nada
-                },
-            ],
             
             //ESTUDIANTE
             //'informacionpersonal_CIInfPer',

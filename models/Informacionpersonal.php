@@ -50,7 +50,7 @@ class Informacionpersonal extends \yii\db\ActiveRecord
             'ApellInfPer' => 'Apellido Paterno',
             'ApellMatInfPer' => 'Apellido Materno',
             'NombInfPer' => 'Nombre',
-            'codigo_dactilar' => 'Código Dactilar',
+            'ClaveUsu' => 'Clave',
         ];
     }
 

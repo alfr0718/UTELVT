@@ -17,8 +17,8 @@ class LibroSearch extends Libro
     public function rules()
     {
         return [
-            [['id', 'n_ejemplares', 'biblioteca_idbiblioteca'], 'integer'],
-            [['codigo_barras', 'titulo', 'autor', 'isbn', 'cute', 'editorial', 'anio_publicacion', 'estado', 'ubicacion', 'categoria_id', 'asignatura_IdAsig', 'pais_cod_pais'], 'safe'],
+            [['id', 'asignatura_IdAsig' ], 'integer'],
+            [['titulo', 'autor', 'isbn', 'cute', 'editorial', 'anio_publicacion', 'categoria_id','seccion_id', 'pais_cod_pais'], 'safe'],
         ];
     }
 
@@ -60,20 +60,17 @@ class LibroSearch extends Libro
         $query->andFilterWhere([
             'id' => $this->id,
             'anio_publicacion' => $this->anio_publicacion,
-            'n_ejemplares' => $this->n_ejemplares,
-            'biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
+            'seccion_id' => $this->seccion_id,
+            'categoria_id' => $this->categoria_id,
+            'categoria_id' => $this->categoria_id,
+
         ]);
 
-        $query->andFilterWhere(['like', 'codigo_barras', $this->codigo_barras])
-            ->andFilterWhere(['like', 'titulo', $this->titulo])
+        $query->andFilterWhere(['like', 'titulo', $this->titulo])
             ->andFilterWhere(['like', 'autor', $this->autor])
             ->andFilterWhere(['like', 'isbn', $this->isbn])
             ->andFilterWhere(['like', 'cute', $this->cute])
             ->andFilterWhere(['like', 'editorial', $this->editorial])
-            ->andFilterWhere(['like', 'estado', $this->estado])
-            ->andFilterWhere(['like', 'ubicacion', $this->ubicacion])
-            ->andFilterWhere(['like', 'categoria_id', $this->categoria_id])
-            ->andFilterWhere(['like', 'asignatura_IdAsig', $this->asignatura_IdAsig])
             ->andFilterWhere(['like', 'pais_cod_pais', $this->pais_cod_pais]);
 
         return $dataProvider;

@@ -20,7 +20,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'idpc') ?>
 
-    <?= $form->field($model, 'estado') ?>
+    <?= $form->field($model, 'type') ?>
+
+    <?= $form->field($model, 'Status') ?>
 
     <?= $form->field($model, 'biblioteca_idbiblioteca') ?>
 

@@ -15,22 +15,18 @@ use Yii;
  * @property string|null $cute
  * @property string $editorial
  * @property string|null $anio_publicacion
- * @property string|null $estado
- * @property int|null $n_ejemplares
- * @property string|null $ubicacion
- * @property string $categoria_id
- * @property string $asignatura_id
+ * @property int $categoria_id
+ * @property int $asignatura_id
  * @property string $pais_codigopais
- * @property int $biblioteca_idbiblioteca
  *
  * @property Asignatura $asignatura
  * @property Biblioteca $bibliotecaIdbiblioteca
  * @property Categoria $categoria
  * @property Pais $paisCodigopais
- * @property Prestamo[] $prestamos
  */
 class Libro extends \yii\db\ActiveRecord
 {
+    public $cubiertaLibro;
     /**
      * {@inheritdoc}
      */
@@ -45,16 +41,19 @@ class Libro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'autor', 'editorial', 'categoria_id', 'asignatura_IdAsig', 'pais_cod_pais', 'biblioteca_idbiblioteca'], 'required'],
-            [['anio_publicacion'], 'safe'],
-            [['n_ejemplares', 'biblioteca_idbiblioteca'], 'integer'],
-            [['codigo_barras', 'titulo', 'autor', 'isbn', 'cute', 'editorial', 'ubicacion'], 'string', 'max' => 100],
-            [['estado'], 'string', 'max' => 10],
-            [['categoria_id', 'asignatura_IdAsig', 'pais_cod_pais'], 'string', 'max' => 10],
-            [['asignatura_IdAsig'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_IdAsig' => 'IdAsig']],
+            [['cubiertaLibro'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            [['titulo', 'autor', 'editorial', 'categoria_id', 'asignatura_IdAsig', 'pais_cod_pais', 'seccion_id', 'biblioteca_idbiblioteca'], 'required'],
+            [['anio_publicacion', 'cover'], 'safe'],
+            [['titulo', 'autor', 'isbn', 'cute', 'editorial'], 'string', 'max' => 300],
+            [['isbn', 'cute'], 'string', 'max' => 200],
+            [['categoria_id', 'asignatura_IdAsig', 'seccion_id'], 'integer'],
+            [['pais_cod_pais'], 'string', 'max' => 10],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
+            [['asignatura_IdAsig'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_IdAsig' => 'IdAsig']],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
             [['pais_cod_pais'], 'exist', 'skipOnError' => true, 'targetClass' => Pais::class, 'targetAttribute' => ['pais_cod_pais' => 'cod_pais']],
+            [['seccion_id'], 'exist', 'skipOnError' => true, 'targetClass' => Seccion::class, 'targetAttribute' => ['seccion_id' => 'id']],
+
         ];
     }
 
@@ -65,19 +64,17 @@ class Libro extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'codigo_barras' => 'Código de Barras',
             'titulo' => 'Título',
             'autor' => 'Autor',
             'isbn' => 'ISBN',
             'cute' => 'CUTE',
             'editorial' => 'Editorial',
             'anio_publicacion' => 'Año de Publicación',
-            'estado' => 'Estado',
-            'n_ejemplares' => 'N de Ejemplares',
-            'ubicacion' => 'Ubicación',
+            'seccion_id' => 'Sección',
             'categoria_id' => 'Categoría',
             'asignatura_IdAsig' => 'Asignatura',
             'pais_cod_pais' => 'País',
+            'cover' => 'Portada',
             'biblioteca_idbiblioteca' => 'Biblioteca',
         ];
     }
@@ -90,6 +87,16 @@ class Libro extends \yii\db\ActiveRecord
     public function getAsignatura()
     {
         return $this->hasOne(Asignatura::class, ['IdAsig' => 'asignatura_IdAsig']);
+    }
+
+    /**
+     * Gets query for [[Seccion]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSeccion()
+    {
+        return $this->hasOne(Seccion::class, ['id' => 'seccion_id']);
     }
 
     /**
@@ -122,13 +129,15 @@ class Libro extends \yii\db\ActiveRecord
         return $this->hasOne(Pais::class, ['cod_pais' => 'pais_cod_pais']);
     }
 
+
     /**
-     * Gets query for [[Prestamos]].
+     * Gets query for [[Ejemplar]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getPrestamos()
+    public function getEjemplar()
     {
-        return $this->hasMany(Prestamo::class, ['libro_id' => 'id', 'libro_biblioteca_idbiblioteca' => 'biblioteca_idbiblioteca']);
+        return $this->hasMany(Ejemplar::class, ['libro_id' => 'id']);
     }
+
 }

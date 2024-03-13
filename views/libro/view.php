@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Libro $model */
 
-$this->title = $model->codigo_barras. ' - ' . $model->titulo;
+$this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Libros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Actualizar Datos', ['update', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca], [
+        <?= Html::a('Actualizar Datos', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => '¿Estás seguro de eliminar este elemento?',
@@ -30,15 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             //'id',
-            'codigo_barras',
+            //'codigo_barras',
             'titulo',
             'autor',
             'isbn',
             'cute',
             'editorial',
             'anio_publicacion',
-            'estado',
-            'n_ejemplares',
+            //'estado',
+            //'n_ejemplares',
             //'categoria_id',
             //'asignatura_id',
             //'pais_codigopais',
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'categoria_id',
                 'value' => function ($model) {
-                    return $model->categoria->Categoría;
+                    return $model->categoria->NombreCateg;
                 },
             ],
             [
@@ -63,12 +63,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
+                'attribute' => 'seccion_id',
                 'value' => function ($model) {
-                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
+                    return $model->seccion->NombreSeccion; 
                 },
             ],
-            'ubicacion',
         ],
     ]) ?>
 
