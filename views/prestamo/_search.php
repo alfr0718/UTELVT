@@ -32,7 +32,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'biblioteca_idbiblioteca')->dropDownList(
                 \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
-                ['prompt' => 'Seleccione Campus']
+                ['prompt' => 'Todos']
             ) ?>
 
             <div class="form-group float-right">
@@ -52,7 +52,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'tipoprestamo_id')->dropDownList(
                 \yii\helpers\ArrayHelper::map(\app\models\Tipoprestamo::find()->all(), 'id', 'nombre_tipo'),
-                ['prompt' => 'Seleccione Tipo de Solicitud']
+                ['prompt' => 'Todos']
             ) ?>
 
             <div class="card">

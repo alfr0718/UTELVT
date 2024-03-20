@@ -48,7 +48,6 @@ class PrestamoController extends Controller
     {
         $searchModel = new PrestamoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->query->orderBy(['fecha_solicitud' => SORT_DESC]); // Ordenar por fecha de solicitud, los más recientes primero
 
         return $this->render('index', [
             'searchModel' => $searchModel,

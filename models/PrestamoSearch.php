@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Prestamo;
+use Yii;
 
 /**
  * PrestamoSearch represents the model behind the search form of `app\models\Prestamo`.
@@ -23,7 +24,7 @@ class PrestamoSearch extends Prestamo
     {
         return [
             [['nombre_pc', 'codigo_barras'], 'string'],
-            [['id', 'biblioteca_idbiblioteca', 'object_id'], 'integer'],
+            [['id', 'biblioteca_idbiblioteca', 'object_id', 'Status'], 'integer'],
             [['cedula_solicitante', 'fecha_solicitud', 'fechaentrega', 'tipoprestamo_id', 'personaldata_Ci', 'informacionpersonal_d_CIInfPer', 'informacionpersonal_CIInfPer'], 'safe'],
         ];
     }
@@ -94,6 +95,7 @@ class PrestamoSearch extends Prestamo
             //'fecha_solicitud' => $this->fecha_solicitud,
             'fechaentrega' => $this->fechaentrega,
             'prestamo.biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
+            'Status' => $this->Status,
             //'pc_biblioteca_idbiblioteca' => $this->pc_biblioteca_idbiblioteca,
             //'libro_id' => $this->libro_id,
             //'libro_biblioteca_idbiblioteca' => $this->libro_biblioteca_idbiblioteca,
@@ -112,6 +114,27 @@ class PrestamoSearch extends Prestamo
                 ['like', 'pc.nombre', $this->nombre_pc],
                 ['like', 'ejemplar.codigo_barras', $this->codigo_barras],
             ]);
+
+
+        if ($this->fecha_solicitud === null) {
+            $now = new \DateTime();
+
+            // Establecer solo la fecha sin la hora
+            $this->fecha_solicitud = $now->format('Y-m-d');
+
+            // Realizar una búsqueda con los parámetros actuales
+            $dataProvider = $this->search(Yii::$app->request->queryParams);
+        }
+
+        // Ordenar los datos por fecha de solicitud en orden descendente, los más recientes primero
+        $dataProvider->query->orderBy(['fecha_solicitud' => SORT_DESC]);
+
+        if ($this->biblioteca_idbiblioteca === null) {
+            if (Yii::$app->session->has('selectBiblioteca')) {
+                $this->biblioteca_idbiblioteca = Yii::$app->session->get('selectBiblioteca');
+                $dataProvider = $this->search(Yii::$app->request->queryParams);
+            }
+        }
 
         return $dataProvider;
     }

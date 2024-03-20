@@ -37,7 +37,7 @@ class EstadisticaController extends Controller
 
 
     //EstadísticaGeneral
-    public function actionInfo()
+    public function actionEstadisticaGeneral()
     {
         $mesSeleccionado = Yii::$app->request->get('mes', date('m'));
         $anioSeleccionado = Yii::$app->request->get('anio', date('Y'));
@@ -146,7 +146,7 @@ class EstadisticaController extends Controller
             ];
         }
 
-        return $this->render('info', [
+        return $this->render('general', [
             'mesSeleccionado' => $mesSeleccionado,
             'anioSeleccionado' => $anioSeleccionado,
             'bibliotecas' => $bibliotecas,
@@ -157,12 +157,20 @@ class EstadisticaController extends Controller
         ]);
     }
 
-    // ESTADISTICA DE LIBROS POR ASIGNATURA
+
+    public function actionIndexLibro(){
+
+        return $this->render('index-libro');
+    }
+
+    // ESTADISTICA DE LIBROS POR ASIGNATURA MES-AÑO
     public function actionAsignaturaLibro()
     {
 
         $mesSeleccionado = Yii::$app->request->get('mes', date('m'));
         $anioSeleccionado = Yii::$app->request->get('anio', date('Y'));
+
+
         $bibliotecaSeleccionada = Yii::$app->request->get('bibliotecaId', null);
         $asignaturaSeleccionada = Yii::$app->request->get('asignaturaId', null);
 
@@ -176,18 +184,24 @@ class EstadisticaController extends Controller
                 'YEAR(p.fecha_solicitud)' => $anioSeleccionado,
                 'p.tipoprestamo_id' => 'LIB' // Filtrar por tipo_prestamoid igual a 'LIB'
             ])
-            ->join('INNER JOIN', 'libro', 'libro.id = e.libro_id')            
+            ->join('INNER JOIN', 'libro', 'libro.id = e.libro_id')
             ->groupBy('libro.id')
             ->orderBy('total DESC')
             ->limit(10);
 
-        if ($asignaturaSeleccionada !== null) {
+
+
+        if ($bibliotecaSeleccionada !== null && $asignaturaSeleccionada !== null) {
+            $query->andFilterWhere([
+                'libro.asignatura_IdAsig' => $asignaturaSeleccionada,
+                'p.biblioteca_idbiblioteca' => $bibliotecaSeleccionada
+            ]);
+        } elseif ($asignaturaSeleccionada !== null) {
             $query->andWhere(['libro.asignatura_IdAsig' => $asignaturaSeleccionada]);
+        } elseif ($bibliotecaSeleccionada !== null) {
+            $query->andWhere(['p.biblioteca_idbiblioteca' => $bibliotecaSeleccionada]);
         }
 
-        if ($bibliotecaSeleccionada !== null) {
-            $query->andWhere(['p.biblioteca_idbiblioteca' => $bibliotecaSeleccionada]); // Cambio aquí
-        }
 
         $librosMasSolicitados = $query->all();
 
@@ -204,7 +218,7 @@ class EstadisticaController extends Controller
             'data' => $data,
         ];
 
-        return $this->render('estadisticalibro', [
+        return $this->render('libro/asignaturaMesAño', [
             'librosMasSolicitados' => $librosMasSolicitados,
             'chartData' => $chartData, // Pasar los datos del gráfico a la vista
             'mesSeleccionado' => $mesSeleccionado,
@@ -214,7 +228,73 @@ class EstadisticaController extends Controller
         ]);
     }
 
+    // ESTADISTICA DE LIBROS POR ASIGNATURA FECHA INICIO - FECHA FIN
+
+    public function actionAsignaturaLibroInicioFin()
+    {
+
+        $fechaInicio = Yii::$app->request->get('fechaInicio', date('Y-m-01'));
+        $fechaFin = Yii::$app->request->get('fechaFin', date('Y-m-t'));
+
+        $bibliotecaSeleccionada = Yii::$app->request->get('bibliotecaId', null);
+        $asignaturaSeleccionada = Yii::$app->request->get('asignaturaId', null);
+
+        $query = new \yii\db\Query();
+
+        $query->select(['libro.titulo as titulo', 'COUNT(*) as total'])
+            ->from(['p' => 'prestamo'])
+            ->leftJoin('ejemplar e', 'p.object_id = e.id') // Unir con la tabla ejemplar
+            ->where([
+                'AND',
+                [
+                    'BETWEEN',
+                    'p.fecha_solicitud',
+                    $fechaInicio,
+                    $fechaFin
+                ],
+                ['p.tipoprestamo_id' => 'LIB']
+            ])
+            ->join('INNER JOIN', 'libro', 'libro.id = e.libro_id')
+            ->groupBy('libro.id')
+            ->orderBy('total DESC')
+            ->limit(10);
 
 
 
+        if ($bibliotecaSeleccionada !== null && $asignaturaSeleccionada !== null) {
+            $query->andFilterWhere([
+                'libro.asignatura_IdAsig' => $asignaturaSeleccionada,
+                'p.biblioteca_idbiblioteca' => $bibliotecaSeleccionada
+            ]);
+        } elseif ($asignaturaSeleccionada !== null) {
+            $query->andWhere(['libro.asignatura_IdAsig' => $asignaturaSeleccionada]);
+        } elseif ($bibliotecaSeleccionada !== null) {
+            $query->andWhere(['p.biblioteca_idbiblioteca' => $bibliotecaSeleccionada]);
+        }
+
+
+        $librosMasSolicitados = $query->all();
+
+        $labels = [];
+        $data = [];
+        foreach ($librosMasSolicitados as $libro) {
+            $labels[] = $libro['titulo'];
+            $data[] = $libro['total'];
+        }
+
+        // Datos para el gráfico
+        $chartData = [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+
+        return $this->render('libro/asignaturaInicioFin', [
+            'librosMasSolicitados' => $librosMasSolicitados,
+            'chartData' => $chartData, // Pasar los datos del gráfico a la vista
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
+            'bibliotecaSeleccionada' => $bibliotecaSeleccionada,
+            'asignaturaSeleccionada' => $asignaturaSeleccionada,
+        ]);
+    }
 }

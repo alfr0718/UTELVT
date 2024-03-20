@@ -40,18 +40,19 @@ use yii\bootstrap4\ActiveForm;
             ['prompt' => 'Seleccione servicio solicitado', 'disabled' => true]
         ) ?>
 
+    <?= $form->field($model, 'object_id')
+        ->dropDownList(
+            \yii\helpers\ArrayHelper::map(\app\models\Pc::find()->all(), 'idpc', 'nombre',),
+            ['prompt' => 'Seleccione el dispositivo', 'disabled' => true]
+        )->label('Equipo Solicitado') ?>
+
     <?= $form->field($model, 'biblioteca_idbiblioteca')
-        ->label('Nuestro Espacio')
+        ->label('Tu Lugar de Trabajo')
         ->dropDownList(
             \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
             ['prompt' => 'Seleccione el campus', 'disabled' => true]
         ) ?>
 
-    <?= $form->field($model, 'object_id')
-        ->dropDownList(
-            \yii\helpers\ArrayHelper::map(\app\models\Pc::find()->all(), 'idpc', 'nombre',),
-            ['prompt' => 'Seleccione el dispositivo', 'disabled' => true]
-        ) ?>
 
     <!-- <div class="form-group">
         <?= Html::submitButton('Enviar', ['class' => 'btn btn-success']) ?>

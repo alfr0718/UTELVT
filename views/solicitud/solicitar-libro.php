@@ -25,8 +25,13 @@ use yii\bootstrap4\ActiveForm;
     <?= $form->field($model, 'personaldata_Ci')
         ->textInput(['maxlength' => true, 'readonly' => true]) ?> -->
 
+
     <?= $form->field($model, 'cedula_solicitante')
-        ->textInput(['maxlength' => true, 'readonly' => true]) ?>
+        ->textInput(['maxlength' => true, 'readonly' => $isEnabled]) ?>
+
+    <?= $form->field($model, 'intervalo_solicitado')
+        ->label('Horas de Inmersión Literaria')
+        ->textInput(['type' => 'time', 'value' => '01:00:00', 'max' => '08:00:00']) ?>
 
     <?= $form->field($model, 'tipoprestamo_id')
         ->label('¿Qué buscas?')
@@ -35,16 +40,20 @@ use yii\bootstrap4\ActiveForm;
             ['prompt' => 'Seleccione servicio solicitado', 'disabled' => true]
         ) ?>
 
-    <?= $form->field($model, 'intervalo_solicitado')
-        ->label('Horas de Inmersión Literaria')
-        ->textInput(['type' => 'time', 'value' => '01:00:00', 'max' => '08:00:00']) ?>
+    <?= $form->field($model, 'object_id')
+        ->dropDownList(
+            \yii\helpers\ArrayHelper::map(\app\models\Ejemplar::find()->all(), 'id', function ($model) {
+                return $model->codigo_barras . ' - ' . $model->libro->titulo;
+            },),
+            ['prompt' => 'Seleccione el libro', 'disabled' => true]
+        )->label('Libro Solicitado') ?>
 
 
     <?= $form->field($model, 'biblioteca_idbiblioteca')
         ->label('Tu Rincón de Lectura')
         ->dropDownList(
             \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
-            ['prompt' => 'Seleccione su ubicación']
+            ['prompt' => 'Seleccione su ubicación', 'disabled' => $isEnabled]
         ) ?>
 
     <!--  <div class="form-group">

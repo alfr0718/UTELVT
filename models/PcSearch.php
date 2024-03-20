@@ -68,14 +68,22 @@ class PcSearch extends Pc
             ->andFilterWhere(['like', 'nombre', $this->nombre]);
 
 
-
+        // Aplicar filtros adicionales basados en el tipo de usuario
         $tipoUsuario = Yii::$app->user->identity->tipo_usuario;
 
-        // Si el tipo de usuario es el requerido, agregar filtro adicional
-        if ($tipoUsuario === User::TYPE_EXTERNO || $tipoUsuario === User::TYPE_DOCENTE|| $tipoUsuario === User::TYPE_ESTUDIANTE) {
-            // Agregar filtro adicional para tipo 1
-            $query->andWhere(['type' => 1]);
+        if ($tipoUsuario === User::TYPE_EXTERNO || $tipoUsuario === User::TYPE_ESTUDIANTE || $tipoUsuario === User::TYPE_DOCENTE) {
             $query->andWhere(['Status' => 1]);
+        }
+
+        if ($tipoUsuario === User::TYPE_EXTERNO || $tipoUsuario === User::TYPE_ESTUDIANTE) {
+            $query->andWhere(['type' => 1]);
+
+        }
+
+
+        if ($this->biblioteca_idbiblioteca === null && Yii::$app->session->has('selectBiblioteca')) {
+            $this->biblioteca_idbiblioteca = Yii::$app->session->get('selectBiblioteca');
+            $dataProvider = $this->search(Yii::$app->request->queryParams);
         }
 
         return $dataProvider;

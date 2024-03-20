@@ -42,7 +42,7 @@ use yii\bootstrap4\ActiveForm;
         ) ?>
 
     <?= $form->field($model, 'biblioteca_idbiblioteca')
-        ->label('Tu Rincón de Lectura')
+        ->label('Nuestro Espacio')
         ->dropDownList(
             \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
             ['prompt' => 'Seleccione el campus']

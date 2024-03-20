@@ -4,6 +4,10 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use hail812\adminlte3\assets\PluginAsset;
+
+
+PluginAsset::register($this)->add('chart-js');
 
 /* @var $this yii\web\View */
 /* @var $mesSeleccionado string */
@@ -13,7 +17,7 @@ use yii\helpers\ArrayHelper;
 /* @var $tiposPrestamo array */
 /* @var $bibliotecas array */
 
-$this->title = 'Estadísticas';
+$this->title = 'Estadísticas Generales';
 $this->params['breadcrumbs'][] = $this->title;
 
 $labelsLibros = [];
@@ -32,17 +36,27 @@ foreach ($computadoras as $item) {
     $dataComputadoras[] = $item['cantidad'];
 }
 
+
+$labelsPrestamos = [];
+$dataPrestamos = [];
+
+foreach ($tiposPrestamo as $item) {
+    $labelsPrestamos[] = $item['nombre'];
+    $dataPrestamos[] = $item['cantidad'];
+}
+
 ?>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
+        <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Filtrar por Mes y Año</h3>
+                <h1><?= Html::encode($this->title) ?></h1>
             </div>
             <div class="card-body">
+                <h5>Filtrar por Mes y Año:</h5>
+
                 <?php $form = ActiveForm::begin(['method' => 'get']); ?>
 
                 <div class="form-group">
@@ -85,12 +99,14 @@ foreach ($computadoras as $item) {
                         'biblioteca_idbiblioteca',
                         $bibliotecaSeleccionada,
                         \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
-                        ['prompt' => 'Seleccione el Campus', 'class' => 'form-control']
+                        ['prompt' => 'Todos', 'class' => 'form-control']
                     ) ?>
 
                 </div>
                 <div class="form-group">
                     <?= Html::submitButton('<i class="fas fa-chart-bar"></i> Generar', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::button('<i class="fas fa-eraser"></i>', ['class' => 'btn btn-outline-secondary', 'onclick' => 'window.location.href = "' . Yii::$app->urlManager->createUrl(['estadistica/info']) . '"']) ?>
+
                 </div>
 
                 <?php ActiveForm::end(); ?>
@@ -99,20 +115,37 @@ foreach ($computadoras as $item) {
     </div>
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card card-success">
             <div class="card-header">
-                <h3 class="card-title">Tipos de Préstamo</h3>
+                <h3 class="card-title">Solicitudes de Préstamos</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
             </div>
             <div class="card-body">
-                <?= GridView::widget([
-                    'dataProvider' => new \yii\data\ArrayDataProvider([
-                        'allModels' => $tiposPrestamo,
-                    ]),
-                    'columns' => [
-                        ['attribute' => 'nombre', 'label' => 'Tipo de Préstamo'],
-                        ['attribute' => 'cantidad', 'label' => 'Cantidad'],
-                    ],
-                ]); ?>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="table-responsive">
+                            <?= GridView::widget([
+                                'summary' => false,
+                                'dataProvider' => new \yii\data\ArrayDataProvider([
+                                    'allModels' => $tiposPrestamo,
+                                ]),
+                                'columns' => [
+                                    ['attribute' => 'nombre', 'label' => 'Tipo'],
+                                    ['attribute' => 'cantidad', 'label' => 'Cantidad'],
+                                ],
+                            ]); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <canvas id="chartPrestamos" style="height: 250px;"></canvas>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -120,9 +153,14 @@ foreach ($computadoras as $item) {
 
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
+        <div class="card card-danger">
             <div class="card-header">
                 <h3 class="card-title">Libros Más Solicitados</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
             </div>
             <div class="card-body">
                 <canvas id="chartLibros" style="height: 250px;"></canvas>
@@ -131,10 +169,17 @@ foreach ($computadoras as $item) {
     </div>
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card card-info">
             <div class="card-header">
-                <h3 class="card-title">Computadoras Más Solicitadas</h3>
+                <h3 class="card-title">Equipos Más Solicitados</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
             </div>
+
             <div class="card-body">
                 <canvas id="chartComputadoras" style="height: 250px;"></canvas>
             </div>
@@ -145,6 +190,34 @@ foreach ($computadoras as $item) {
 <?php
 // Código JavaScript para crear los gráficos con Chart.js
 $this->registerJs("
+    var ctxPrestamos = document.getElementById('chartPrestamos').getContext('2d');
+    var colores = [
+    'rgba(41, 128, 185, 0.5)',   // Azul
+    'rgba(39, 174, 96, 0.5)',   // Verde
+        'rgba(231, 76, 60, 0.5)'    // Granate
+];
+    var chartPrestamos = new Chart(ctxPrestamos, {
+        type: 'doughnut',
+        data: {
+            labels: " . json_encode($labelsPrestamos) . ",
+            datasets: [{
+                label: 'Préstamos',
+                data: " . json_encode($dataPrestamos) . ",
+                backgroundColor: colores,
+                borderColor: colores,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                 position: 'bottom'
+                }
+            }
+        }
+    });
+    
+    
     var ctxLibros = document.getElementById('chartLibros').getContext('2d');
     var coloresCalidos = [
     'rgba(231, 76, 60, 0.5)',    // Granate
@@ -193,11 +266,11 @@ $this->registerJs("
     'rgba(68, 108, 179, 0.5)'    // Azul intenso
     ];
     var chartComputadoras = new Chart(ctxComputadoras, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: " . json_encode($labelsComputadoras) . ",
             datasets: [{
-                label: 'Computadoras Más Solicitadas',
+                label: 'Equipos Más Solicitados',
                 data: " . json_encode($dataComputadoras) . ",
                 backgroundColor: coloresFrios,
                 borderColor: coloresFrios,

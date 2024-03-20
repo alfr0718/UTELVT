@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Libro;
+use Yii;
 
 /**
  * LibroSearch represents the model behind the search form of `app\models\Libro`.
@@ -17,7 +18,7 @@ class LibroSearch extends Libro
     public function rules()
     {
         return [
-            [['id', 'asignatura_IdAsig' ], 'integer'],
+            [['id', 'asignatura_IdAsig', 'biblioteca_idbiblioteca' ], 'integer'],
             [['titulo', 'autor', 'isbn', 'cute', 'editorial', 'anio_publicacion', 'categoria_id','seccion_id', 'pais_cod_pais'], 'safe'],
         ];
     }
@@ -62,7 +63,8 @@ class LibroSearch extends Libro
             'anio_publicacion' => $this->anio_publicacion,
             'seccion_id' => $this->seccion_id,
             'categoria_id' => $this->categoria_id,
-            'categoria_id' => $this->categoria_id,
+            'asignatura_IdAsig' => $this->asignatura_IdAsig,
+            'biblioteca_idbiblioteca' => $this->biblioteca_idbiblioteca,
 
         ]);
 
@@ -73,6 +75,14 @@ class LibroSearch extends Libro
             ->andFilterWhere(['like', 'editorial', $this->editorial])
             ->andFilterWhere(['like', 'pais_cod_pais', $this->pais_cod_pais]);
 
+
+        if ($this->biblioteca_idbiblioteca === null) {
+            if (Yii::$app->session->has('selectBiblioteca')) {
+                $this->biblioteca_idbiblioteca = Yii::$app->session->get('selectBiblioteca');
+                $dataProvider = $this->search(Yii::$app->request->queryParams);
+            }
+        }
+        
         return $dataProvider;
     }
 }

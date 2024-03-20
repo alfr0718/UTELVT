@@ -97,16 +97,29 @@ use app\models\Seccion;
 
         // Función para cargar la imagen existente del modelo
         function loadExistingImage() {
+            // Definir la URL base para la cubierta
+            var coverUrl = "<?= Yii::getAlias('@web') ?>";
+
             // Verificar si el modelo tiene una imagen de portada
-            if ("<?= $model->cover ?>" != "") {
-                // Construir la URL de la imagen existente
+            <?php if (!isset($model->cover) || $model->cover == '') : ?>
+                // Si no hay imagen de portada, usar la imagen por defecto
+                coverUrl += '/cover/default-cover.jpg';
+            <?php else : ?>
+                // Construir la ruta de la imagen de portada
+                var coverPath = "<?= Yii::getAlias('@webroot') . '/cover/' . $model->cover ?>";
+                // Verificar si la imagen de portada existe en el servidor
+                <?php if (file_exists($coverPath)) : ?>
+                    // Si existe, usar la imagen de portada del modelo
+                    coverUrl += '/cover/<?= $model->cover ?>';
+                <?php else : ?>
+                    // Si no existe, usar la imagen por defecto
+                    coverUrl += '/cover/default-cover.jpg';
+                <?php endif; ?>
+            <?php endif; ?>
 
-                var existingImageUrl = "<?= Yii::getAlias('@web') ?>" + "<?= '/cover/' . $model->cover ?>";
-                // Mostrar la imagen existente en la vista previa
-                previewImage.src = existingImageUrl;
-                previewImage.style.display = 'block'; // Mostrar la imagen
-            }
-
+            // Mostrar la imagen en la vista previa
+            previewImage.src = coverUrl;
+            previewImage.style.display = 'block'; // Mostrar la imagen
         }
 
         // Llamar a la función para cargar la imagen existente al cargar la página

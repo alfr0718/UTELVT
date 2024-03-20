@@ -33,10 +33,9 @@ class Ejemplar extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'codigo_barras', 'ubicacion', 'Status', 'libro_id', 'biblioteca_idbiblioteca'], 'required'],
-            [['id', 'Status', 'libro_id', 'biblioteca_idbiblioteca'], 'integer'],
+            [['ubicacion', 'libro_id', 'biblioteca_idbiblioteca'], 'required'],
+            [['Status', 'libro_id', 'biblioteca_idbiblioteca'], 'integer'],
             [['codigo_barras', 'ubicacion'], 'string', 'max' => 60],
-            [['id'], 'unique'],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
             [['libro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Libro::class, 'targetAttribute' => ['libro_id' => 'id']],
         ];

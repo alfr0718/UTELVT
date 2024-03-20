@@ -175,8 +175,6 @@ class UserController extends Controller
                     Yii::$app->session->setFlash('error', 'La contraseña actual es incorrecta.');
                 }
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('optionsByUser/change-password', [

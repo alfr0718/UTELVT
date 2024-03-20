@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Ejemplar;
+use app\models\EjemplarSearch;
 use app\models\Informacionpersonal;
 use app\models\InformacionpersonalD;
 use app\models\Libro;
@@ -10,6 +11,7 @@ use app\models\Pc;
 use app\models\Personaldata;
 use app\models\Prestamo;
 use app\models\User;
+use ChangeStatusJob;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -39,23 +41,42 @@ class SolicitudController extends Controller
         );
     }
 
+    public function actionIndiceEjemplares($id)
+    {
+        // Cargar el modelo de libro basado en el $id recibido
+        $Libro = Libro::findOne(['id' => $id]);
+
+        // Verificar si el libro existe
+        if (!$Libro) {
+            throw new NotFoundHttpException('El libro no se encontró.');
+        }
+
+        $searchModel = new EjemplarSearch();
+        $searchModel->libro_id = $id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->renderAjax('indexEjemplar/index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionSolicitarLibro($id)
     {
         $isEnabled = false;
 
         // Cargar el modelo de libro basado en el $id recibido
-        $ejemplarLibro = Ejemplar::findOne(['id' => $id]);
+        $ejemplar = Ejemplar::findOne(['id' => $id]);
 
         // Verificar si el libro existe
-        if (!$ejemplarLibro) {
+        if (!$ejemplar) {
             throw new NotFoundHttpException('El libro no se encontró.');
         }
 
         $model = new Prestamo();
 
         $model->tipoprestamo_id = 'LIB';
-
-        $model->biblioteca_idbiblioteca = $ejemplarLibro->biblioteca_idbiblioteca; // Campus donde se encuentra el usuario... mejorar (Y)
+        $model->biblioteca_idbiblioteca = $ejemplar->biblioteca_idbiblioteca;
         $model->object_id = $id;
 
         if (!Yii::$app->user->isGuest) {
@@ -63,10 +84,11 @@ class SolicitudController extends Controller
             $userData = Yii::$app->user->identity;
             if ($userData->tipo_usuario === User::TYPE_EXTERNO || $userData->tipo_usuario === User::TYPE_ESTUDIANTE || $userData->tipo_usuario === USER::TYPE_DOCENTE) {
                 $model->cedula_solicitante = $userData->username;
+                $isEnabled = true;
             }
         }
 
-        
+
         if ($this->request->isPost) {
             // Verificar si se envió un formulario
             if ($model->load(\Yii::$app->request->post())) {
@@ -88,7 +110,7 @@ class SolicitudController extends Controller
                     Yii::$app->session->setFlash('error', 'No existe el solicitante en el sistema.');
                     return $this->redirect(Url::to(['site/error']));
                 }
-                
+
                 // Asignar valores y calcular la fecha de entrega
                 list($horas, $minutos) = explode(':', $model->intervalo_solicitado);
 
@@ -101,6 +123,10 @@ class SolicitudController extends Controller
 
                 // Verificar si el modelo se guarda con éxito
                 if ($model->save()) {
+
+                    $ejemplar->Status=2;
+                    $ejemplar->save();
+                    
                     Yii::$app->session->setFlash('success', 'Hemos recibido tu solicitud');
                     return $this->redirect(['prestamo/view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
                 } else {
@@ -114,7 +140,6 @@ class SolicitudController extends Controller
         return $this->renderAjax('solicitar-libro', [
             'model' => $model,
             'isEnabled' => $isEnabled,
-
         ]);
     }
 
@@ -142,6 +167,7 @@ class SolicitudController extends Controller
             $userData = Yii::$app->user->identity;
             if ($userData->tipo_usuario === User::TYPE_EXTERNO || $userData->tipo_usuario === User::TYPE_ESTUDIANTE || $userData->tipo_usuario === USER::TYPE_DOCENTE) {
                 $model->cedula_solicitante = $userData->username;
+                $isEnabled = true;
             }
         }
 
@@ -179,6 +205,8 @@ class SolicitudController extends Controller
                 // Verificar si el modelo se guarda con éxito
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Hemos recibido tu solicitud');
+                    $equipo->Status = 2;
+                    $equipo->save();
                     return $this->redirect(['prestamo/view', 'id' => $model->id, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca]);
                 } else {
                     Yii::$app->session->setFlash('error', 'No se pudo realizar la solicitud.');
@@ -211,8 +239,11 @@ class SolicitudController extends Controller
             $userData = Yii::$app->user->identity;
             if ($userData->tipo_usuario === User::TYPE_EXTERNO || $userData->tipo_usuario === User::TYPE_ESTUDIANTE || $userData->tipo_usuario === USER::TYPE_DOCENTE) {
                 $model->cedula_solicitante = $userData->username;
+                $isEnabled = true;
             }
+            $model->biblioteca_idbiblioteca = Yii::$app->session->get('selectBiblioteca');
         }
+
 
 
         if ($this->request->isPost) {

@@ -23,6 +23,8 @@ use Yii;
  * @property Biblioteca $bibliotecaIdbiblioteca
  * @property Categoria $categoria
  * @property Pais $paisCodigopais
+ * @property Ejemplar[] $ejemplars
+ * 
  */
 class Libro extends \yii\db\ActiveRecord
 {
@@ -131,11 +133,11 @@ class Libro extends \yii\db\ActiveRecord
 
 
     /**
-     * Gets query for [[Ejemplar]].
+     * Gets query for [[Ejemplars]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEjemplar()
+    public function getEjemplars()
     {
         return $this->hasMany(Ejemplar::class, ['libro_id' => 'id']);
     }

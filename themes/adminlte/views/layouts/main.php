@@ -31,10 +31,10 @@ $this->registerJsFile($publishedRes[1] . '/control_sidebar.js', ['depends' => '\
 </head>
 
 <?php
-$bodyClass="layout-top-nav";
-$sidebarClass="main-sidebar sidebar-light-teal elevation-4";
+$bodyClass = "sidebar-collapse layout-fixed layout-navbar-fixed sidebar-closed";
+$sidebarClass = "main-sidebar sidebar-light-teal elevation-4";
 $navbarClass = "main-header navbar navbar-expand navbar-white navbar-light";
-
+$userData = NULL;
 if (!Yii::$app->user->isGuest) {
     $cacheKey = 'user_' . Yii::$app->user->id;
     $userData = Yii::$app->cache->get($cacheKey);
@@ -46,34 +46,33 @@ if (!Yii::$app->user->isGuest) {
         Yii::$app->cache->set($cacheKey, $userData, 3600);
     }
 
-    if ($userData->tipo_usuario === User::TYPE_ADMIN || $userData->tipo_usuario === User::TYPE_GERENTE || $userData->tipo_usuario === User::TYPE_PERSONALB){
-        $bodyClass = "sidebar-mini sidebar-collapse layout-fixed dark-mode";
-        $sidebarClass="main-sidebar sidebar-dark-teal elevation-4";
+    if ($userData->tipo_usuario === User::TYPE_ADMIN || $userData->tipo_usuario === User::TYPE_GERENTE || $userData->tipo_usuario === User::TYPE_PERSONALB) {
+        $bodyClass = "sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed dark-mode";
+        $sidebarClass = "main-sidebar sidebar-dark-teal elevation-4";
         $navbarClass = "main-header navbar navbar-expand navbar-gray navbar-dark";
-
     }
 }
 
-
 ?>
+
 <body class="<?= $bodyClass ?>">
     <?php $this->beginBody() ?>
 
     <div class="wrapper">
 
         <?php if (!Yii::$app->user->isGuest) : ?>
-
             <?= $this->render('navbar', ['assetDir' => $assetDir, 'userData' => $userData, 'navbarClass' => $navbarClass]) ?>
-            <?php if ($userData->tipo_usuario === User::TYPE_ADMIN || $userData->tipo_usuario === User::TYPE_GERENTE || $userData->tipo_usuario === User::TYPE_PERSONALB) : ?>
-                <?= $this->render('sidebar', ['assetDir' => $assetDir, 'userData' => $userData, 'sidebarClass'=>$sidebarClass]) ?>
-            <?php endif; ?>
+            <?= $this->render('sidebar', ['assetDir' => $assetDir, 'userData' => $userData, 'sidebarClass' => $sidebarClass]) ?>
         <?php endif; ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <?= $this->render('content', ['content' => $content, 'assetDir' => $assetDir]) ?>
+        <?= $this->render('content', ['content' => $content, 'assetDir' => $assetDir, 'userData' => $userData]) ?>
         <!-- /.content-wrapper -->
 
+
+
         <!-- Control Sidebar -->
+
         <?php if (!Yii::$app->user->isGuest) : ?>
             <?php if ($userData->tipo_usuario === User::TYPE_ADMIN) : ?>
                 <?= $this->render('control-sidebar') ?>

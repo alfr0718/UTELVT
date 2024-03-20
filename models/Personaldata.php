@@ -104,4 +104,15 @@ class Personaldata extends \yii\db\ActiveRecord
             $this->addError($attribute, 'Ingrese una fecha válida.');
         }
     }
+
+    /**
+     * Encuentra un modelo basado en el número de cédula.
+     * @param string $cedula El número de cédula para buscar.
+     * @return static|null El modelo encontrado o null si no se encuentra.
+     */
+    public static function findByCedula($cedula)
+    {
+        return static::findOne(['Ci' => $cedula]);
+    }
+
 }

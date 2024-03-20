@@ -45,6 +45,10 @@ use yii\widgets\ActiveForm;
                 <div class="card-body" style="display: none;">
                     <?= $form->field($model, 'isbn')->textInput(['style' => 'width: 100%;', 'placeholder' => 'ISBN de la Publicación'])->label('ISBN') ?>
 
+                    <?= $form->field($model, 'anio_publicacion')
+                        ->textInput(['style' => 'width: 100%;', 'placeholder' => 'Año de Publicación', 'type' => 'number', 'min' => 1900, 'max' => date('Y')])
+                        ->label('Año de Publicación') ?>
+
                     <?= $form->field($model, 'categoria_id')
                         ->dropDownList(
                             \yii\helpers\ArrayHelper::map(
@@ -52,8 +56,31 @@ use yii\widgets\ActiveForm;
                                 'id',
                                 'NombreCateg'
                             ),
-                            ['prompt' => 'Seleccionar Categoría', 'style' => 'width: 100%;']
+                            ['prompt' => 'Todos', 'style' => 'width: 100%;']
                         )->label('Categoría') ?>
+                    <?= $form->field($model, 'seccion_id')
+                        ->dropDownList(
+                            \yii\helpers\ArrayHelper::map(
+                                \app\models\Seccion::find()->orderBy(['NombreSeccion' => SORT_ASC])->all(),
+                                'id',
+                                'NombreSeccion'
+                            ),
+                            ['prompt' => 'Todos', 'style' => 'width: 100%;']
+                        )->label('Sección') ?>
+
+
+                    <?php $paisesConLibros = \app\models\Pais::find()
+                        ->where(['IN', 'cod_pais', \app\models\Libro::find()->select('pais_cod_pais')->distinct()])
+                        ->orderBy(['nomb_pais' => SORT_ASC])
+                        ->all();
+                    ?>
+
+                    <?= $form->field($model, 'pais_cod_pais')
+                        ->dropDownList(
+                            \yii\helpers\ArrayHelper::map($paisesConLibros, 'cod_pais', 'nomb_pais'),
+                            ['prompt' => 'Todos', 'style' => 'width: 100%;']
+                        )
+                        ->label('País de Publicación') ?>
 
 
                     <?php $asignaturasConLibros = \app\models\Asignatura::find()
@@ -68,26 +95,20 @@ use yii\widgets\ActiveForm;
                                 'IdAsig',
                                 'NombAsig'
                             ),
-                            ['prompt' => 'Seleccionar Asignatura', 'style' => 'width: 100%;']
+                            ['prompt' => 'Todos', 'style' => 'width: 100%;']
                         )->label('Asignatura') ?>
 
-                    <?php $paisesConLibros = \app\models\Pais::find()
-                        ->where(['IN', 'cod_pais', \app\models\Libro::find()->select('pais_cod_pais')->distinct()])
-                        ->orderBy(['nomb_pais' => SORT_ASC])
-                        ->all();
-                    ?>
 
-                    <?= $form->field($model, 'pais_cod_pais')
+
+                    <?= $form->field($model, 'biblioteca_idbiblioteca')
+                        ->label('Biblioteca')
                         ->dropDownList(
-                            \yii\helpers\ArrayHelper::map($paisesConLibros, 'cod_pais', 'nomb_pais'),
-                            ['prompt' => 'Seleccionar País', 'style' => 'width: 100%;']
-                        )
-                        ->label('País de Publicación') ?>
+                            \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
+                            [
+                                'prompt' => 'Todos',
+                            ]
+                        ) ?>
 
-
-                    <?= $form->field($model, 'anio_publicacion')
-                        ->textInput(['style' => 'width: 100%;', 'placeholder' => 'Año de Publicación', 'type' => 'number', 'min' => 1900, 'max' => date('Y')])
-                        ->label('Año de Publicación') ?>
 
                 </div>
             </div>

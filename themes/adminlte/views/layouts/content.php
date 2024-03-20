@@ -1,7 +1,6 @@
 <!-- Verificar si el usuario está autenticado -->
 <?php
 
-use yii\bootstrap5\Html;
 use hail812\adminlte3\assets\PluginAsset;
 
 PluginAsset::register($this)->add('sweetalert2');
@@ -43,6 +42,19 @@ foreach ($sweetAlertType as $flashType => $messageTitle) {
 
 
 <?php else : ?>
+
+    <?php
+    //if ($userData->tipo_usuario === User::TYPE_ESTUDIANTE || $userData->tipo_usuario === User::TYPE_DOCENTE || $userData->tipo_usuario === User::TYPE_EXTERNO){
+    if (!Yii::$app->session->has('selectBiblioteca') && !Yii::$app->session->has('librarySelectionJSLoaded')) {
+        $jsFilePath = '@web/js/librarySelection.js';
+        $this->registerJsFile($jsFilePath, ['depends' => [\yii\web\JqueryAsset::class]]);
+        Yii::$app->session->set('librarySelectionJSLoaded', true);
+    }
+    //}
+    ?>
+
+
+
     <div class="content-wrapper">
 
         <!-- Si el usuario está autenticado, muestra el menú y el contenido principal -->
@@ -51,7 +63,6 @@ foreach ($sweetAlertType as $flashType => $messageTitle) {
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <!-- Botón de regresar -->
-
                     </div><!-- /.col -->
 
                     <div class="col-sm-6">
@@ -68,12 +79,12 @@ foreach ($sweetAlertType as $flashType => $messageTitle) {
 
         <!-- Main content -->
         <div class="content">
-            <div class="row justify-content-center">
-                <div class="col-11 col-sm-10 col-md-11 col-lg-11 col-xl-11">
+            <!--   <div class="row justify-content-center">
+                <div class="col-11 col-sm-10 col-md-11 col-lg-11 col-xl-11"> -->
 
-                    <?= $content ?>
-                </div>
-            </div>
+            <?= $content ?>
+            <!-- </div>
+            </div> -->
         </div>
         <!-- /.content -->
 

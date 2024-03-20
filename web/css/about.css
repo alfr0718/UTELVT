@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+.site-about {
+    padding: 30px 0;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.site-about:hover {
+    background-color: #FAFAFA;
+}
+
+.site-about h1 {
+    font-size: 2.5em;
+    margin: 20px 0;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    /* Convierte el texto a mayúsculas, si es necesario */
+
+}
+
+.site-about p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.section {
+    background-color: #FFF;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* Agregado efecto de transformación y sombra al pasar el mouse */
+}
+
+.section:hover {
+    transform: scale(1.05);
+    /* Efecto de sobresaltado al pasar el mouse */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    /* Aumentar la sombra al pasar el mouse */
+}
+
+.section h2 {
+    font-size: 2em;
+    margin-bottom: 15px;
+    color: #333;
+}

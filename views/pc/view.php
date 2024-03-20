@@ -12,34 +12,48 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="pc-view">
+    <div class="card">
+        <div class="card-header bg-olive">
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+        <div class="card-body">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+            <?= DetailView::widget([
+                'model' => $model,
+                'options' => ['class' => 'table table-hover'], 
+                'attributes' => [
+                    //'idpc',
+                    'nombre',
+                    [
+                        'attribute' => 'Status',
+                        'value' => function ($model) {
+                            $estados = $model->statusArray;
+                            return isset($estados[$model->Status]) ? $estados[$model->Status] : $model->Status;
+                        },
+                    ],                  
+                    [
+                        'attribute' => 'biblioteca_idbiblioteca',
+                        'value' => function ($model) {
+                            return $model->bibliotecaIdbiblioteca->Campus;
+                        },
+                    ],
+                ],
+            ]) ?>
 
-    <p>
-        <?= Html::a('Actualizar PC', ['update', 'idpc' => $model->idpc, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'idpc' => $model->idpc, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => '¿Estás seguro de eliminar este elemento?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+        </div>
+        <div class="card-footer">
+            <div class="group-form text-right">
+                <?= Html::a('<i class="far fa-edit"></i> Actualizar', ['update', 'idpc' => $model->idpc, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca], ['class' => 'btn btn-app btn-primary']) ?>
+                <?= Html::a('<i class="fas fa-trash"></i> Eliminar', ['delete', 'idpc' => $model->idpc, 'biblioteca_idbiblioteca' => $model->biblioteca_idbiblioteca], [
+                    'class' => 'btn btn-app btn-danger',
+                    'data' => [
+                        'confirm' => '¿Estás seguro de eliminar este elemento?',
+                        'method' => 'post',
+                    ],
+                ]) ?>
+            </div>
+        </div>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            //'idpc',
-            'nombre',
-            'Status',
-            //  'biblioteca_idbiblioteca',
-            [
-                'attribute' => 'biblioteca_idbiblioteca', // Esto muestra el código del país
-                'value' => function ($model) {
-                    return $model->bibliotecaIdbiblioteca->Campus; // Accede al nombre del país relacionado
-                },
-            ],
-        ],
-    ]) ?>
+    </div>
 
 </div>

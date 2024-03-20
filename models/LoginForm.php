@@ -92,14 +92,25 @@ class LoginForm extends Model
                 // Si no se encuentra al usuario en la tabla de usuarios, busca en otras tablas
                 $student = Informacionpersonal::findByCedula($this->username);
                 $teacher = InformacionpersonalD::findByCedula($this->username);
+                $personEX = Personaldata::findByCedula($this->username);
 
-                if ($student !== null) {
+                if($personEX !== null){
+                    $user = new User();
+                    $user->username = $personEX->Ci; // Utiliza la cédula como nombre de usuario
+                    $user->tipo_usuario = User::TYPE_EXTERNO;
+                    // Genera una contraseña segura y aleatoria
+                    $user->setPassword($personEX->Ci);
+                    $user->Created_at = date('Y-m-d H:i:s');
+                    $user->Auth_key = Yii::$app->security->generateRandomString();
+                    // Guarda el usuario
+                    $user->save();
+                } elseif ($student !== null) {
                     // Si se encuentra en la tabla de Estudiantes, crea un nuevo usuario con los datos de Estudiantes
                     $user = new User();
                     $user->username = $student->CIInfPer; // Utiliza la cédula como nombre de usuario
                     $user->tipo_usuario = User::TYPE_ESTUDIANTE;
                     // Genera una contraseña segura y aleatoria
-                    $user->setPassword($student->CIInfPer);
+                    $user->setPassword($student->ClaveUsu);
                     //$user->password = $student->ClaveUsu;
                     $user->Created_at = date('Y-m-d H:i:s');
                     $user->Auth_key = Yii::$app->security->generateRandomString();
@@ -111,8 +122,8 @@ class LoginForm extends Model
                     $user->username = $teacher->CIInfPer; // Utiliza la cédula como nombre de usuario
                     $user->tipo_usuario = User::TYPE_DOCENTE;
                     // Genera una contraseña segura y aleatoria
-                    $user->setPassword($teacher->CIInfPer);
-                    //$user->password = $student->ClaveUsu;
+                    $user->setPassword($teacher->ClaveUsu);
+                    //$user->password = $teacher->ClaveUsu;
                     $user->Created_at = date('Y-m-d H:i:s');
                     $user->Auth_key = Yii::$app->security->generateRandomString();
                     // Guarda el usuario

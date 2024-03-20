@@ -24,12 +24,10 @@ class Pc extends \yii\db\ActiveRecord
         3 => 'Proyector'
     ];
 
-    public $statusArray =[
-            '1' => 'Disponible',
-            '0' => 'No Disponible',
-            '2' => 'Fuera de servicio',
-            '3' => 'En Mantenimiento',
-            '4' => 'Retirada'
+    public $statusArray = [
+        '2' => 'En Uso',
+        '1' => 'Disponible',
+        '0' => 'No Disponible',
     ];
 
     /**
@@ -49,7 +47,7 @@ class Pc extends \yii\db\ActiveRecord
             [['nombre', 'biblioteca_idbiblioteca'], 'required'],
             [['Status', 'type', 'biblioteca_idbiblioteca'], 'integer'],
             [['nombre'], 'string', 'max' => 45],
-           // [['idpc', 'biblioteca_idbiblioteca'], 'unique', 'targetAttribute' => ['idpc', 'biblioteca_idbiblioteca']],
+            // [['idpc', 'biblioteca_idbiblioteca'], 'unique', 'targetAttribute' => ['idpc', 'biblioteca_idbiblioteca']],
             [['biblioteca_idbiblioteca'], 'exist', 'skipOnError' => true, 'targetClass' => Biblioteca::class, 'targetAttribute' => ['biblioteca_idbiblioteca' => 'idbiblioteca']],
         ];
     }

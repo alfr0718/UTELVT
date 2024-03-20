@@ -49,7 +49,7 @@ class Prestamo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cedula_solicitante', 'intervalo_solicitado', 'fecha_solicitud', 'fechaentrega'], 'safe'],
+            [['cedula_solicitante', 'intervalo_solicitado', 'fecha_solicitud', 'fechaentrega', 'Status'], 'safe'],
             [['tipoprestamo_id', 'biblioteca_idbiblioteca'], 'required'],
             [['biblioteca_idbiblioteca', /*'pc_idpc', 'pc_biblioteca_idbiblioteca', 'libro_id', 'libro_biblioteca_idbiblioteca'*/], 'integer'],
             [['tipoprestamo_id'], 'string', 'max' => 5],
@@ -117,11 +117,11 @@ class Prestamo extends \yii\db\ActiveRecord
             'fechaentrega' => 'Fecha de Entrega',
             'tipoprestamo_id' => 'Tipo de Solicitud',
             'intervalo_solicitado' => 'Tiempo Solicitado',
-            'biblioteca_idbiblioteca' => 'Campus',
+            'biblioteca_idbiblioteca' => 'Ubicación',
             'cedula_solicitante' => '¡Tus Datos!',
-            /*'personaldata_Ci' => 'Cédula Solicitante Externo',
+            'personaldata_Ci' => 'Cédula Solicitante Externo',
             'informacionpersonal_d_CIInfPer' => 'Cédula Docente',
-            'informacionpersonal_CIInfPer' => 'Cédula Estudiante',*/
+            'informacionpersonal_CIInfPer' => 'Cédula Estudiante',
             'pc_idpc' => 'Equipo',
             //'pc_biblioteca_idbiblioteca' => 'Ubicación del Equipo',
             'libro_id' => 'Libro',
@@ -146,7 +146,7 @@ class Prestamo extends \yii\db\ActiveRecord
      */
     public function getEjemplar()
     {
-        return $this->hasOne(Libro::class, ['id' => 'object_id']);
+        return $this->hasOne(Ejemplar::class, ['id' => 'object_id']);
     }
 
     /**

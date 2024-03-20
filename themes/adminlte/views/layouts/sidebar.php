@@ -5,9 +5,9 @@ use app\models\User;
 $this->registerCssFile('@web/css/user-initial.css');
 
 ?>
-<aside class="<?=$sidebarClass?>">
+<aside class="<?= $sidebarClass ?>">
     <!-- Brand Logo -->
-    <a href="/site/index" class="brand-link">
+    <a href="<?= \yii\helpers\Url::home() ?>" class="brand-link">
         <img src="<?= Yii::$app->urlManager->baseUrl ?>/img/ESCUDETO_UTE-LVT.png" alt="Universidad Luis Vargas Torres" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">UTELVT | Biblioteca</span>
     </a>
@@ -19,8 +19,6 @@ $this->registerCssFile('@web/css/user-initial.css');
             <div class="image">
                 <?php if (!Yii::$app->user->isGuest) : ?>
                     <?php
-
-
                     $personalData = $userData->personaldata;
                     if ($personalData !== null) {
                         $nombre = $personalData->Nombres;
@@ -49,6 +47,7 @@ $this->registerCssFile('@web/css/user-initial.css');
                     $iniciales = substr($nombre, 0, 1) . substr($apellido, 0, 1);
                     echo '<div class="user-initials">' . $iniciales . '</div>';
                     ?>
+
                 <?php else : ?>
                     <div class="user-initials">¿?</div>
                 <?php endif; ?>
@@ -57,7 +56,7 @@ $this->registerCssFile('@web/css/user-initial.css');
                 <?php if (!Yii::$app->user->isGuest) : ?>
                     <?= \yii\helpers\Html::a($perfil, $url) ?>
                 <?php else : ?>
-                    <a href="#">¿Qué estas haciendo aquí?</a> <!-- O el texto que desees para usuarios no autenticados -->
+                    <a href="#">¿Cómo llegaste hasta aquí?</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -65,6 +64,8 @@ $this->registerCssFile('@web/css/user-initial.css');
         <?php
         $commonMenuItems = [
             ['label' => 'Página Principal', 'icon' => 'fas fa-home', 'url' => ['/site/index']],
+            ['label' => 'Libros', 'url' => ['/libro/index'], 'icon' => 'fas fa-book'],
+            ['label' => 'Equipos', 'url' => ['/pc/index'], 'icon' => 'fas fa-desktop'],
         ];
 
         $adminMenuItems = [
@@ -95,26 +96,14 @@ $this->registerCssFile('@web/css/user-initial.css');
         ];
 
         $personalMenuItems = [
-            ['label' => 'Personal', 'header' => true],
-            ['label' => 'Libros', 'url' => ['/libro/index'], 'icon' => 'fas fa-book'],
-            ['label' => 'Equipos', 'url' => ['/pc/index'], 'icon' => 'fas fa-desktop'],
+            ['label' => 'Registro Bibliotecario', 'header' => true],
             ['label' => 'Solicitudes', 'url' => ['/prestamo/index'], 'icon' => 'fas fa-clipboard'],
-
-            /* [
-                'label' => 'Préstamo',
-                'icon' => 'fas fa-clipboard',
-                'items' => [
-                    ['label' => 'Registros de Préstamo', 'icon' => 'fas fa-folder-open', 'url' => ['/prestamo/index']],
-                    ['label' => 'Ingresar Solicitud', 'icon' => 'fas fa-file-upload', 'url' => ['/prestamo/create']],
-                ]
-            ], */
-            
             [
                 'label' => 'Estadísticas',
                 'icon' => 'fas fa-chart-area',
                 'items' => [
-                    ['label' => 'General', 'icon' => 'fas fa-chart-bar', 'url' => ['/estadistica/info']],
-                    ['label' => 'Libros por Asignatura', 'icon' => 'fas fa-chart-pie', 'url' => ['/estadistica/asignatura-libro']],
+                    ['label' => 'General', 'icon' => 'fas fa-chart-bar', 'url' => ['/estadistica/estadistica-general']],
+                    ['label' => 'Estadística de Libros', 'icon' => 'fas fa-chart-pie', 'url' => ['/estadistica/index-libro']],
                 ]
             ],
         ];

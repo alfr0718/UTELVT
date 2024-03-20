@@ -1,0 +1,66 @@
+ #encabezado-impresion {
+     display: none;
+     /* Oculta el encabezado en la vista normal */
+ }
+
+ @media print {
+
+     #encabezado-impresion {
+         top: 0;
+         left: 0;
+         right: 0;
+         padding: 10px;
+         text-align: center;
+         font-family: "Times New Roman", serif;
+         text-transform: uppercase;
+         font-size: 26px;
+         font-weight: bold;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+
+     }
+
+     #encabezado-izquierda img,
+     #encabezado-derecha img {
+         width: 100px;
+         display: inline;
+     }
+
+     .linea-separadora {
+         border-top: 2px solid green;
+         /* Cambia el grosor y el color de la línea según tus preferencias */
+         margin-top: 20px;
+         /* Espacio superior */
+         margin-bottom: 20px;
+         /* Espacio inferior */
+     }
+
+     .botones-impresion {
+         display: none;
+     }
+
+     body {
+
+         font-family: "Times New Roman", serif;
+         font-size: 24px;
+     }
+
+     h1 {
+         font-size: 30px;
+         margin-bottom: 10px;
+     }
+
+     .detalle-titulo {
+         font-weight: bold;
+         font-size: 40px;
+         margin-bottom: 10px;
+     }
+
+     .detalle-dato {
+         font-size: 18px;
+         margin-bottom: 15px;
+     }
+
+
+ }

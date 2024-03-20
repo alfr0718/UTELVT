@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Informacionpersonal;
+use app\models\InformacionpersonalD;
 use app\models\Personaldata;
 use app\models\User;
 
@@ -75,13 +77,11 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        // if (!Yii::$app->user->isGuest) {
-        //     return $this->goHome();
-        // }
 
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
             return $this->goHome();
         }
 
@@ -100,6 +100,9 @@ class SiteController extends Controller
     {
         $cacheKey = 'user_' . Yii::$app->user->id;
         Yii::$app->cache->delete($cacheKey);
+        
+        Yii::$app->session->remove('selectBiblioteca');
+        Yii::$app->session->remove('librarySelectionJSLoaded');
 
         Yii::$app->user->logout();
 
@@ -135,38 +138,53 @@ class SiteController extends Controller
     }
 
 
+    public function actionGuardarBibliotecaEnSesion()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        // Verificar si se recibió la opción a guardar
+        $selectedOption = Yii::$app->request->post('option');
+        if ($selectedOption !== null) {
+            // Guardar la opción en la sesión
+            Yii::$app->session->set('selectBiblioteca', $selectedOption);
+
+            // Enviar una respuesta JSON indicando éxito
+            return ['success' => true];
+        }
+
+        // Enviar una respuesta JSON indicando error si no se recibió la opción
+        return ['success' => false, 'error' => 'No se recibió la opción.'];
+    }
+
     public function actionSignup()
     {
         $model = new Personaldata(); // Ajusta el modelo de Datos Personales según tu aplicación.
 
         if ($this->request->isPost) {
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                // Los datos personales se guardaron con éxito, ahora puedes crear un usuario.
-                // Puedes utilizar los datos personales para llenar el modelo de Usuario si es necesario.
-                $User = new User(); // Ajusta el modelo de Usuario según tu aplicación.
-                $now = \Yii::$app->formatter;
-                $User->username = $model->Ci;
-                $User->setPassword($model->Ci);
-                $User->Created_at = $now->asDatetime(new \DateTime(), 'php:Y-m-d H:i:s');
-                $User->Auth_key = \Yii::$app->security->generateRandomString();
+            if ($model->load(Yii::$app->request->post())) {
 
-                // Aquí puedes configurar otros campos del modelo Usuario según tus necesidades.
+                //Buscar datos ya existentes.
+                $externo = Personaldata::findOne($model->Ci);
 
-                if ($User->save()) {
-                    // El usuario se creó con éxito. Datos personales también
-                    \Yii::$app->session->setFlash('success', 'Usuario creado con éxito. Usuario: CI, Contraseña: CI.');
-                    return $this->redirect(['site/login']); // Reemplaza 'site/login' con la ruta de tu página de inicio de sesión
+                if (!$externo ) {
+                    if ($model->save) {
+                        // Los datos personales se guardaron con éxito.
+                        \Yii::$app->session->setFlash('success', 'Datos Registrados con éxito. Para la primera sesión, Usuario: CI, Contraseña: CI.');
+                    } else {
+                        // Si se envió el formulario pero no se cargaron ni guardaron datos, muestra un mensaje de error.
+                        \Yii::$app->session->setFlash('error', 'Error al guardar los datos personales.');
+                    }
+                } elseif($externo) {
+                    $usuario = User::find()->where(['username' => $model->Ci])->one();
 
-                    // Redirige al usuario a la página de inicio de sesión (ajusta la URL según tu configuración).
-                    // return $this->redirect(['site/login']); // Cambia 'site/login' a la URL real de tu página de inicio de sesión.
-                } else {
-                    \Yii::$app->session->setFlash('error', 'Error al crear el usuario.');
+                    if ($usuario->Status == 1) {
+                        \Yii::$app->session->setFlash('info', 'Existe una cuenta activa con estos datos');
+                    } elseif($usuario->Status == 0) {
+                        \Yii::$app->session->setFlash('info', 'Existe una cuenta inactiva con estos datos. Para más información, comunicarse con administración.');
+                    }
                 }
-            } else {
-                // Si se envió el formulario pero no se cargaron ni guardaron datos, muestra un mensaje de error.
-                \Yii::$app->session->setFlash('error', 'Error al guardar los datos personales.');
             }
-        }else{
+        } else {
             $model->loadDefaultValues();
         }
 

@@ -3,11 +3,21 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Libros Más Solicitados';
+use hail812\adminlte3\assets\PluginAsset;
+
+
+PluginAsset::register($this)->add('chart-js');
+$this->title = 'Libros Más Solicitados: ' .($fechaInicio ? $fechaInicio: '').' / '.($fechaFin ? $fechaFin : '') ;
 $this->params['breadcrumbs'][] = $this->title;
+
+$asignaturasConLibros = \app\models\Asignatura::find()
+    ->where(['IN', 'IdAsig', \app\models\Libro::find()->select('asignatura_IdAsig')->distinct()])
+    ->orderBy(['NombAsig' => SORT_ASC])
+    ->all();
+
 ?>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
 <div class="libro">
 
@@ -17,32 +27,20 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Generador Estadístico</h3>
+                    <h3 class="card-title">Generador Estadístico por Fechas</h3>
+
                 </div>
                 <div class="card-body">
                     <?php $form = ActiveForm::begin(['method' => 'get']); ?>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= Html::dropDownList('mes', $mesSeleccionado, [
-                                    '01' => 'Enero',
-                                    '02' => 'Febrero',
-                                    '03' => 'Marzo',
-                                    '04' => 'Abril',
-                                    '05' => 'Mayo',
-                                    '06' => 'Junio',
-                                    '07' => 'Julio',
-                                    '08' => 'Agosto',
-                                    '09' => 'Septiembre',
-                                    '10' => 'Octubre',
-                                    '11' => 'Noviembre',
-                                    '12' => 'Diciembre',
-                                ], ['prompt' => 'Selecciona el Mes', 'class' => 'form-control']) ?>
+                                <?= Html::input('date', 'fechaInicio', $fechaInicio, ['class' => 'form-control']); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= Html::textInput('anio', $anioSeleccionado, ['class' => 'form-control', 'placeholder' => 'Ingrese el año']); ?>
+                                <?= Html::input('date', 'fechaFin', $fechaFin, ['class' => 'form-control']); ?>
                             </div>
                         </div>
                     </div>
@@ -54,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'bibliotecaId',
                                     $bibliotecaSeleccionada,
                                     \yii\helpers\ArrayHelper::map(\app\models\Biblioteca::find()->all(), 'idbiblioteca', 'Campus'),
-                                    ['prompt' => 'Seleccione el Campus', 'class' => 'form-control']
+                                    ['prompt' => 'Todos', 'class' => 'form-control']
                                 ) ?>
                             </div>
                         </div>
@@ -64,8 +62,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= Html::dropDownList(
                                     'asignaturaId',
                                     $asignaturaSeleccionada,
-                                    \yii\helpers\ArrayHelper::map(\app\models\Asignatura::find()->all(), 'IdAsig', 'NombAsig'),
-                                    ['prompt' => 'Seleccione la asignatura', 'class' => 'form-control']
+                                    \yii\helpers\ArrayHelper::map(
+                                        $asignaturasConLibros,
+                                        'IdAsig',
+                                        'NombAsig'
+                                    ),
+                                    ['prompt' => 'Todas', 'class' => 'form-control']
                                 ) ?>
                             </div>
                         </div>
@@ -73,6 +75,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fas fa-chart-pie"></i> Generar', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::button('<i class="fas fa-eraser"></i>', ['class' => 'btn btn-outline-secondary', 'onclick' => 'window.location.href = "' . Yii::$app->urlManager->createUrl(['estadistica/asignatura-libro-inicio-fin']) . '"']) ?>
+
                     </div>
                     <?php ActiveForm::end(); ?>
                 </div>
@@ -82,9 +86,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class=col-md-6>
-            <div class="card">
+            <div class="card card-success">
                 <div class="card-header">
                     <h3 class="card-title">Informe de Solicitudes de Libros</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -108,9 +117,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
         <div class="col-md-6">
-            <div class="card">
+            <div class="card card-success">
                 <div class="card-header">
                     <h3 class="card-title">Top 10 Libros Más Solicitados</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <canvas id="graficaLibrosMasSolicitados" width="400" height="200"></canvas>
@@ -149,15 +163,6 @@ $this->registerJs("
                 borderWidth: 1
             }]
         },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
     });
 ");
 ?>

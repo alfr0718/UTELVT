@@ -1,4 +1,4 @@
-function showRegistroModal(url) {
+/*function showRegistroModal(url) {
     $.ajax({
         url: url, // Utiliza la URL pasada como parámetro
         type: 'GET',
@@ -16,4 +16,4 @@ $(document).ready(function () {
     $('#registroSubmit').click(function () {
         $('#registroForm').submit(); // Envía el formulario cuando se hace clic en el botón fuera del formulario
     });
-});
+});*/
